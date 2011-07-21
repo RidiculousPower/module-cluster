@@ -271,6 +271,7 @@ describe ModuleCluster do
     module ModuleCluster::MockClusterExtension03a
       ancestors.include?( ModuleCluster::MockClusterExtension03::Mock1 ).should == false
       ancestors.include?( ModuleCluster::MockClusterExtension03::Mock2 ).should == false
+      ancestors.include?( ModuleCluster::MockClusterExtension03::Mock3 ).should == false
       extend ModuleCluster::MockClusterExtension03
       ancestors.include?( ModuleCluster::MockClusterExtension03::Mock1 ).should == false
       ancestors.include?( ModuleCluster::MockClusterExtension03::Mock2 ).should == false
