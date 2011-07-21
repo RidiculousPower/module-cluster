@@ -8,7 +8,7 @@ Adds methods for defining module clusters using #included and #extended.
 
 # Summary #
 
-Provides :define_module_inclusion, :define_module_extension, and :define_module_cluster.
+Provides :define_module_included, :define_module_extended, and :define_module_cluster.
 
 # Install #
 
@@ -28,7 +28,7 @@ To cause modules to be included when this module is included:
 
 ```ruby
 module SomeModule
-  define_module_inclusion do |includes, extends|
+  define_module_included do |includes, extends|
     includes.concat [ SomeOtherModule ]
   end
 end
@@ -38,7 +38,7 @@ or extended when this module is included:
 
 ```ruby
 module SomeModule
-  define_module_inclusion do |includes, extends|
+  define_module_included do |includes, extends|
     extends.concat [ SomeOtherModule ]
   end
 end
@@ -48,7 +48,7 @@ or when this module is extended
 
 ```ruby
 module SomeModule
-  define_module_extension do |includes, extends|
+  define_module_extended do |includes, extends|
     includes.concat [ SomeOtherModule ]
   end
 end
@@ -58,7 +58,7 @@ or
 
 ```ruby
 module SomeModule
-  define_module_extension do |includes, extends|
+  define_module_extended do |includes, extends|
     extends.concat [ SomeOtherModule ]
   end
 end

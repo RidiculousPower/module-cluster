@@ -3,7 +3,7 @@ require_relative '../lib/module-cluster.rb'
 describe ModuleCluster do
 
 	#############################
-	#  define_module_inclusion  #
+	#  define_module_included  #
 	#############################
 
   it 'can define includes and extends for module inclusion' do
@@ -15,7 +15,7 @@ describe ModuleCluster do
       end
       module Mock3
       end
-      define_module_inclusion do |includes, extends|
+      define_module_included do |includes, extends|
         includes.concat [ Mock1, Mock2 ]
         extends.concat [ Mock3 ]
       end
@@ -37,7 +37,7 @@ describe ModuleCluster do
       end
       module Mock3
       end
-      define_module_inclusion do |includes, extends|
+      define_module_included do |includes, extends|
         includes.concat [ Mock1, Mock2 ]
       end
     end
@@ -58,7 +58,7 @@ describe ModuleCluster do
       end
       module Mock3
       end
-      define_module_inclusion do |includes, extends|
+      define_module_included do |includes, extends|
         extends.concat [ Mock3 ]
       end
     end
@@ -74,7 +74,7 @@ describe ModuleCluster do
   end
 
 	#############################
-	#  define_module_extension  #
+	#  define_module_extended  #
 	#############################
 	
   it 'can define includes and extends for module extension' do
@@ -86,7 +86,7 @@ describe ModuleCluster do
       end
       module Mock3
       end
-      define_module_extension do |includes, extends|
+      define_module_extended do |includes, extends|
         includes.concat [ Mock1, Mock2 ]
         extends.concat [ Mock3 ]
       end
@@ -108,7 +108,7 @@ describe ModuleCluster do
       end
       module Mock3
       end
-      define_module_extension do |includes, extends|
+      define_module_extended do |includes, extends|
         includes.concat [ Mock1, Mock2 ]
       end
     end
@@ -129,7 +129,7 @@ describe ModuleCluster do
       end
       module Mock3
       end
-      define_module_extension do |includes, extends|
+      define_module_extended do |includes, extends|
         extends.concat [ Mock3 ]
       end
     end
