@@ -7,7 +7,8 @@ module ModuleCluster::IncludeExtendSupport
 
 	def set_includes_for_class_or_module( class_or_module, includes )
 		@includes_for_class_or_module ||= Hash.new
-		@includes_for_class_or_module[ class_or_module ] = includes
+		@includes_for_class_or_module[ class_or_module ] ||= Array.new
+		@includes_for_class_or_module[ class_or_module ].concat( includes )
 	end
 
 	#####################################
@@ -16,7 +17,8 @@ module ModuleCluster::IncludeExtendSupport
 	
 	def set_extends_for_class_or_module( class_or_module, extends )
 		@extends_for_class_or_module ||= Hash.new
-		@extends_for_class_or_module[ class_or_module ] = extends
+		@extends_for_class_or_module[ class_or_module ] ||= Array.new
+		@extends_for_class_or_module[ class_or_module ].concat( extends )
 	end
 
 	############################################
