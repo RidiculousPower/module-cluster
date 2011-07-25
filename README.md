@@ -12,6 +12,9 @@ Provides:
 * :define_module_included
 * :define_module_extended
 * :define_module_cluster
+* :define_module_included_cascades
+* :define_module_extended_cascades
+* :define_module_cluster_cascades
 * :define_module_included_cascades_to_class
 * :define_module_extended_cascades_to_class
 * :define_module_cluster_cascades_to_class
@@ -104,9 +107,48 @@ module SomeModule
 end
 ```
 
+## define_module_included_cascades ##
+
+To cause modules to be included or extended when this module is used to include in a class or module.
+
+```ruby
+module SomeModule
+  define_module_included_cascades do |includes, extends|
+    includes.concat [ SomeOtherModule ]
+    extends.concat [ SomeOtherModule ]
+  end
+end
+```
+
+## define_module_extended_cascades ##
+
+To cause modules to be included or extended when this module is used to extend in a class or module:
+
+```ruby
+module SomeModule
+  define_module_extended_cascades do |includes, extends|
+    includes.concat [ SomeOtherModule ]
+    extends.concat [ SomeOtherModule ]
+  end
+end
+```
+
+## define_module_cluster_cascades ##
+
+To cause modules to be included or extended when this module is used to include or extend in a class or module:
+
+```ruby
+module SomeModule
+  define_module_cluster_cascades do |includes, extends|
+    includes.concat [ SomeOtherModule ]
+    extends.concat [ SomeOtherModule ]
+  end
+end
+```
+
 ## define_module_included_cascades_to_class ##
 
-To cause modules to be included or extended when this module is used to include a class (and not a module):
+To cause modules to be included or extended when this module is used to include in a class (and not a module):
 
 ```ruby
 module SomeModule
@@ -119,7 +161,7 @@ end
 
 ## define_module_extended_cascades_to_class ##
 
-To cause modules to be included or extended when this module is used to extend a class (and not a module):
+To cause modules to be included or extended when this module is used to extend in a class (and not a module):
 
 ```ruby
 module SomeModule
@@ -132,7 +174,7 @@ end
 
 ## define_module_cluster_cascades_to_class ##
 
-To cause modules to be included or extended when this module is used to include or extend a class (and not a module):
+To cause modules to be included or extended when this module is used to include or extend in a class (and not a module):
 
 ```ruby
 module SomeModule
