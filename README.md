@@ -9,6 +9,7 @@ Adds methods for defining module clusters using #included and #extended.
 # Summary #
 
 Provides:
+
 * :define_module_included
 * :define_module_extended
 * :define_module_cluster
