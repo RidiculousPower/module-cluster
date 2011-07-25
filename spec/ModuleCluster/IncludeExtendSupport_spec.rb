@@ -19,7 +19,7 @@ describe ModuleCluster::IncludeExtendSupport do
 	  class ModuleCluster::IncludeExtendSupport::MockClass
 	    includes = [ ModuleCluster::IncludeExtendSupport::Mock01::MockModule1,
 	                 ModuleCluster::IncludeExtendSupport::Mock01::MockModule2 ]
-	    ModuleCluster::IncludeExtendSupport::Mock01.set_includes_for_class_or_module( self, includes )
+	    ModuleCluster::IncludeExtendSupport::Mock01.add_includes_for_class_or_module( self, includes )
     end
   end
 
@@ -39,7 +39,7 @@ describe ModuleCluster::IncludeExtendSupport do
 	  class ModuleCluster::IncludeExtendSupport::MockClass
 	    includes = [ ModuleCluster::IncludeExtendSupport::Mock02::MockModule1,
 	                 ModuleCluster::IncludeExtendSupport::Mock02::MockModule2 ]
-	    ModuleCluster::IncludeExtendSupport::Mock02.set_includes_for_class_or_module( self, includes )
+	    ModuleCluster::IncludeExtendSupport::Mock02.add_includes_for_class_or_module( self, includes )
     end	  
   end
   
