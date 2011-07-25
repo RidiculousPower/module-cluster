@@ -8,7 +8,13 @@ Adds methods for defining module clusters using #included and #extended.
 
 # Summary #
 
-Provides :define_module_included, :define_module_extended, and :define_module_cluster.
+Provides:
+* :define_module_included
+* :define_module_extended
+* :define_module_cluster
+* :define_module_included_cascades_to_class
+* :define_module_extended_cascades_to_class
+* :define_module_cluster_cascades_to_class
 
 # Install #
 
@@ -23,6 +29,16 @@ module SomeModule
   include ModuleCluster
 end
 ```
+
+## The Basic Idea ##
+
+We use blocks to define cascading module includes/extends. This automates calls to super (so we don't forget) and puts self.included/self.extended support into a module so that local overriding is still possible.
+
+The block provides arrays to hold includes/extends. If two arrays [ includes, extends ] are returned by the block, they will be used. Otherwise the arrays passed in by parameters will be used. This means, due to how Ruby handles references, that *if you set one of the parameter arrays to a new array you have to return both arrays* or your changes won't be added.
+
+Calls to define_module_... functions are cumulative, permitting multiple calls (whether subsequently or otherwise). This is particularly useful for configuring including/extending modules from the included/extended module (and so on - nested blocks permit this sort of determination indefinitely).
+
+## define_module_included ##
 
 To cause modules to be included when this module is included:
 
@@ -44,7 +60,9 @@ module SomeModule
 end
 ```
 
-or when this module is extended
+## define_module_extended ##
+
+To cause modules to be included when this module is extended:
 
 ```ruby
 module SomeModule
@@ -54,7 +72,7 @@ module SomeModule
 end
 ```
 
-or
+or extended when this module is extended:
 
 ```ruby
 module SomeModule
@@ -64,7 +82,9 @@ module SomeModule
 end
 ```
 
-or when this module is either included or extended:
+## define_module_cluster ##
+
+To cause modules to be included when this module is included or extended:
 
 ```ruby
 module SomeModule
@@ -74,7 +94,7 @@ module SomeModule
 end
 ```
 
-or
+or extended when this module is included or extended:
 
 ```ruby
 module SomeModule
@@ -84,7 +104,44 @@ module SomeModule
 end
 ```
 
-If the block returns [ includes, extends ] as arrays, those values will be used; otherwise, the contents of the includes and extends parameters passed to the block will be used.
+## define_module_included_cascades_to_class ##
+
+To cause modules to be included or extended when this module is used to include a class (and not a module):
+
+```ruby
+module SomeModule
+  define_module_included_cascades_to_class do |includes, extends|
+    includes.concat [ SomeOtherModule ]
+    extends.concat [ SomeOtherModule ]
+  end
+end
+```
+
+## define_module_extended_cascades_to_class ##
+
+To cause modules to be included or extended when this module is used to extend a class (and not a module):
+
+```ruby
+module SomeModule
+  define_module_extended_cascades_to_class do |includes, extends|
+    includes.concat [ SomeOtherModule ]
+    extends.concat [ SomeOtherModule ]
+  end
+end
+```
+
+## define_module_cluster_cascades_to_class ##
+
+To cause modules to be included or extended when this module is used to include or extend a class (and not a module):
+
+```ruby
+module SomeModule
+  define_module_cluster_cascades_to_class do |includes, extends|
+    includes.concat [ SomeOtherModule ]
+    extends.concat [ SomeOtherModule ]
+  end
+end
+```
 
 # License #
 

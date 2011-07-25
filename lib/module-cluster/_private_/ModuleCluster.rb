@@ -5,11 +5,10 @@ module ModuleCluster
       private ###############################################################################################
   ###########################################################################################################
 
-	def yield_for_includes_extends( block )
-		inclusion_array = Array.new
-		extension_array = Array.new
+	def yield_for_includes_extends( inclusion_array, extension_array, block )
 		returned_includes, returned_extends = block.call( inclusion_array, extension_array )
-		if returned_includes and returned_extends and returned_includes.is_a?( Array ) and returned_extends.is_a?( Array )
+		if returned_includes and returned_extends and 
+			 returned_includes.is_a?( Array ) and returned_extends.is_a?( Array )
 			inclusion_array = returned_includes
 			extension_array = returned_extends
 		end

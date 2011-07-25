@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
 
   spec.name                      =  'module-cluster'
   spec.rubyforge_project         =  'module-cluster'
-  spec.version                   =  '1.0.3'
+  spec.version                   =  '1.1.0'
 
   spec.summary                   =  "Adds methods for defining module clusters using #included and #extended."
   spec.description               =  "Provides :define_module_included, :define_module_extended, and :define_module_cluster."

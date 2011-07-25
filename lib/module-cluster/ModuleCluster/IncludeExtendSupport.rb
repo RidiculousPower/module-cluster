@@ -2,39 +2,67 @@
 module ModuleCluster::IncludeExtendSupport
 
 	######################################
-	#  set_includes_for_class_or_module  #
+	#  add_includes_for_class_or_module  #
 	######################################
 
-	def set_includes_for_class_or_module( class_or_module, includes )
-		@includes_for_class_or_module ||= Hash.new
-		@includes_for_class_or_module[ class_or_module ] ||= Array.new
-		@includes_for_class_or_module[ class_or_module ].concat( includes )
+	def add_includes_for_class_or_module( class_or_module, includes )
+		included_sets( class_or_module ).push( includes ) unless includes.empty?
 	end
 
 	#####################################
-	#  set_extends_for_class_or_module  #
+	#  add_extends_for_class_or_module  #
 	#####################################
 	
-	def set_extends_for_class_or_module( class_or_module, extends )
-		@extends_for_class_or_module ||= Hash.new
-		@extends_for_class_or_module[ class_or_module ] ||= Array.new
-		@extends_for_class_or_module[ class_or_module ].concat( extends )
+	def add_extends_for_class_or_module( class_or_module, extends )
+		extended_sets( class_or_module ).push( extends ) unless extends.empty?
 	end
 
-	############################################
-	#  includes_for_class_or_module_inclusion  #
-	############################################
+	############################
+	#  add_includes_for_class  #
+	############################
 
-	def includes_for_class_or_module( class_or_module )
-		return @includes_for_class_or_module[ class_or_module ]	||= Array.new
+	def add_includes_for_class( klass, includes )
+		included_sets( klass ).push( includes ) unless includes.empty?
 	end
 
-	###########################################
-	#  extends_for_class_or_module_extension  #
-	###########################################
+	###########################
+	#  add_extends_for_class  #
+	###########################
+	
+	def add_extends_for_class( klass, extends )
+		extended_sets( klass ).push( extends ) unless extends.empty?
+	end
 
-	def extends_for_class_or_module( class_or_module )
-		return @extends_for_class_or_module[ class_or_module ] ||= Array.new
+	###################
+	#  included_sets  #
+	###################
+
+	def included_sets( class_or_module )
+		return included_sets_hash[ class_or_module ] ||= Array.new
+	end
+
+	###################
+	#  extended_sets  #
+	###################
+
+	def extended_sets( class_or_module )
+		return extended_sets_hash[ class_or_module ] ||= Array.new
+	end
+
+	####################
+	#  set_as_cluster  #
+	####################
+
+	def set_as_cluster( class_or_module )
+		return cluster_hash[ class_or_module ] = true
+	end
+
+	##############
+	#  cluster?  #
+	##############
+
+	def cluster?( class_or_module )
+		return cluster_hash[ class_or_module ]
 	end
 
 end
