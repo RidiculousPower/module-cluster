@@ -8,7 +8,9 @@ end
 
 class Array::ClassOrModule < Array
 end
-class Array::Class < Array
+class Array::CascadeToClass < Array
+end
+class Array::CascadeToClassOrModule < Array
 end
 
 require_relative 'module-cluster/ModuleCluster.rb'
