@@ -4,17 +4,11 @@ http://rubygems.org/gems/module-cluster
 
 == Description
 
-Adds methods for defining module clusters using #included and #extended.
+Adds methods for defining module clusters using #included, #extended, #append_features, and #extend_object.
 
 == Summary
 
-Provides:
-* :define_module_included
-* :define_module_extended
-* :define_module_cluster
-* :define_module_included_cascades_to_class
-* :define_module_extended_cascades_to_class
-* :define_module_cluster_cascades_to_class
+Provides methods for clustering modules so that when the main module is included other modules are also included or extended, either before or after the main module. There are currently three variants: cluster, cascade, cascade to class. Cluster causes the next module to be affected. Cascade causes all subsequent modules to be affected. Cascade to class causes the first including/extending class to be affected, but not any modules prior to it (although the effects will cascade through those unaffected modules). 
 
 == Install
 
@@ -28,133 +22,63 @@ module SomeModule
   include ModuleCluster
 end
 
-=== The Basic Idea
+Definition methods accept modules as arguments. 
 
-We use blocks to define cascading module includes/extends. This automates calls to super (so we don't forget) and puts self.included/self.extended support into a module so that local overriding is still possible.
-
-The block provides arrays with the current set of includes/extends to cascade for the module. If two arrays [ includes, extends ] are returned by the block, they will be used. Otherwise the arrays passed in by parameters will be used. This means, due to how Ruby handles references, that *if you set one of the parameter arrays to a new array you have to return both arrays* or your changes won't be added.
-
-Calls to define_module_... functions are cumulative, permitting multiple calls (whether subsequently or otherwise). This is particularly useful for configuring including/extending modules from the included/extended module (and so on - nested blocks permit this sort of determination indefinitely).
-
-=== define_module_included
-
-To cause modules to be included when this module is included:
+For example:
 
 module SomeModule
-  define_module_included do |includes, extends|
-    includes.concat [ SomeOtherModule ]
-  end
+  include ModuleCluster
+  include_also_includes( SomeOtherModule )
 end
 
-or extended when this module is included:
+Calls to the various functions are cumulative and stack in the order called. This permits multiple calls, whether subsequently or otherwise.
 
-module SomeModule
-  define_module_included do |includes, extends|
-    extends.concat [ SomeOtherModule ]
-  end
-end
+== Methods
 
-=== define_module_extended
+Cluster methods:
 
-To cause modules to be included when this module is extended:
+* include_also_includes
+* include_also_extends
+* include_also_includes_and_extends
+* extend_also_includes
+* extend_also_extends
+* extend_also_includes_and_extends
+* include_prepends_includes
+* include_prepends_extends
+* include_prepends_includes_and_extends
+* extend_prepends_includes
+* extend_prepends_extends
+* extend_prepends_includes_and_extends
 
-module SomeModule
-  define_module_extended do |includes, extends|
-    includes.concat [ SomeOtherModule ]
-  end
-end
+Cascade methods:
 
-or extended when this module is extended:
+* include_cascades_includes
+* include_cascades_extends
+* include_cascades_includes_and_extends
+* extend_cascades_includes
+* extend_cascades_extends
+* extend_cascades_includes_and_extends
+* include_cascades_prepending_includes
+* include_cascades_prepending_extends
+* include_cascades_prepending_includes_and_extends
+* extend_cascades_prepending_includes
+* extend_cascades_prepending_extends
+* extend_cascades_prepending_includes_and_extends
 
-module SomeModule
-  define_module_extended do |includes, extends|
-    extends.concat [ SomeOtherModule ]
-  end
-end
+Cascade to class methods:
 
-=== define_module_cluster
-
-To cause modules to be included when this module is included or extended:
-
-module SomeModule
-  define_module_cluster do |includes, extends|
-    includes.concat [ SomeOtherModule ]
-  end
-end
-
-or extended when this module is included or extended:
-
-module SomeModule
-  define_module_cluster do |includes, extends|
-    extends.concat [ SomeOtherModule ]
-  end
-end
-
-=== define_module_included_cascades
-
-To cause modules to be included or extended when this module is used to include in a class or module.
-
-module SomeModule
-  define_module_included_cascades do |includes, extends|
-    includes.concat [ SomeOtherModule ]
-    extends.concat [ SomeOtherModule ]
-  end
-end
-
-=== define_module_extended_cascades
-
-To cause modules to be included or extended when this module is used to extend in a class or module:
-
-module SomeModule
-  define_module_extended_cascades do |includes, extends|
-    includes.concat [ SomeOtherModule ]
-    extends.concat [ SomeOtherModule ]
-  end
-end
-
-=== define_module_cluster_cascades
-
-To cause modules to be included or extended when this module is used to include or extend in a class or module:
-
-module SomeModule
-  define_module_cluster_cascades do |includes, extends|
-    includes.concat [ SomeOtherModule ]
-    extends.concat [ SomeOtherModule ]
-  end
-end
-
-=== define_module_included_cascades_to_class
-
-To cause modules to be included or extended when this module is used to include a class (and not a module):
-
-module SomeModule
-  define_module_included_cascades_to_class do |includes, extends|
-    includes.concat [ SomeOtherModule ]
-    extends.concat [ SomeOtherModule ]
-  end
-end
-
-=== define_module_extended_cascades_to_class
-
-To cause modules to be included or extended when this module is used to extend a class (and not a module):
-
-module SomeModule
-  define_module_extended_cascades_to_class do |includes, extends|
-    includes.concat [ SomeOtherModule ]
-    extends.concat [ SomeOtherModule ]
-  end
-end
-
-=== define_module_cluster_cascades_to_class
-
-To cause modules to be included or extended when this module is used to include or extend a class (and not a module):
-
-module SomeModule
-  define_module_cluster_cascades_to_class do |includes, extends|
-    includes.concat [ SomeOtherModule ]
-    extends.concat [ SomeOtherModule ]
-  end
-end
+* include_cascades_includes_to_class
+* include_cascades_extends_to_class
+* include_cascades_includes_and_extends_to_class
+* extend_cascades_includes_to_class
+* extend_cascades_extends_to_class
+* extend_cascades_includes_and_extends_to_class
+* include_cascades_to_class_prepending_includes
+* include_cascades_to_class_prepending_extends
+* include_cascades_to_class_prepending_includes_and_extends
+* extend_cascades_to_class_prepending_includes
+* extend_cascades_to_class_prepending_extends
+* extend_cascades_to_class_prepending_includes_and_extends
 
 == License
 

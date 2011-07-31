@@ -5,3 +5,10 @@ Initial release.
 == 7/23/2011
 
 Addition of cascading module functions.
+
+== 7/31/2011
+
+Total overhaul of internals.
+Major interface changes.
+Addition of prepend functions.
+Added deprecated method exceptions for interface changes.
