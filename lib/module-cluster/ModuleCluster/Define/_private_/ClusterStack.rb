@@ -16,7 +16,7 @@ module ModuleCluster::Define::ClusterStack
     end
     
     # we use a block so that we don't have to worry about re-extending each time
-    self::ClusterStackModule.module_eval( & clusterstack_extend_include_block )
+    self::ClusterStackModule.module_eval( & clusterstack_extend_include_block ) if block_given?
 
     # we have to re-extend each time so that new includes/extends apply to self
     extend( self::ClusterStackModule )

@@ -8,7 +8,7 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
   #######################################################
   
   it 'it can construct an anonymous module each time requested to append features with modules' do
-    class ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01
+    class ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01
       extend ModuleCluster::Define::ModuleClusterCascadesToClass
       module Module1
       end
@@ -22,22 +22,22 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
       SomeModule.extend( anonymous_module_cascade_to_class_append_features_instance )
       SomeModule.respond_to?( :append_features ).should == true
       module SomeOtherModule
-        include ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::SomeModule
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module1 ).should == false
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module2 ).should == false
+        include ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::SomeModule
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module1 ).should == false
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module2 ).should == false
       end
       module Cascade1
-        include ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::SomeOtherModule
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module1 ).should == false
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module2 ).should == false
+        include ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::SomeOtherModule
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module1 ).should == false
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module2 ).should == false
       end
       class CascadeClass1
-        include ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Cascade1
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module1 ).should == true
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module2 ).should == true
-        ( ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module1 ) > ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module2 ) ).should == true
-        ( ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module2 ) > ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::SomeModule ) ).should == true
-        ( ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::SomeModule ) > ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::SomeOtherModule ) ).should == true
+        include ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Cascade1
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module1 ).should == true
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module2 ).should == true
+        ( ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module1 ) > ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module2 ) ).should == true
+        ( ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module2 ) > ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::SomeModule ) ).should == true
+        ( ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::SomeModule ) > ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::SomeOtherModule ) ).should == true
       end
       anonymous_module_cascade_to_class_append_features_instance2 = anonymous_module_cascade_to_class_append_features( :extend, Module1, Module2 )
       anonymous_module_cascade_to_class_append_features_instance2.should_not == anonymous_module_cascade_to_class_append_features_instance
@@ -46,23 +46,23 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
       AnotherModule.extend( anonymous_module_cascade_to_class_append_features_instance2 )
       AnotherModule.respond_to?( :append_features ).should == true
       module YetAnotherModule
-        include ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::AnotherModule
+        include ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::AnotherModule
         eigenclass = class << self ; self ; end
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module1 ).should == false
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module2 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module1 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module2 ).should == false
       end
       module Cascade2
-        include ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::YetAnotherModule
+        include ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::YetAnotherModule
         eigenclass = class << self ; self ; end
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module1 ).should == false
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module2 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module1 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module2 ).should == false
       end
       class CascadeClass2
-        include ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Cascade2
+        include ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Cascade2
         eigenclass = class << self ; self ; end
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module1 ).should == true
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module2 ).should == true        
-        ( eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module1 ) > eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock01::Module2 ) ).should == true
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module1 ).should == true
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module2 ).should == true        
+        ( eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module1 ) > eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock01::Module2 ) ).should == true
       end
     end
   end
@@ -72,7 +72,7 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
   ################################################
 
   it 'it can construct an anonymous module each time requested to include with modules' do
-    class ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02
+    class ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02
       extend ModuleCluster::Define::ModuleClusterCascadesToClass
       module Module1
       end
@@ -86,14 +86,14 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
       SomeModule.extend( anonymous_module_cascade_to_class_included_instance )
       SomeModule.respond_to?( :included ).should == true
       module SomeOtherModule
-        include ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::SomeModule
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module1 ).should == false
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module2 ).should == false
+        include ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::SomeModule
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module1 ).should == false
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module2 ).should == false
       end
       module Cascade1
-        include ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::SomeOtherModule
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module1 ).should == false
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module2 ).should == false
+        include ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::SomeOtherModule
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module1 ).should == false
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module2 ).should == false
       end
       class CascadeClass1
       end
@@ -104,23 +104,23 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
       AnotherModule.extend( anonymous_module_cascade_to_class_included_instance2 )
       AnotherModule.respond_to?( :included ).should == true
       module YetAnotherModule
-        include ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::AnotherModule
+        include ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::AnotherModule
         eigenclass = class << self ; self ; end
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module1 ).should == false
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module2 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module1 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module2 ).should == false
       end
       module Cascade2
-        include ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::YetAnotherModule
+        include ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::YetAnotherModule
         eigenclass = class << self ; self ; end
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module1 ).should == false
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module2 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module1 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module2 ).should == false
       end
       class CascadeClass2
-        include ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Cascade2
+        include ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Cascade2
         eigenclass = class << self ; self ; end
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module1 ).should == true
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module2 ).should == true
-        ( eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module1 ) > eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock02::Module2 ) ).should == true
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module1 ).should == true
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module2 ).should == true
+        ( eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module1 ) > eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock02::Module2 ) ).should == true
       end
     end
   end
@@ -130,7 +130,7 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
   #####################################################
 
   it 'it can construct an anonymous module each time requested to extend object with modules' do
-    class ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03
+    class ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03
       extend ModuleCluster::Define::ModuleClusterCascadesToClass
       module Module1
       end
@@ -144,20 +144,20 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
       SomeModule.extend( anonymous_module_cascade_to_class_extend_object_instance )
       SomeModule.respond_to?( :extend_object ).should == true
       module SomeOtherModule
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::SomeModule
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module1 ).should == false
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module2 ).should == false
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::SomeModule
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module1 ).should == false
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module2 ).should == false
       end
       module Cascade1
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::SomeOtherModule
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module1 ).should == false
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module2 ).should == false
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::SomeOtherModule
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module1 ).should == false
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module2 ).should == false
       end
       class CascadeClass1
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Cascade1
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module1 ).should == true
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module2 ).should == true
-        ( ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module1 ) > ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module2 ) ).should == true
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Cascade1
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module1 ).should == true
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module2 ).should == true
+        ( ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module1 ) > ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module2 ) ).should == true
       end
       anonymous_module_cascade_to_class_extend_object_instance2 = anonymous_module_cascade_to_class_extend_object( :extend, Module1, Module2 )
       anonymous_module_cascade_to_class_extend_object_instance2.should_not == anonymous_module_cascade_to_class_extend_object_instance
@@ -166,20 +166,20 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
       AnotherModule.extend( anonymous_module_cascade_to_class_extend_object_instance2 )
       AnotherModule.respond_to?( :extend_object ).should == true
       module YetAnotherModule
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::AnotherModule
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::AnotherModule
         eigenclass = class << self ; self ; end
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module1 ).should == false
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module2 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module1 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module2 ).should == false
       end
       module Cascade2
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::YetAnotherModule
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::YetAnotherModule
       end
       class CascadeClass2
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Cascade2
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Cascade2
         eigenclass = class << self ; self ; end
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module1 ).should == true
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module2 ).should == true
-        ( eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module1 ) > eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock03::Module2 ) ).should == true
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module1 ).should == true
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module2 ).should == true
+        ( eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module1 ) > eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock03::Module2 ) ).should == true
       end
     end
   end
@@ -189,7 +189,7 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
   ################################################
 
   it 'it can construct an anonymous module each time requested to extend with modules' do
-    class ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04
+    class ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04
       extend ModuleCluster::Define::ModuleClusterCascadesToClass
       module Module1
       end
@@ -203,20 +203,20 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
       SomeModule.extend( anonymous_module_cascade_to_class_extended_instance )
       SomeModule.respond_to?( :extended ).should == true
       module SomeOtherModule
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::SomeModule
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module1 ).should == false
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module2 ).should == false
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::SomeModule
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module1 ).should == false
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module2 ).should == false
       end
       module Cascade1
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::SomeOtherModule
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module1 ).should == false
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module2 ).should == false
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::SomeOtherModule
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module1 ).should == false
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module2 ).should == false
       end
       class CascadeClass1
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Cascade1
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module1 ).should == true
-        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module2 ).should == true
-        ( ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module1 ) > ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module2 ) ).should == true
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Cascade1
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module1 ).should == true
+        ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module2 ).should == true
+        ( ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module1 ) > ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module2 ) ).should == true
       end
       anonymous_module_cascade_to_class_extended_instance2 = anonymous_module_cascade_to_class_extended( :extend, Module1, Module2 )
       anonymous_module_cascade_to_class_extended_instance2.should_not == anonymous_module_cascade_to_class_extended_instance
@@ -225,23 +225,23 @@ describe ModuleCluster::Define::ModuleClusterCascadesToClass do
       AnotherModule.extend( anonymous_module_cascade_to_class_extended_instance2 )
       AnotherModule.respond_to?( :extended ).should == true
       module YetAnotherModule
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::AnotherModule
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::AnotherModule
         eigenclass = class << self ; self ; end
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module1 ).should == false
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module2 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module1 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module2 ).should == false
       end
       module Cascade2
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::YetAnotherModule
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::YetAnotherModule
         eigenclass = class << self ; self ; end
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module1 ).should == false
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module2 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module1 ).should == false
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module2 ).should == false
       end
       class CascadeClass2
-        extend ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Cascade2
+        extend ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Cascade2
         eigenclass = class << self ; self ; end
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module1 ).should == true
-        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module2 ).should == true
-        ( eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module1 ) > eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::Mock04::Module2 ) ).should == true
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module1 ).should == true
+        eigenclass.ancestors.include?( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module2 ).should == true
+        ( eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module1 ) > eigenclass.ancestors.index( ModuleCluster::Define::ModuleClusterCascadesToClass::PrivateMock04::Module2 ) ).should == true
       end
     end    
   end
