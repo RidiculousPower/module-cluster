@@ -8,7 +8,7 @@ module ModuleCluster::Define::ModuleClusterCascades
 	###############################
 
 	def include_cascades_includes( *includes )
-	  includes_module = anonymous_module_for_included do
+	  includes_module = anonymous_module_for_included( 'Cascades' ) do
       extend ModuleCluster::Define::ModuleClusterCascades
       include_cascades_includes( *includes )
       includes.each do |this_module|
@@ -24,7 +24,7 @@ module ModuleCluster::Define::ModuleClusterCascades
 	##############################
 
 	def include_cascades_extends( *extends )
-	  extends_module = anonymous_module_for_included do
+	  extends_module = anonymous_module_for_included( 'Cascades' ) do
       extend ModuleCluster::Define::ModuleClusterCascades
       include_cascades_extends( *extends )
       extends.each do |this_module|
@@ -50,7 +50,7 @@ module ModuleCluster::Define::ModuleClusterCascades
 	##############################
 
 	def extend_cascades_includes( *includes )
-	  includes_module = anonymous_module_for_extended do
+	  includes_module = anonymous_module_for_extended( 'Cascades' ) do
       extend ModuleCluster::Define::ModuleClusterCascades
       extend_cascades_includes( *includes )
       includes.each do |this_module|
@@ -66,7 +66,7 @@ module ModuleCluster::Define::ModuleClusterCascades
 	#############################
 
 	def extend_cascades_extends( *extends )
-	  extends_module = anonymous_module_for_extended do
+	  extends_module = anonymous_module_for_extended( 'Cascades' ) do
       extend ModuleCluster::Define::ModuleClusterCascades
       extend_cascades_extends( *extends )
       extends.each do |this_module|
@@ -92,7 +92,7 @@ module ModuleCluster::Define::ModuleClusterCascades
 	##########################################
 
 	def include_cascades_prepending_includes( *includes )
-	  includes_module = anonymous_module_for_append_features do
+	  includes_module = anonymous_module_for_append_features( 'Cascades' ) do
       extend ModuleCluster::Define::ModuleClusterCascades
       include_cascades_prepending_includes( *includes )
       includes.each do |this_module|
@@ -108,7 +108,7 @@ module ModuleCluster::Define::ModuleClusterCascades
 	#########################################
 
 	def include_cascades_prepending_extends( *extends )
-	  extends_module = anonymous_module_for_append_features do
+	  extends_module = anonymous_module_for_append_features( 'Cascades' ) do
       extend ModuleCluster::Define::ModuleClusterCascades
       include_cascades_prepending_extends( *extends )
       extends.each do |this_module|
@@ -134,7 +134,7 @@ module ModuleCluster::Define::ModuleClusterCascades
 	#########################################
 
 	def extend_cascades_prepending_includes( *includes )
-	  includes_module = anonymous_module_for_extend_object do
+	  includes_module = anonymous_module_for_extend_object( 'Cascades' ) do
       extend ModuleCluster::Define::ModuleClusterCascades
       extend_cascades_prepending_includes( *includes )
       includes.each do |this_module|
@@ -150,7 +150,7 @@ module ModuleCluster::Define::ModuleClusterCascades
 	########################################
 
 	def extend_cascades_prepending_extends( *extends )
-	  extends_module = anonymous_module_for_extend_object do
+	  extends_module = anonymous_module_for_extend_object( 'Cascades' ) do
       extend ModuleCluster::Define::ModuleClusterCascades
       extend_cascades_prepending_extends( *extends )
       extends.each do |this_module|

@@ -11,7 +11,7 @@ module ModuleCluster::Define::AnonymousModule
   #  anonymous_module_for_append_features  #
   ##########################################
 
-	def anonymous_module_for_append_features( & method_block )
+	def anonymous_module_for_append_features( subset_string = '', & method_block )
 
     module_instance = Module.new do
 
@@ -26,7 +26,7 @@ module ModuleCluster::Define::AnonymousModule
 
     end
 
-    set_anonymous_module_constant( 'AppendFeatures', module_instance )
+    set_anonymous_module_constant( 'AppendFeatures' + subset_string, module_instance )
     
     return module_instance
     
@@ -36,7 +36,7 @@ module ModuleCluster::Define::AnonymousModule
   #  anonymous_module_for_included  #
   ###################################
 
-	def anonymous_module_for_included( & method_block )
+	def anonymous_module_for_included( subset_string = '', & method_block )
 
     module_instance = Module.new do
 
@@ -51,7 +51,7 @@ module ModuleCluster::Define::AnonymousModule
 
     end
 
-    set_anonymous_module_constant( 'Included', module_instance )
+    set_anonymous_module_constant( 'Included' + subset_string, module_instance )
     
     return module_instance
 
@@ -61,7 +61,7 @@ module ModuleCluster::Define::AnonymousModule
   #  anonymous_module_for_extend_object  #
   ########################################
 
-	def anonymous_module_for_extend_object( & method_block )
+	def anonymous_module_for_extend_object( subset_string = '', & method_block )
 
     module_instance = Module.new do
 
@@ -76,7 +76,7 @@ module ModuleCluster::Define::AnonymousModule
 
     end
 
-    set_anonymous_module_constant( 'ExtendObject', module_instance )
+    set_anonymous_module_constant( 'ExtendObject' + subset_string, module_instance )
     
     return module_instance
 
@@ -86,7 +86,7 @@ module ModuleCluster::Define::AnonymousModule
   #  anonymous_module_for_extended  #
   ###################################
 
-	def anonymous_module_for_extended( & method_block )
+	def anonymous_module_for_extended( subset_string = '', & method_block )
 
     module_instance = Module.new do
 
@@ -101,7 +101,7 @@ module ModuleCluster::Define::AnonymousModule
 
     end
 
-    set_anonymous_module_constant( 'Included', module_instance )
+    set_anonymous_module_constant( 'Included' + subset_string, module_instance )
     
     return module_instance
 
