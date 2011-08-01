@@ -1,6 +1,6 @@
 
 module ModuleCluster::Define::ClusterStack
-
+  
   ###########################################################################################################
       private ###############################################################################################
   ###########################################################################################################
@@ -12,7 +12,20 @@ module ModuleCluster::Define::ClusterStack
   def clusterstack_module( & clusterstack_extend_include_block )
     
     unless const_defined?( :ClusterStackModule )
-      const_set( :ClusterStackModule, Module.new )
+      module_instance = Module.new do
+
+        #-------------------------#
+        #  increment_stack_count  #
+        #-------------------------#
+
+        def self.increment_stack_count
+          @stack_count ||= 0
+          @stack_count += 1
+          return @stack_count
+        end
+
+      end
+      const_set( :ClusterStackModule, module_instance )
     end
     
     # we use a block so that we don't have to worry about re-extending each time

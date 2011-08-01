@@ -1,12 +1,22 @@
 
 module ModuleCluster::Define::ModuleClusterCascadesToModule
 
+  include ModuleCluster::Define::AnonymousModule
+
 	#########################################
 	#  include_cascades_includes_to_module  #
 	#########################################
 
 	def include_cascades_includes_to_module( *includes )
-	  includes_module = anonymous_module_cascade_to_module_included( :include, *includes )
+	  includes_module = anonymous_module_for_included do
+      unless is_a?( Class )
+        extend ModuleCluster::Define::ModuleClusterCascadesToModule
+        include_cascades_includes_to_module( *includes )
+        includes.each do |this_module|
+          include( this_module )
+        end
+      end
+    end
     clusterstack_module { include( includes_module ) }
 		return self
 	end
@@ -16,7 +26,15 @@ module ModuleCluster::Define::ModuleClusterCascadesToModule
 	########################################
 
 	def include_cascades_extends_to_module( *extends )
-	  extends_module = anonymous_module_cascade_to_module_included( :extend, *extends )
+	  extends_module = anonymous_module_for_included do
+      unless is_a?( Class )
+        extend ModuleCluster::Define::ModuleClusterCascadesToModule
+        include_cascades_extends_to_module( *extends )
+        extends.each do |this_module|
+          extend( this_module )
+        end
+      end
+    end
     clusterstack_module { include( extends_module ) }
 		return self
 	end
@@ -36,7 +54,15 @@ module ModuleCluster::Define::ModuleClusterCascadesToModule
 	########################################
 
 	def extend_cascades_includes_to_module( *includes )
-	  includes_module = anonymous_module_cascade_to_module_extended( :include, *includes )
+	  includes_module = anonymous_module_for_extended do
+      unless is_a?( Class )
+        extend ModuleCluster::Define::ModuleClusterCascadesToModule
+        extend_cascades_includes_to_module( *includes )
+        includes.each do |this_module|
+          include( this_module )
+        end
+      end
+    end
     clusterstack_module { include( includes_module ) }
 		return self
 	end
@@ -46,7 +72,15 @@ module ModuleCluster::Define::ModuleClusterCascadesToModule
 	#######################################
 
 	def extend_cascades_extends_to_module( *extends )
-	  extends_module = anonymous_module_cascade_to_module_extended( :extend, *extends )
+	  extends_module = anonymous_module_for_extended do
+      unless is_a?( Class )
+        extend ModuleCluster::Define::ModuleClusterCascadesToModule
+        extend_cascades_extends_to_module( *extends )
+        extends.each do |this_module|
+          extend( this_module )
+        end
+      end
+    end
     clusterstack_module { include( extends_module ) }
 		return self
 	end
@@ -66,7 +100,15 @@ module ModuleCluster::Define::ModuleClusterCascadesToModule
 	####################################################
 
 	def include_cascades_to_module_prepending_includes( *includes )
-	  includes_module = anonymous_module_cascade_to_module_append_features( :include, *includes )
+	  includes_module = anonymous_module_for_append_features do
+      unless is_a?( Class )
+        extend ModuleCluster::Define::ModuleClusterCascadesToModule
+        include_cascades_to_module_prepending_includes( *includes )
+        includes.each do |this_module|
+          include( this_module )
+        end
+      end
+    end
     clusterstack_module { include( includes_module ) }
 		return self
 	end
@@ -76,7 +118,15 @@ module ModuleCluster::Define::ModuleClusterCascadesToModule
 	###################################################
 
 	def include_cascades_to_module_prepending_extends( *extends )
-	  extends_module = anonymous_module_cascade_to_module_append_features( :extend, *extends )
+	  extends_module = anonymous_module_for_append_features do
+      unless is_a?( Class )
+        extend ModuleCluster::Define::ModuleClusterCascadesToModule
+        include_cascades_to_module_prepending_extends( *extends )
+        extends.each do |this_module|
+          extend( this_module )
+        end
+      end
+    end
     clusterstack_module { include( extends_module ) }
 		return self
 	end
@@ -96,7 +146,15 @@ module ModuleCluster::Define::ModuleClusterCascadesToModule
 	###################################################
 
 	def extend_cascades_to_module_prepending_includes( *includes )
-	  includes_module = anonymous_module_cascade_to_module_extend_object( :include, *includes )
+	  includes_module = anonymous_module_for_extend_object do
+      unless is_a?( Class )
+        extend ModuleCluster::Define::ModuleClusterCascadesToModule
+        extend_cascades_to_module_prepending_includes( *includes )
+        includes.each do |this_module|
+          include( this_module )
+        end
+      end
+    end
     clusterstack_module { include( includes_module ) }
 		return self
 	end
@@ -106,7 +164,15 @@ module ModuleCluster::Define::ModuleClusterCascadesToModule
 	##################################################
 
 	def extend_cascades_to_module_prepending_extends( *extends )
-	  extends_module = anonymous_module_cascade_to_module_extend_object( :extend, *extends )
+	  extends_module = anonymous_module_for_extend_object do
+      unless is_a?( Class )
+        extend ModuleCluster::Define::ModuleClusterCascadesToModule
+        extend_cascades_to_module_prepending_extends( *extends )
+        extends.each do |this_module|
+          extend( this_module )
+        end
+      end
+    end
     clusterstack_module { include( extends_module ) }
 		return self
 	end
