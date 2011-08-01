@@ -1,5 +1,7 @@
 
 module ModuleCluster
+	
+	include ModuleCluster::Define::ClusterStack
 
   include ModuleCluster::Define::ModuleCluster
   include ModuleCluster::Define::ModuleClusterCascades
