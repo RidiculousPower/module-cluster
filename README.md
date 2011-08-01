@@ -54,7 +54,7 @@ Cluster methods:
 * extend_prepends_extends
 * extend_prepends_includes_and_extends
 
-Cascade methods:
+Cascade methods (cascades to modules and classes):
 
 * include_cascades_includes
 * include_cascades_extends
@@ -69,7 +69,7 @@ Cascade methods:
 * extend_cascades_prepending_extends
 * extend_cascades_prepending_includes_and_extends
 
-Cascade to class methods:
+Cascade to class methods (does not cascade to modules):
 
 * include_cascades_includes_to_class
 * include_cascades_extends_to_class
@@ -83,6 +83,21 @@ Cascade to class methods:
 * extend_cascades_to_class_prepending_includes
 * extend_cascades_to_class_prepending_extends
 * extend_cascades_to_class_prepending_includes_and_extends
+
+Cascade to module methods (does not cascade to classes):
+
+* include_cascades_includes_to_module
+* include_cascades_extends_to_module
+* include_cascades_includes_and_extends_to_module
+* extend_cascades_includes_to_module
+* extend_cascades_extends_to_module
+* extend_cascades_includes_and_extends_to_module
+* include_cascades_to_module_prepending_includes
+* include_cascades_to_module_prepending_extends
+* include_cascades_to_module_prepending_includes_and_extends
+* extend_cascades_to_module_prepending_includes
+* extend_cascades_to_module_prepending_extends
+* extend_cascades_to_module_prepending_includes_and_extends
 
 # License #
 

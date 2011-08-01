@@ -12,3 +12,7 @@ Total overhaul of internals.
 Major interface changes.
 Addition of prepend functions.
 Added deprecated method exceptions for interface changes.
+
+== 8/1/2011
+
+Added cascades_to_module methods.

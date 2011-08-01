@@ -7,9 +7,7 @@ module ModuleCluster::Define::ModuleClusterCascadesToClass
 
 	def include_cascades_includes_to_class( *includes )
 	  includes_module = anonymous_module_cascade_to_class_included( :include, *includes )
-    clusterstack_module do
-      include( includes_module )
-    end
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 	
@@ -19,9 +17,7 @@ module ModuleCluster::Define::ModuleClusterCascadesToClass
 
 	def include_cascades_extends_to_class( *extends )
 	  extends_module = anonymous_module_cascade_to_class_included( :extend, *extends )
-    clusterstack_module do
-      include( extends_module )
-    end
+    clusterstack_module { extend( extends_module ) }
 		return self
 	end
 	
@@ -41,9 +37,7 @@ module ModuleCluster::Define::ModuleClusterCascadesToClass
 
 	def extend_cascades_includes_to_class( *includes )
 	  includes_module = anonymous_module_cascade_to_class_extended( :include, *includes )
-    clusterstack_module do
-      include( includes_module )
-    end
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 	
@@ -53,9 +47,7 @@ module ModuleCluster::Define::ModuleClusterCascadesToClass
 
 	def extend_cascades_extends_to_class( *extends )
 	  extends_module = anonymous_module_cascade_to_class_extended( :extend, *extends )
-    clusterstack_module do
-      include( extends_module )
-    end
+    clusterstack_module { extend( extends_module ) }
 		return self
 	end
 	
@@ -75,9 +67,7 @@ module ModuleCluster::Define::ModuleClusterCascadesToClass
 
 	def include_cascades_to_class_prepending_includes( *includes )
 	  includes_module = anonymous_module_cascade_to_class_append_features( :include, *includes )
-    clusterstack_module do
-      include( includes_module )
-    end
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 	
@@ -87,9 +77,7 @@ module ModuleCluster::Define::ModuleClusterCascadesToClass
 
 	def include_cascades_to_class_prepending_extends( *extends )
 	  extends_module = anonymous_module_cascade_to_class_append_features( :extend, *extends )
-    clusterstack_module do
-      include( extends_module )
-    end
+    clusterstack_module { extend( extends_module ) }
 		return self
 	end
 	
@@ -109,9 +97,7 @@ module ModuleCluster::Define::ModuleClusterCascadesToClass
 
 	def extend_cascades_to_class_prepending_includes( *includes )
 	  includes_module = anonymous_module_cascade_to_class_extend_object( :include, *includes )
-    clusterstack_module do
-      include( includes_module )
-    end
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 	
@@ -121,9 +107,7 @@ module ModuleCluster::Define::ModuleClusterCascadesToClass
 
 	def extend_cascades_to_class_prepending_extends( *extends )
 	  extends_module = anonymous_module_cascade_to_class_extend_object( :extend, *extends )
-    clusterstack_module do
-      include( extends_module )
-    end
+    clusterstack_module { extend( extends_module ) }
 		return self
 	end
 	

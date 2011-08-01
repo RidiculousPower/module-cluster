@@ -7,9 +7,7 @@ module ModuleCluster::Define::ModuleCluster
 
 	def include_also_includes( *includes )
 	  includes_module = anonymous_module_included( :include, *includes )
-    clusterstack_module do
-      include( includes_module )
-    end
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 	
@@ -19,9 +17,7 @@ module ModuleCluster::Define::ModuleCluster
 	
 	def include_also_extends( *extends )
 	  extends_module = anonymous_module_included( :extend, *extends )
-    clusterstack_module do
-      include( extends_module )
-    end
+    clusterstack_module { extend( extends_module ) }
 		return self
 	end
 	
@@ -41,9 +37,7 @@ module ModuleCluster::Define::ModuleCluster
 
 	def extend_also_includes( *includes )
 	  includes_module = anonymous_module_extended( :include, *includes )
-    clusterstack_module do
-      include( includes_module )
-    end
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 	
@@ -53,9 +47,7 @@ module ModuleCluster::Define::ModuleCluster
 	
 	def extend_also_extends( *extends )
 	  extends_module = anonymous_module_extended( :extend, *extends )
-    clusterstack_module do
-      include( extends_module )
-    end
+    clusterstack_module { extend( extends_module ) }
 		return self
 	end
 	
@@ -75,9 +67,7 @@ module ModuleCluster::Define::ModuleCluster
 
 	def include_prepends_includes( *includes )
 	  includes_module = anonymous_module_append_features( :include, *includes )
-    clusterstack_module do
-      include( includes_module )
-    end
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 
@@ -87,9 +77,7 @@ module ModuleCluster::Define::ModuleCluster
 	
 	def include_prepends_extends( *extends )
 	  extends_module = anonymous_module_append_features( :extend, *extends )
-    clusterstack_module do
-      include( extends_module )
-    end
+    clusterstack_module { extend( extends_module ) }
 		return self
 	end
 	
@@ -109,9 +97,7 @@ module ModuleCluster::Define::ModuleCluster
 
 	def extend_prepends_includes( *includes )
 	  includes_module = anonymous_module_extend_object( :include, *includes )
-    clusterstack_module do
-      include( includes_module )
-    end
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 
@@ -121,9 +107,7 @@ module ModuleCluster::Define::ModuleCluster
 	
 	def extend_prepends_extends( *extends )
 	  extends_module = anonymous_module_extend_object( :extend, *extends )
-    clusterstack_module do
-      include( extends_module )
-    end
+    clusterstack_module { extend( extends_module ) }
 		return self
 	end
 	
