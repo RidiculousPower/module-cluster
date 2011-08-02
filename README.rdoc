@@ -49,6 +49,12 @@ Cluster methods:
 * extend_prepends_includes
 * extend_prepends_extends
 * extend_prepends_includes_and_extends
+* include_or_extend_also_includes
+* include_or_extend_also_extends
+* include_or_extend_also_includes_and_extends
+* include_or_extend_prepends_includes
+* include_or_extend_prepends_extends
+* include_or_extend_prepends_includes_and_extends
 
 Cascade methods (cascades to modules and classes):
 
@@ -64,6 +70,12 @@ Cascade methods (cascades to modules and classes):
 * extend_cascades_prepending_includes
 * extend_cascades_prepending_extends
 * extend_cascades_prepending_includes_and_extends
+* include_or_extend_cascades_includes
+* include_or_extend_cascades_extends
+* include_or_extend_cascades_includes_and_extends
+* include_or_extend_cascades_prepending_includes
+* include_or_extend_cascades_prepending_extends
+* include_or_extend_cascades_prepending_includes_and_extends
 
 Cascade to class methods (does not cascade to modules):
 
@@ -79,6 +91,12 @@ Cascade to class methods (does not cascade to modules):
 * extend_cascades_to_class_prepending_includes
 * extend_cascades_to_class_prepending_extends
 * extend_cascades_to_class_prepending_includes_and_extends
+* include_or_extend_cascades_includes_to_class
+* include_or_extend_cascades_extends_to_class
+* include_or_extend_cascades_includes_and_extends_to_class
+* include_or_extend_cascades_to_class_prepending_includes
+* include_or_extend_cascades_to_class_prepending_extends
+* include_or_extend_cascades_to_class_prepending_includes_and_extends
 
 Cascade to module methods (does not cascade to classes):
 
@@ -94,6 +112,12 @@ Cascade to module methods (does not cascade to classes):
 * extend_cascades_to_module_prepending_includes
 * extend_cascades_to_module_prepending_extends
 * extend_cascades_to_module_prepending_includes_and_extends
+* include_or_extend_cascades_includes_to_module
+* include_or_extend_cascades_extends_to_module
+* include_or_extend_cascades_includes_and_extends_to_module
+* include_or_extend_cascades_to_module_prepending_includes
+* include_or_extend_cascades_to_module_prepending_extends
+* include_or_extend_cascades_to_module_prepending_includes_and_extends
 
 == License
 

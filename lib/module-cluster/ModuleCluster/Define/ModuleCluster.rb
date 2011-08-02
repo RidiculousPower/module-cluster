@@ -154,5 +154,65 @@ module ModuleCluster::Define::ModuleCluster
 		extend_prepends_extends( *includes_and_extends )
 		return self
 	end
+	
+	#####################################
+	#  include_or_extend_also_includes  #
+	#####################################
+
+  def include_or_extend_also_includes( *includes )
+    include_also_includes( *includes )
+    extend_also_includes( *includes )
+		return self
+  end
+
+	####################################
+	#  include_or_extend_also_extends  #
+	####################################
+
+  def include_or_extend_also_extends( *extends )
+    include_also_extends( *extends )
+    extend_also_extends( *extends )
+		return self
+  end
+
+	#################################################
+	#  include_or_extend_also_includes_and_extends  #
+	#################################################
+
+  def include_or_extend_also_includes_and_extends( *includes_and_extends )
+    include_prepends_includes_and_extends( *includes_and_extends )
+    extend_prepends_includes_and_extends( *includes_and_extends )
+		return self
+  end
+
+	#########################################
+	#  include_or_extend_prepends_includes  #
+	#########################################
+
+  def include_or_extend_prepends_includes( *includes )
+    include_prepends_includes( *includes )
+    extend_prepends_includes( *includes )
+		return self
+  end
+
+	########################################
+	#  include_or_extend_prepends_extends  #
+	########################################
+
+  def include_or_extend_prepends_extends( *extends )
+    include_prepends_extends( *extends )
+    extend_prepends_extends( *extends )
+		return self
+  end
+
+	#####################################################
+	#  include_or_extend_prepends_includes_and_extends  #
+	#####################################################
+
+  def include_or_extend_prepends_includes_and_extends( *includes_and_extends )
+    include_prepends_includes_and_extends( *includes_and_extends )
+    extend_prepends_includes_and_extends( *includes_and_extends )
+		return self
+  end
 
 end

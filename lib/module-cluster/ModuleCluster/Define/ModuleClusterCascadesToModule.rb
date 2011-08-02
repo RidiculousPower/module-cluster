@@ -187,4 +187,64 @@ module ModuleCluster::Define::ModuleClusterCascadesToModule
 		return self
 	end
 
+	###################################################
+	#  include_or_extend_cascades_includes_to_module  #
+	###################################################
+
+  def include_or_extend_cascades_includes_to_module( *includes )
+    include_cascades_includes_to_module( *includes )
+    extend_cascades_includes_to_module( *includes )
+		return self
+  end
+
+	##################################################
+	#  include_or_extend_cascades_extends_to_module  #
+	##################################################
+
+  def include_or_extend_cascades_extends_to_module( *extends )
+    include_cascades_extends_to_module( *extends )
+    extend_cascades_extends_to_module( *extends )
+		return self
+  end
+
+	###############################################################
+	#  include_or_extend_cascades_includes_and_extends_to_module  #
+	###############################################################
+
+  def include_or_extend_cascades_includes_and_extends_to_module( *includes_and_extends )
+    include_cascades_includes_and_extends_to_module( *includes_and_extends )
+    extend_cascades_includes_and_extends_to_module( *includes_and_extends )
+		return self
+  end
+
+	##############################################################
+	#  include_or_extend_cascades_to_module_prepending_includes  #
+	##############################################################
+
+  def include_or_extend_cascades_to_module_prepending_includes( *includes )
+    include_cascades_to_module_prepending_includes( *includes )
+    extend_cascades_to_module_prepending_includes( *includes )
+		return self
+  end
+
+	#############################################################
+	#  include_or_extend_cascades_to_module_prepending_extends  #
+	#############################################################
+
+  def include_or_extend_cascades_to_module_prepending_extends( *extends )
+    include_cascades_to_module_prepending_extends( *extends )
+    extend_cascades_to_module_prepending_extends( *extends )
+		return self
+  end
+
+	##########################################################################
+	#  include_or_extend_cascades_to_module_prepending_includes_and_extends  #
+	##########################################################################
+	
+  def include_or_extend_cascades_to_module_prepending_includes_and_extends( *includes_and_extends )
+    include_cascades_to_module_prepending_includes_and_extends( *includes_and_extends )
+    extend_cascades_to_module_prepending_includes_and_extends( *includes_and_extends )
+		return self
+  end
+
 end
