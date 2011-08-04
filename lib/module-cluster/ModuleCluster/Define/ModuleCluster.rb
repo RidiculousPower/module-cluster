@@ -3,17 +3,38 @@ module ModuleCluster::Define::ModuleCluster
   
   include ModuleCluster::Define::AnonymousModule
   
+  ########################
+  #  self.include_block  #
+  ########################
+  
+  def self.include_block( *includes )
+    return Proc.new do
+      unless ( includes -= ancestors ).empty?
+        include( *includes.reverse )
+      end
+    end
+  end
+
+  #######################
+  #  self.extend_block  #
+  #######################
+  
+  def self.extend_block( *extends )
+    return Proc.new do
+      eigenclass = class << self ; self ; end
+      unless ( extends -= eigenclass.ancestors ).empty?
+        extend( *extends.reverse )
+      end
+    end
+  end
+  
 	###########################
 	#  include_also_includes  #
 	###########################
 
 	def include_also_includes( *includes )
-	  unless ( includes -= ancestors ).empty?
-  	  includes_module = anonymous_module_for_included do
-        include( *includes.reverse )
-      end
-      clusterstack_module { include( includes_module ) }
-    end
+	  includes_module = anonymous_module_for_included( & ModuleCluster::Define::ModuleCluster.include_block( *includes ) )
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 	
@@ -22,12 +43,8 @@ module ModuleCluster::Define::ModuleCluster
 	##########################
 	
 	def include_also_extends( *extends )
-	  unless ( extends -= eigenclass.ancestors ).empty?
-  	  extends_module = anonymous_module_for_included do
-        extend( *extends.reverse )
-      end
-      clusterstack_module { include( extends_module ) }
-    end
+	  extends_module = anonymous_module_for_included( & ModuleCluster::Define::ModuleCluster.extend_block( *extends ) )
+    clusterstack_module { include( extends_module ) }
 		return self
 	end
 	
@@ -46,12 +63,8 @@ module ModuleCluster::Define::ModuleCluster
 	##########################
 
 	def extend_also_includes( *includes )
-	  unless ( includes -= ancestors ).empty?
-  	  includes_module = anonymous_module_for_extended do
-        include( *includes.reverse )
-      end
-      clusterstack_module { include( includes_module ) }
-    end
+	  includes_module = anonymous_module_for_extended( & ModuleCluster::Define::ModuleCluster.include_block( *includes ) )
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 	
@@ -60,12 +73,8 @@ module ModuleCluster::Define::ModuleCluster
 	#########################
 	
 	def extend_also_extends( *extends )
-	  unless ( extends -= eigenclass.ancestors ).empty?
-  	  extends_module = anonymous_module_for_extended do
-        extend( *extends.reverse )
-      end
-      clusterstack_module { include( extends_module ) }
-    end
+	  extends_module = anonymous_module_for_extended( & ModuleCluster::Define::ModuleCluster.extend_block( *extends ) )
+    clusterstack_module { include( extends_module ) }
 		return self
 	end
 	
@@ -84,12 +93,8 @@ module ModuleCluster::Define::ModuleCluster
 	###############################
 
 	def include_prepends_includes( *includes )
-	  unless ( includes -= ancestors ).empty?
-  	  includes_module = anonymous_module_for_append_features do
-        include( *includes.reverse )
-      end
-      clusterstack_module { include( includes_module ) }
-    end
+	  includes_module = anonymous_module_for_append_features( & ModuleCluster::Define::ModuleCluster.include_block( *includes ) )
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 
@@ -98,12 +103,8 @@ module ModuleCluster::Define::ModuleCluster
 	##############################
 	
 	def include_prepends_extends( *extends )
-	  unless ( extends -= eigenclass.ancestors ).empty?
-  	  extends_module = anonymous_module_for_append_features do
-        extend( *extends.reverse )
-      end
-      clusterstack_module { include( extends_module ) }
-    end
+	  extends_module = anonymous_module_for_append_features( & ModuleCluster::Define::ModuleCluster.extend_block( *extends ) )
+    clusterstack_module { include( extends_module ) }
 		return self
 	end
 	
@@ -122,12 +123,8 @@ module ModuleCluster::Define::ModuleCluster
 	##############################
 
 	def extend_prepends_includes( *includes )
-	  unless ( includes -= ancestors ).empty?
-  	  includes_module = anonymous_module_for_extend_object do
-        include( *includes.reverse )
-      end
-      clusterstack_module { include( includes_module ) }
-    end
+	  includes_module = anonymous_module_for_extend_object( & ModuleCluster::Define::ModuleCluster.include_block( *includes ) )
+    clusterstack_module { include( includes_module ) }
 		return self
 	end
 
@@ -136,12 +133,8 @@ module ModuleCluster::Define::ModuleCluster
 	#############################
 	
 	def extend_prepends_extends( *extends )
-	  unless ( extends -= eigenclass.ancestors ).empty?
-  	  extends_module = anonymous_module_for_extend_object do
-        extend( *extends.reverse )
-      end
-      clusterstack_module { include( extends_module ) }
-    end
+	  extends_module = anonymous_module_for_extend_object( & ModuleCluster::Define::ModuleCluster.extend_block( *extends ) )
+    clusterstack_module { include( extends_module ) }
 		return self
 	end
 	

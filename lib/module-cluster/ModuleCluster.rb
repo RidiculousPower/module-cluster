@@ -1,6 +1,6 @@
 
 module ModuleCluster
-	
+	  
 	include ModuleCluster::Define::ClusterStack
 
   include ModuleCluster::Define::ModuleCluster

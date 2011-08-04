@@ -1,5 +1,7 @@
 
 module ModuleCluster
+  module Eigenclass
+  end
   module Define
     module AnonymousModule
     end
@@ -27,3 +29,4 @@ require_relative 'module-cluster/ModuleCluster/Define/ModuleClusterCascadesToCla
 require_relative 'module-cluster/ModuleCluster/Define/ModuleClusterCascadesToModule.rb'
 require_relative 'module-cluster/ModuleCluster/Define/Deprecated.rb'
 require_relative 'module-cluster/ModuleCluster.rb'
+

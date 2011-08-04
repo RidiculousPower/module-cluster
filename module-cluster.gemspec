@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
 
   spec.name                      =  'module-cluster'
   spec.rubyforge_project         =  'module-cluster'
-  spec.version                   =  '1.3.0'
+  spec.version                   =  '1.3.1'
 
   spec.summary                   =  "Adds methods for defining module clusters using #included, #extended, #append_features, and #extend_object."
   spec.description               =  "Provides methods for clustering modules so that when the main module is included other modules are also included or extended, either before or after the main module. There are currently three variants: cluster, cascade, cascade to class. Cluster causes the next module to be affected. Cascade causes all subsequent modules to be affected. Cascade to class causes the first including/extending class to be affected, but not any modules prior to it (although the effects will cascade through those unaffected modules)."
