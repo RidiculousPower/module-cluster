@@ -16,3 +16,8 @@ Added deprecated method exceptions for interface changes.
 == 8/1/2011
 
 Added cascades_to_module methods.
+
+== 8/3/2011
+
+2700% speed-up by preventing cascading duplicate includes/extends.
+

@@ -8,12 +8,12 @@ module ModuleCluster::Define::ModuleCluster
 	###########################
 
 	def include_also_includes( *includes )
-	  includes_module = anonymous_module_for_included do
-      includes.each do |this_module|
-        include( this_module )
+	  unless ( includes -= ancestors ).empty?
+  	  includes_module = anonymous_module_for_included do
+        include( *includes.reverse )
       end
+      clusterstack_module { include( includes_module ) }
     end
-    clusterstack_module { include( includes_module ) }
 		return self
 	end
 	
@@ -22,12 +22,12 @@ module ModuleCluster::Define::ModuleCluster
 	##########################
 	
 	def include_also_extends( *extends )
-	  extends_module = anonymous_module_for_included do
-	    extends.each do |this_module|
-        extend( this_module )
+	  unless ( extends -= eigenclass.ancestors ).empty?
+  	  extends_module = anonymous_module_for_included do
+        extend( *extends.reverse )
       end
+      clusterstack_module { include( extends_module ) }
     end
-    clusterstack_module { include( extends_module ) }
 		return self
 	end
 	
@@ -46,12 +46,12 @@ module ModuleCluster::Define::ModuleCluster
 	##########################
 
 	def extend_also_includes( *includes )
-	  includes_module = anonymous_module_for_extended do
-      includes.each do |this_module|
-        include( this_module )
+	  unless ( includes -= ancestors ).empty?
+  	  includes_module = anonymous_module_for_extended do
+        include( *includes.reverse )
       end
+      clusterstack_module { include( includes_module ) }
     end
-    clusterstack_module { include( includes_module ) }
 		return self
 	end
 	
@@ -60,12 +60,12 @@ module ModuleCluster::Define::ModuleCluster
 	#########################
 	
 	def extend_also_extends( *extends )
-	  extends_module = anonymous_module_for_extended do
-	    extends.each do |this_module|
-        extend( this_module )
+	  unless ( extends -= eigenclass.ancestors ).empty?
+  	  extends_module = anonymous_module_for_extended do
+        extend( *extends.reverse )
       end
+      clusterstack_module { include( extends_module ) }
     end
-    clusterstack_module { include( extends_module ) }
 		return self
 	end
 	
@@ -84,12 +84,12 @@ module ModuleCluster::Define::ModuleCluster
 	###############################
 
 	def include_prepends_includes( *includes )
-	  includes_module = anonymous_module_for_append_features do
-      includes.each do |this_module|
-        include( this_module )
+	  unless ( includes -= ancestors ).empty?
+  	  includes_module = anonymous_module_for_append_features do
+        include( *includes.reverse )
       end
+      clusterstack_module { include( includes_module ) }
     end
-    clusterstack_module { include( includes_module ) }
 		return self
 	end
 
@@ -98,12 +98,12 @@ module ModuleCluster::Define::ModuleCluster
 	##############################
 	
 	def include_prepends_extends( *extends )
-	  extends_module = anonymous_module_for_append_features do
-	    extends.each do |this_module|
-        extend( this_module )
+	  unless ( extends -= eigenclass.ancestors ).empty?
+  	  extends_module = anonymous_module_for_append_features do
+        extend( *extends.reverse )
       end
+      clusterstack_module { include( extends_module ) }
     end
-    clusterstack_module { include( extends_module ) }
 		return self
 	end
 	
@@ -122,12 +122,12 @@ module ModuleCluster::Define::ModuleCluster
 	##############################
 
 	def extend_prepends_includes( *includes )
-	  includes_module = anonymous_module_for_extend_object do
-      includes.each do |this_module|
-        include( this_module )
+	  unless ( includes -= ancestors ).empty?
+  	  includes_module = anonymous_module_for_extend_object do
+        include( *includes.reverse )
       end
+      clusterstack_module { include( includes_module ) }
     end
-    clusterstack_module { include( includes_module ) }
 		return self
 	end
 
@@ -136,12 +136,12 @@ module ModuleCluster::Define::ModuleCluster
 	#############################
 	
 	def extend_prepends_extends( *extends )
-	  extends_module = anonymous_module_for_extend_object do
-	    extends.each do |this_module|
-        extend( this_module )
+	  unless ( extends -= eigenclass.ancestors ).empty?
+  	  extends_module = anonymous_module_for_extend_object do
+        extend( *extends.reverse )
       end
+      clusterstack_module { include( extends_module ) }
     end
-    clusterstack_module { include( extends_module ) }
 		return self
 	end
 	
