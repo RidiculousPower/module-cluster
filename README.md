@@ -35,6 +35,25 @@ module SomeModule
 end
 ```
 
+Additionally, all methods accept a block that returns one or more modules; the modules will be added *after* any modules specified in the parameters:
+
+```ruby
+module SomeModule
+  include ModuleCluster
+  include_also_includes( SomeOtherModule ) do
+    AnotherModule
+  end
+end
+```
+
+Blocks can be used to return dynamically-determined modules at runtime.
+
+```ruby
+class_or_module.include_or_extend_cascades_prepending_extends do
+  method_that_returns_one_or_more_modules
+end
+```
+
 Calls to the various functions are cumulative and stack in the order called. This permits multiple calls, whether subsequently or otherwise.
 
 # Methods #
@@ -122,6 +141,16 @@ Cascade to module methods (does not cascade to classes):
 * include_or_extend_cascades_to_module_prepending_includes
 * include_or_extend_cascades_to_module_prepending_extends
 * include_or_extend_cascades_to_module_prepending_includes_and_extends
+
+Block methods (used for nesting declarations, for instance to apply cascades only after first module/class):
+
+```ruby
+prepend_module_include do |class_or_module|
+  class_or_module.include_or_extend_cascades_prepending_extends do
+    method_that_returns_one_or_more_modules
+  end
+end
+```
 
 # License #
 

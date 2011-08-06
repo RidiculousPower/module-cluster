@@ -24,4 +24,6 @@ Added cascades_to_module methods.
 == 8/6/2011
 
 Actually fixed speed problems rather than just improving them.
+Add block support for declarations.
+Added block methods for nested declarations.
 

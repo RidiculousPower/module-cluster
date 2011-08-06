@@ -13,58 +13,81 @@ module ModuleCluster::CascadeFeatures
     includes_or_extends = nil
     
     case runtime_includes_or_extends_block.arity
-    when 0
-      includes_or_extends = module_self.instance_eval( & runtime_includes_or_extends_block )
-    else
-      includes_or_extends = module_self.instance_exec( class_or_module, & runtime_includes_or_extends_block )
+      when 0
+        includes_or_extends = module_self.instance_eval( & runtime_includes_or_extends_block )
+      else
+        includes_or_extends = module_self.instance_exec( class_or_module, & runtime_includes_or_extends_block )
     end
-
+    
+    unless includes_or_extends.is_a?( Array )
+      includes_or_extends = [ includes_or_extends ]
+    end
+    
     return includes_or_extends
     
   end
   
-  ############################################
-  #  self.includes_or_extends_for_set_stack  #
-  ############################################
+  #######################################
+  #  self.cascade_struct_for_set_stack  #
+  #######################################
   
-  def self.includes_or_extends_for_set_stack( module_self, class_or_module, set_stack )
+  def self.cascade_struct_for_set_stack( module_self, class_or_module, set_stack )
     
     includes = Array.new
     extends = Array.new
     cascades = Hash.new
     
     set_stack.each do |this_set|
-
-      # get cascades
-      if this_set.dependency_module.should_cascade?( class_or_module )
-        cascades[ this_set.dependency_module ] ||= Hash.new
-        cascades[ this_set.dependency_module ][ this_set.method ] ||= Array.new
-        cascades[ this_set.dependency_module ][ this_set.method ].concat( this_set.modules )            
-      end
-
-      # get runtime block
-      runtime_set = nil
-      if block = this_set.runtime_includes_or_extends_block
-        runtime_set = ModuleCluster::CascadeFeatures.get_runtime_includes_or_extends_from_block( module_self, 
-                                                                                                 class_or_module,
-                                                                                                 this_set.include_or_extend,
-                                                                                                 block )
-      end
       
-      # get includes/extends
-      case this_set.include_or_extend
-        when :include
-          this_set.modules.each do |this_module|
-            if this_set.dependency_module.should_include_or_extend?( class_or_module )
-              includes.concat( this_set.modules )            
+      if this_set.is_a?( ModuleCluster::ClusterStack::Block::Set )
+        
+        class_or_module.instance_eval do
+          extend( ModuleCluster )
+        end
+        
+        case this_set.runtime_block.arity
+          when 0
+            module_self.instance_eval( & this_set.runtime_block )
+          else
+            module_self.instance_exec( class_or_module, & this_set.runtime_block )
+        end
+        
+      else
+        
+        # get cascades
+        if this_set.dependency_module.should_cascade?( class_or_module )
+          cascades[ this_set.dependency_module ] ||= Hash.new
+          cascades[ this_set.dependency_module ][ this_set.method ] ||= Array.new
+          cascades[ this_set.dependency_module ][ this_set.method ].concat( this_set.modules )            
+        end
+
+        # get runtime block
+        runtime_set = nil
+        if block = this_set.runtime_includes_or_extends_block
+          runtime_set = ModuleCluster::CascadeFeatures.get_runtime_includes_or_extends_from_block( module_self, 
+                                                                                                   class_or_module,
+                                                                                                   this_set.include_or_extend,
+                                                                                                   block )
+          cascades[ this_set.dependency_module ] ||= Hash.new
+          cascades[ this_set.dependency_module ][ this_set.method ] ||= Array.new
+          cascades[ this_set.dependency_module ][ this_set.method ].concat( runtime_set )            
+        end
+        # get includes/extends
+        case this_set.include_or_extend
+          when :include
+            this_set.modules.each do |this_module|
+              if this_set.dependency_module.should_include_or_extend?( class_or_module )
+                includes.concat( this_set.modules )            
+              end
             end
-          end
-          includes.concat( runtime_set ) if runtime_set
-        when :extend
-          if this_set.dependency_module.should_include_or_extend?( class_or_module )
-            extends.concat( this_set.modules )
-          end
-          extends.concat( runtime_set ) if runtime_set
+            includes.concat( runtime_set ) if runtime_set
+          when :extend
+            if this_set.dependency_module.should_include_or_extend?( class_or_module )
+              extends.concat( this_set.modules )
+            end
+            extends.concat( runtime_set ) if runtime_set
+        end
+      
       end
       
     end
@@ -105,8 +128,8 @@ module ModuleCluster::CascadeFeatures
   #####################
 
   def append_features( class_or_module )
-    
-    cascade_struct = ModuleCluster::CascadeFeatures.includes_or_extends_for_set_stack( self, class_or_module, cluster_stack.cascading_prepending_includes )
+        
+    cascade_struct = ModuleCluster::CascadeFeatures.cascade_struct_for_set_stack( self, class_or_module, cluster_stack.cascading_prepending_includes )
     ModuleCluster::CascadeFeatures.cascade_features( class_or_module, cascade_struct )
     
     super
@@ -121,7 +144,7 @@ module ModuleCluster::CascadeFeatures
 
     super
 
-    cascade_struct = ModuleCluster::CascadeFeatures.includes_or_extends_for_set_stack( self, class_or_module, cluster_stack.cascading_includes )
+    cascade_struct = ModuleCluster::CascadeFeatures.cascade_struct_for_set_stack( self, class_or_module, cluster_stack.cascading_includes )
     ModuleCluster::CascadeFeatures.cascade_features( class_or_module, cascade_struct )
     
   end
@@ -132,7 +155,7 @@ module ModuleCluster::CascadeFeatures
 
   def extend_object( class_or_module )
 
-    cascade_struct = ModuleCluster::CascadeFeatures.includes_or_extends_for_set_stack( self, class_or_module, cluster_stack.cascading_prepending_extends )
+    cascade_struct = ModuleCluster::CascadeFeatures.cascade_struct_for_set_stack( self, class_or_module, cluster_stack.cascading_prepending_extends )
     ModuleCluster::CascadeFeatures.cascade_features( class_or_module, cascade_struct )
     
     super
@@ -147,7 +170,7 @@ module ModuleCluster::CascadeFeatures
 
     super
 
-    cascade_struct = ModuleCluster::CascadeFeatures.includes_or_extends_for_set_stack( self, class_or_module, cluster_stack.cascading_extends )
+    cascade_struct = ModuleCluster::CascadeFeatures.cascade_struct_for_set_stack( self, class_or_module, cluster_stack.cascading_extends )
     ModuleCluster::CascadeFeatures.cascade_features( class_or_module, cascade_struct )
 
   end

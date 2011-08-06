@@ -26,6 +26,7 @@ module ModuleCluster::Define::Cluster
   ###########################
   
   def self.perform_cascades( class_or_module, method, modules )
+    # nothing required
   end
   
 	###########################
