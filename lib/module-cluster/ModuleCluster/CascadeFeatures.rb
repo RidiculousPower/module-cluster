@@ -93,10 +93,13 @@ module ModuleCluster::CascadeFeatures
     end
     
     includes.uniq!
+    includes.compact!
     extends.uniq!
+    extends.compact!
     cascades.each do |this_dependency_module, this_method_and_module_set|
       this_method_and_module_set.each do |this_method, this_module_set|
         this_module_set.uniq!
+        this_module_set.compact!
       end
     end
         
