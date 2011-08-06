@@ -57,6 +57,16 @@ module SomeModule
 end
 ```
 
+Block methods can be used for nesting declarations, for instance to apply cascades only after first module/class:
+
+```ruby
+prepend_module_include do |class_or_module|
+  class_or_module.include_or_extend_cascades_prepending_extends do
+    method_that_returns_one_or_more_modules
+  end
+end
+```
+
 Calls to the various functions are cumulative and stack in the order called. This permits multiple calls, whether subsequently or otherwise.
 
 # Methods #
@@ -145,15 +155,26 @@ Cascade to module methods (does not cascade to classes):
 * include_or_extend_cascades_to_module_prepending_extends
 * include_or_extend_cascades_to_module_prepending_includes_and_extends
 
-Block methods (used for nesting declarations, for instance to apply cascades only after first module/class):
+Block methods:
 
-```ruby
-prepend_module_include do |class_or_module|
-  class_or_module.include_or_extend_cascades_prepending_extends do
-    method_that_returns_one_or_more_modules
-  end
-end
-```
+* module_include
+* module_extend
+* module_include_or_extend
+* prepend_module_include
+* prepend_module_extend
+* prepend_module_include_or_extend
+* class_include
+* class_extend
+* class_include_or_extend
+* prepend_class_include
+* prepend_class_extend
+* prepend_class_include_or_extend
+* class_or_module_include
+* class_or_module_extend
+* class_or_module_include_or_extend
+* prepend_class_or_module_include
+* prepend_class_or_module_extend
+* prepend_class_or_module_include_or_extend
 
 # License #
 
