@@ -49,8 +49,12 @@ end
 Blocks can be used to return dynamically-determined modules at runtime.
 
 ```ruby
-class_or_module.include_or_extend_cascades_prepending_extends do
-  method_that_returns_one_or_more_modules
+module SomeModule
+  include ModuleCluster
+  include_or_extend_cascades_prepending_extends do
+    method_that_returns_one_or_more_modules
+  end
+end
 end
 ```
 
