@@ -20,7 +20,7 @@ Simply:
 
 ```ruby
 module SomeModule
-  include ModuleCluster
+  extend ModuleCluster
 end
 ```
 
@@ -30,7 +30,7 @@ For example:
 
 ```ruby
 module SomeModule
-  include ModuleCluster
+  extend ModuleCluster
   include_also_includes( SomeOtherModule )
 end
 ```
@@ -39,7 +39,7 @@ Additionally, all methods accept a block that returns one or more modules; the m
 
 ```ruby
 module SomeModule
-  include ModuleCluster
+  extend ModuleCluster
   include_also_includes( SomeOtherModule ) do
     AnotherModule
   end
@@ -50,11 +50,10 @@ Blocks can be used to return dynamically-determined modules at runtime.
 
 ```ruby
 module SomeModule
-  include ModuleCluster
+  extend ModuleCluster
   include_or_extend_cascades_prepending_extends do
     method_that_returns_one_or_more_modules
   end
-end
 end
 ```
 
