@@ -86,6 +86,7 @@ module ModuleCluster::CascadeFeatures
   ###########################
   
   def self.cascade_features( class_or_module, cascade_struct )
+
     class_or_module.module_eval do
       include( *cascade_struct.includes.reverse ) unless cascade_struct.includes.empty?
       extend( *cascade_struct.extends.reverse ) unless cascade_struct.extends.empty?
@@ -96,6 +97,7 @@ module ModuleCluster::CascadeFeatures
         this_dependency_module.perform_cascades( class_or_module, this_method, this_module_set )
       end
     end
+    
   end
 
   #####################

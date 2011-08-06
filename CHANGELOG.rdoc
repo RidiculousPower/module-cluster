@@ -21,3 +21,7 @@ Added cascades_to_module methods.
 
 2700% speed-up by preventing cascading duplicate includes/extends.
 
+== 8/6/2011
+
+Actually fixed speed problems rather than just improving them.
+
