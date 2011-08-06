@@ -1,32 +1,36 @@
 
 module ModuleCluster
-  module Eigenclass
+  class ClusterStack
+  end
+  module CascadeFeatures
   end
   module Define
-    module AnonymousModule
+    module DedoubleAncestors
     end
     module ClusterStack
     end
-    module ModuleCluster
+    module Cluster
     end
-    module ModuleClusterCascades
+    module ClusterCascades
     end
-    module ModuleClusterCascadesToClass
+    module ClusterCascadesToClass
     end
-    module ModuleClusterCascadesToModule
+    module ClusterCascadesToModule
     end
     module Deprecated
     end
   end
 end
 
-require_relative 'module-cluster/ModuleCluster/Define/_private_/AnonymousModule.rb'
-require_relative 'module-cluster/ModuleCluster/Define/_private_/ClusterStack.rb'
-
-require_relative 'module-cluster/ModuleCluster/Define/ModuleCluster.rb'
-require_relative 'module-cluster/ModuleCluster/Define/ModuleClusterCascades.rb'
-require_relative 'module-cluster/ModuleCluster/Define/ModuleClusterCascadesToClass.rb'
-require_relative 'module-cluster/ModuleCluster/Define/ModuleClusterCascadesToModule.rb'
+require_relative 'module-cluster/ModuleCluster/CascadeFeatures.rb'
+require_relative 'module-cluster/ModuleCluster/Define/DedoubleAncestors.rb'
+require_relative 'module-cluster/ModuleCluster/ExtendForCascade.rb'
+require_relative 'module-cluster/ModuleCluster/Define/ClusterStack.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Cluster.rb'
+require_relative 'module-cluster/ModuleCluster/Define/ClusterCascades.rb'
+require_relative 'module-cluster/ModuleCluster/Define/ClusterCascadesToClass.rb'
+require_relative 'module-cluster/ModuleCluster/Define/ClusterCascadesToModule.rb'
 require_relative 'module-cluster/ModuleCluster/Define/Deprecated.rb'
+require_relative 'module-cluster/ModuleCluster/ClusterStack.rb'
 require_relative 'module-cluster/ModuleCluster.rb'
 

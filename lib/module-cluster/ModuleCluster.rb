@@ -1,13 +1,13 @@
 
 module ModuleCluster
-	  
-	include ModuleCluster::Define::ClusterStack
-
-  include ModuleCluster::Define::ModuleCluster
-  include ModuleCluster::Define::ModuleClusterCascades
-  include ModuleCluster::Define::ModuleClusterCascadesToClass
-  include ModuleCluster::Define::ModuleClusterCascadesToModule
+	
+	extend ModuleCluster::ExtendForCascade
+    
+  include ModuleCluster::Define::Cluster
+  include ModuleCluster::Define::ClusterCascades
+  include ModuleCluster::Define::ClusterCascadesToClass
+  include ModuleCluster::Define::ClusterCascadesToModule
 
   include ModuleCluster::Define::Deprecated
-	
+		
 end
