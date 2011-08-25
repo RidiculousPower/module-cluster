@@ -27,3 +27,6 @@ Actually fixed speed problems rather than just improving them.
 Add block support for declarations.
 Added block methods for nested declarations.
 
+== 8/25/2011
+
+Updates to :cascade_features to support cascading to extended instances.

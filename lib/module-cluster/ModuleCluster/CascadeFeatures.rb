@@ -70,7 +70,7 @@ module ModuleCluster::CascadeFeatures
                                                                                                    block )
           cascades[ this_set.dependency_module ] ||= Hash.new
           cascades[ this_set.dependency_module ][ this_set.method ] ||= Array.new
-          cascades[ this_set.dependency_module ][ this_set.method ].concat( runtime_set )            
+          cascades[ this_set.dependency_module ][ this_set.method ].concat( runtime_set )
         end
         # get includes/extends
         case this_set.include_or_extend
@@ -112,16 +112,33 @@ module ModuleCluster::CascadeFeatures
   ###########################
   
   def self.cascade_features( class_or_module, cascade_struct )
+    
+    if class_or_module.is_a?( Module )
 
-    class_or_module.module_eval do
-      include( *cascade_struct.includes.reverse ) unless cascade_struct.includes.empty?
-      extend( *cascade_struct.extends.reverse ) unless cascade_struct.extends.empty?
-    end
-
-    cascade_struct.cascades.each do |this_dependency_module, this_method_and_module_set|
-      this_method_and_module_set.each do |this_method, this_module_set|
-        this_dependency_module.perform_cascades( class_or_module, this_method, this_module_set )
+      class_or_module.module_eval do
+        include( *cascade_struct.includes.reverse ) unless cascade_struct.includes.empty?
+        extend( *cascade_struct.extends.reverse ) unless cascade_struct.extends.empty?
       end
+
+      cascade_struct.cascades.each do |this_dependency_module, this_method_and_module_set|
+        this_method_and_module_set.each do |this_method, this_module_set|
+          this_dependency_module.perform_cascades( class_or_module, this_method, this_module_set )
+        end
+      end
+
+    else
+      
+      class_or_module.instance_eval do
+        extend( *cascade_struct.includes.reverse ) unless cascade_struct.includes.empty?
+        extend( *cascade_struct.extends.reverse ) unless cascade_struct.extends.empty?
+      end
+
+      cascade_struct.cascades.each do |this_dependency_module, this_method_and_module_set|
+        this_method_and_module_set.each do |this_method, this_module_set|
+          this_dependency_module.perform_cascades( class_or_module, :extend, this_module_set )
+        end
+      end
+      
     end
     
   end
