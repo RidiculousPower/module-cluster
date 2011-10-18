@@ -9,7 +9,7 @@ module ModuleCluster::ExtendForCascade
 	  super
 	  class_or_module.module_eval do
 	    extend ModuleCluster::CascadeFeatures
-    end unless class_or_module.is_a?( Class )
+    end if class_or_module.is_a?( Module ) and ! class_or_module.is_a?( Class )
   end
   
 end
