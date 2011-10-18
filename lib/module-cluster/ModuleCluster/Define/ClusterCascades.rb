@@ -21,23 +21,12 @@ module ModuleCluster::Define::ClusterCascades
     return true
   end
 
-  #######################################
-  #  self.perform_includes_and_extends  #
-  #######################################
-  
-  def self.perform_includes_and_extends( class_or_module, set_stack )
-    class_or_module.module_eval do
-      include( *cascade_struct.includes.reverse ) unless includes.empty?
-      extend( *cascade_struct.extends.reverse ) unless extends.empty?
-    end
-  end
-
   ###########################
   #  self.perform_cascades  #
   ###########################
   
   def self.perform_cascades( class_or_module, method, modules )
-    class_or_module.module_eval do
+    class_or_module.instance_eval do
       unless is_a?( Class )
         extend ModuleCluster::Define::ClusterCascades
         __send__( method, *modules )

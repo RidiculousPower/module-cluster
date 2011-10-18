@@ -129,7 +129,6 @@ module ModuleCluster::CascadeFeatures
     else
       
       class_or_module.instance_eval do
-        extend( *cascade_struct.includes.reverse ) unless cascade_struct.includes.empty?
         extend( *cascade_struct.extends.reverse ) unless cascade_struct.extends.empty?
       end
 

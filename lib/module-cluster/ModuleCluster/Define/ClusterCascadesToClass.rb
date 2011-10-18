@@ -26,7 +26,7 @@ module ModuleCluster::Define::ClusterCascadesToClass
   ###########################
   
   def self.perform_cascades( class_or_module, method, modules )
-    class_or_module.module_eval do
+    class_or_module.instance_eval do
       unless is_a?( Class )
         extend ModuleCluster::Define::ClusterCascadesToClass
         __send__( method, *modules )

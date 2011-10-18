@@ -30,3 +30,7 @@ Added block methods for nested declarations.
 == 8/25/2011
 
 Updates to :cascade_features to support cascading to extended instances.
+
+== 10/18/2011
+
+Changes from :module_eval to :instance_eval for instance extend support.
