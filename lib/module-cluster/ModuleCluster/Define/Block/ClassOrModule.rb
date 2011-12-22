@@ -4,6 +4,8 @@ module ModuleCluster::Define::Block::ClassOrModule
   include ModuleCluster::Define::Block::Class
   include ModuleCluster::Define::Block::Module
   
+  extend ModuleCluster::ExtendForCascade
+  
   #############################
   #  class_or_module_include  #
   #############################

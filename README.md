@@ -92,6 +92,113 @@ Cluster methods:
 * include_or_extend_prepends_extends
 * include_or_extend_prepends_includes_and_extends
 
+Module cluster methods:
+
+* module_include_also_includes
+* module_include_also_extends
+* module_include_also_includes_and_extends
+* module_extend_also_includes
+* module_extend_also_extends
+* module_extend_also_includes_and_extends
+* module_include_prepends_includes
+* module_include_prepends_extends
+* module_include_prepends_includes_and_extends
+* module_extend_prepends_includes
+* module_extend_prepends_extends
+* module_extend_prepends_includes_and_extends
+* module_include_or_extend_also_includes
+* module_include_or_extend_also_extends
+* module_include_or_extend_also_includes_and_extends
+* module_include_or_extend_prepends_includes
+* module_include_or_extend_prepends_extends
+* module_include_or_extend_prepends_includes_and_extends
+
+Class cluster methods:
+
+* class_include_also_includes
+* class_include_also_extends
+* class_include_also_includes_and_extends
+* class_extend_also_includes
+* class_extend_also_extends
+* class_extend_also_includes_and_extends
+* class_include_prepends_includes
+* class_include_prepends_extends
+* class_include_prepends_includes_and_extends
+* class_extend_prepends_includes
+* class_extend_prepends_extends
+* class_extend_prepends_includes_and_extends
+* class_include_or_extend_also_includes
+* class_include_or_extend_also_extends
+* class_include_or_extend_also_includes_and_extends
+* class_include_or_extend_prepends_includes
+* class_include_or_extend_prepends_extends
+* class_include_or_extend_prepends_includes_and_extends
+
+Instance cluster methods:
+
+* instance_extend_also_extends
+* instance_extend_prepends_extends
+
+Module or instance cluster methods:
+
+* module_include_or_extend_or_instance_extend_also_includes_or_extends
+* module_include_or_extend_or_instance_extend_also_extends
+* module_include_or_instance_extend_also_includes_or_extends
+* module_include_or_instance_extend_also_extends
+* module_or_instance_extend_also_extends
+* module_include_or_extend_or_instance_extend_prepends_includes_or_extends
+* module_include_or_instance_extend_prepends_includes_or_extends
+* module_include_or_extend_or_instance_extend_prepends_extends
+* module_include_or_instance_extend_prepends_extends
+* module_or_instance_extend_prepends_extends
+
+Class or module cluster methods:
+
+* module_or_class_include_also_includes
+* module_or_class_include_also_extends
+* module_or_class_include_also_includes_and_extends
+* module_or_class_extend_also_includes
+* module_or_class_extend_also_extends
+* module_or_class_extend_also_includes_and_extends
+* module_or_class_include_prepends_includes
+* module_or_class_include_prepends_extends
+* module_or_class_include_prepends_includes_and_extends
+* module_or_class_extend_prepends_includes
+* module_or_class_extend_prepends_extends
+* module_or_class_extend_prepends_includes_and_extends
+* module_or_class_include_or_extend_also_includes
+* module_or_class_include_or_extend_also_extends
+* module_or_class_include_or_extend_also_includes_and_extends
+* module_or_class_include_or_extend_prepends_includes
+* module_or_class_include_or_extend_prepends_extends
+* module_or_class_include_or_extend_prepends_includes_and_extends
+
+Class or module or instance cluster methods:
+
+* module_include_or_extend_or_instance_extend_also_includes_or_extends
+* module_include_or_extend_or_instance_extend_also_extends
+* module_include_or_instance_extend_also_includes_or_extends
+* module_include_or_instance_extend_also_extends
+* module_or_instance_extend_also_extends
+* module_include_or_extend_or_instance_extend_prepends_includes_or_extends
+* module_include_or_instance_extend_prepends_includes_or_extends
+* module_include_or_extend_or_instance_extend_prepends_extends
+* module_include_or_instance_extend_prepends_extends
+* module_or_instance_extend_prepends_extends
+
+Class or instance cluster methods:
+
+* class_include_or_extend_or_instance_extend_also_includes_or_extends
+* class_include_or_extend_or_instance_extend_also_extends
+* class_include_or_instance_extend_also_includes_or_extends
+* class_include_or_instance_extend_also_extends
+* class_or_instance_extend_also_extends
+* class_include_or_extend_or_instance_extend_prepends_includes_or_extends
+* class_include_or_instance_extend_prepends_includes_or_extends
+* class_include_or_extend_or_instance_extend_prepends_extends
+* class_include_or_instance_extend_prepends_extends
+* class_or_instance_extend_prepends_extends
+
 Cascade methods (cascades to modules and classes):
 
 * include_cascades_includes
@@ -155,7 +262,7 @@ Cascade to module methods (does not cascade to classes):
 * include_or_extend_cascades_to_module_prepending_extends
 * include_or_extend_cascades_to_module_prepending_includes_and_extends
 
-Block methods:
+Module block methods:
 
 * module_include
 * module_extend
@@ -163,18 +270,56 @@ Block methods:
 * prepend_module_include
 * prepend_module_extend
 * prepend_module_include_or_extend
+
+Class block methods:
+
 * class_include
 * class_extend
 * class_include_or_extend
 * prepend_class_include
 * prepend_class_extend
 * prepend_class_include_or_extend
+
+Instance block methods:
+
+* instance_extend
+* prepend_instance_extend
+
+Class or module block methods:
+
 * class_or_module_include
 * class_or_module_extend
 * class_or_module_include_or_extend
 * prepend_class_or_module_include
 * prepend_class_or_module_extend
 * prepend_class_or_module_include_or_extend
+
+Module or instance block methods:
+
+* module_or_instance_extend
+* module_include_or_instance_extend
+* module_include_or_extend_or_instance_extend
+* prepend_module_or_instance_extend
+* prepend_module_include_or_instance_extend
+* prepend_module_include_or_extend_or_instance_extend
+
+Class or instance block methods:
+
+* class_or_instance_extend
+* class_include_or_instance_extend
+* class_include_or_extend_or_instance_extend
+* prepend_class_or_instance_extend
+* prepend_class_include_or_instance_extend
+* prepend_class_include_or_extend_or_instance_extend
+
+Class or module or instance block methods:
+
+* class_or_module_or_instance_extend
+* class_or_module_include_or_instance_extend
+* class_or_module_include_or_extend_or_instance_extend
+* prepend_class_or_module_or_instance_extend
+* prepend_class_or_module_include_or_instance_extend
+* prepend_class_or_module_include_or_extend_or_instance_extend
 
 # License #
 

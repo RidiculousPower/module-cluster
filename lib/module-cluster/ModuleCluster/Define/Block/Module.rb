@@ -1,12 +1,24 @@
 
 module ModuleCluster::Define::Block::Module
   
+  include ModuleCluster::CascadeFeatures::ClusterStack
+  
+  extend ModuleCluster::ExtendForCascade
+  
+  ############################
+  #  self.should_run_block?  #
+  ############################
+  
+  def self.should_run_block?( hooked_instance )
+    return hooked_instance.is_a?( Module ) && ! hooked_instance.is_a?( Class )
+  end
+
   ####################
   #  module_include  #
   ####################
 
   def module_include( & runtime_block )
-    cluster_stack.module_include( runtime_block )
+    cluster_stack.module_include( ModuleCluster::Define::Block::Module, runtime_block )
   end
 
   ###################
@@ -14,7 +26,7 @@ module ModuleCluster::Define::Block::Module
   ###################
 
   def module_extend( & runtime_block )
-    cluster_stack.module_extend( runtime_block )
+    cluster_stack.module_extend( ModuleCluster::Define::Block::Module, runtime_block )
   end
 
   ##############################
@@ -31,7 +43,7 @@ module ModuleCluster::Define::Block::Module
   ############################
 
   def prepend_module_include( & runtime_block )
-    cluster_stack.prepend_module_include( runtime_block )
+    cluster_stack.prepend_module_include( ModuleCluster::Define::Block::Module, runtime_block )
   end
 
   ###########################
@@ -39,7 +51,7 @@ module ModuleCluster::Define::Block::Module
   ###########################
 
   def prepend_module_extend( & runtime_block )
-    cluster_stack.prepend_module_extend( runtime_block )
+    cluster_stack.prepend_module_extend( ModuleCluster::Define::Block::Module, runtime_block )
   end
 
   ######################################

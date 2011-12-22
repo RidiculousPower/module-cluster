@@ -34,3 +34,10 @@ Updates to :cascade_features to support cascading to extended instances.
 == 10/18/2011
 
 Changes from :module_eval to :instance_eval for instance extend support.
+
+== 12/22/2011
+
+Full internals update/rewrite/restructure for instance support and more complete hooks.
+
+Separated out public interface modules from internal implementation modules. 
+

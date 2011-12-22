@@ -1,7 +1,7 @@
 
 module ModuleCluster::Define::ClusterCascadesToClass
 
-  include ModuleCluster::Define::ClusterStack
+  include ModuleCluster::CascadeFeatures::ClusterStack
 
   extend ModuleCluster::ExtendForCascade
 
@@ -9,29 +9,16 @@ module ModuleCluster::Define::ClusterCascadesToClass
   #  self.should_include_or_extend?  #
   ####################################
 
-  def self.should_include_or_extend?( class_or_module )
-    return class_or_module.is_a?( Class )
+  def self.should_include_or_extend?( hooked_instance )
+    return hooked_instance.is_a?( Class )
   end
 
   ##########################
   #  self.should_cascade?  #
   ##########################
 
-  def self.should_cascade?( class_or_module )
-    return ! class_or_module.is_a?( Class )
-  end
-
-  ###########################
-  #  self.perform_cascades  #
-  ###########################
-  
-  def self.perform_cascades( class_or_module, method, modules )
-    class_or_module.instance_eval do
-      unless is_a?( Class )
-        extend ModuleCluster::Define::ClusterCascadesToClass
-        __send__( method, *modules )
-      end
-    end
+  def self.should_cascade?( hooked_instance )
+    return hooked_instance.is_a?( Module ) && ! hooked_instance.is_a?( Class )
   end
 
 	########################################
@@ -57,8 +44,7 @@ module ModuleCluster::Define::ClusterCascadesToClass
 	####################################################
 
 	def include_cascades_includes_and_extends_to_class( *includes_and_extends, & runtime_includes_and_extends_block )
-		include_cascades_includes_to_class( *includes_and_extends, & runtime_includes_and_extends_block )
-		include_cascades_extends_to_class( *includes_and_extends, & runtime_includes_and_extends_block )
+	  cluster_stack.include_includes_and_extends( ModuleCluster::Define::ClusterCascadesToClass, __method__, includes_and_extends, runtime_includes_and_extends_block )
 		return self
 	end
 
@@ -85,8 +71,7 @@ module ModuleCluster::Define::ClusterCascadesToClass
 	###################################################
 
 	def extend_cascades_includes_and_extends_to_class( *includes_and_extends, & runtime_includes_and_extends_block )
-		extend_cascades_includes_to_class( *includes_and_extends, & runtime_includes_and_extends_block )
-		extend_cascades_extends_to_class( *includes_and_extends, & runtime_includes_and_extends_block )
+	  cluster_stack.extend_includes_and_extends( ModuleCluster::Define::ClusterCascadesToClass, __method__, includes_and_extends, runtime_includes_and_extends_block )
 		return self
 	end
 
@@ -113,8 +98,7 @@ module ModuleCluster::Define::ClusterCascadesToClass
 	###############################################################
 
 	def include_cascades_to_class_prepending_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-		include_cascades_to_class_prepending_includes( *includes_and_extends, & runtime_includes_and_extends_block )
-		include_cascades_to_class_prepending_extends( *includes_and_extends, & runtime_includes_and_extends_block )
+	  cluster_stack.include_prepends_includes_and_extends( ModuleCluster::Define::ClusterCascadesToClass, __method__, includes_and_extends, runtime_includes_and_extends_block )
 		return self
 	end
 
@@ -141,8 +125,7 @@ module ModuleCluster::Define::ClusterCascadesToClass
 	##############################################################
 
 	def extend_cascades_to_class_prepending_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-		extend_cascades_to_class_prepending_includes( *includes_and_extends, & runtime_includes_and_extends_block )
-		extend_cascades_to_class_prepending_extends( *includes_and_extends, & runtime_includes_and_extends_block )
+	  cluster_stack.extend_prepends_includes_and_extends( ModuleCluster::Define::ClusterCascadesToClass, __method__, includes_and_extends, runtime_includes_and_extends_block )
 		return self
 	end
 

@@ -1,7 +1,7 @@
 
 module ModuleCluster::Define::ClusterCascades
 
-  include ModuleCluster::Define::ClusterStack
+  include ModuleCluster::CascadeFeatures::ClusterStack
 
   extend ModuleCluster::ExtendForCascade
 
@@ -9,7 +9,7 @@ module ModuleCluster::Define::ClusterCascades
   #  self.should_include_or_extend?  #
   ####################################
 
-  def self.should_include_or_extend?( class_or_module )
+  def self.should_include_or_extend?( hooked_instance )
     return true
   end
 
@@ -17,21 +17,8 @@ module ModuleCluster::Define::ClusterCascades
   #  self.should_cascade?  #
   ##########################
 
-  def self.should_cascade?( class_or_module )
+  def self.should_cascade?( hooked_instance )
     return true
-  end
-
-  ###########################
-  #  self.perform_cascades  #
-  ###########################
-  
-  def self.perform_cascades( class_or_module, method, modules )
-    class_or_module.instance_eval do
-      unless is_a?( Class )
-        extend ModuleCluster::Define::ClusterCascades
-        __send__( method, *modules )
-      end
-    end
   end
 
 	###############################
@@ -57,8 +44,7 @@ module ModuleCluster::Define::ClusterCascades
 	###########################################
 
 	def include_cascades_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-		include_cascades_includes( *includes_and_extends, & runtime_includes_and_extends_block )
-		include_cascades_extends( *includes_and_extends, & runtime_includes_and_extends_block )
+	  cluster_stack.include_includes_and_extends( ModuleCluster::Define::ClusterCascades, __method__, includes_and_extends, runtime_includes_and_extends_block )
 		return self
 	end
 
@@ -85,8 +71,7 @@ module ModuleCluster::Define::ClusterCascades
 	##########################################
 
 	def extend_cascades_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-		extend_cascades_includes( *includes_and_extends, & runtime_includes_and_extends_block )
-		extend_cascades_extends( *includes_and_extends, & runtime_includes_and_extends_block )
+	  cluster_stack.extend_includes_and_extends( ModuleCluster::Define::ClusterCascades, __method__, includes_and_extends, runtime_includes_and_extends_block )
 		return self
 	end
 

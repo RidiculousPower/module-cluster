@@ -1,7 +1,7 @@
 
 module ModuleCluster::Define::Cluster
 
-  include ModuleCluster::Define::ClusterStack
+  include ModuleCluster::CascadeFeatures::ClusterStack
   
   extend ModuleCluster::ExtendForCascade
 
@@ -18,17 +18,9 @@ module ModuleCluster::Define::Cluster
   ##########################
 
   def self.should_cascade?( class_or_module )
-    return true
+    return false
   end
-  
-  ###########################
-  #  self.perform_cascades  #
-  ###########################
-  
-  def self.perform_cascades( class_or_module, method, modules )
-    # nothing required
-  end
-  
+
 	###########################
 	#  include_also_includes  #
 	###########################
@@ -52,8 +44,7 @@ module ModuleCluster::Define::Cluster
 	#######################################
 
 	def include_also_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-		include_also_includes( *includes_and_extends, & runtime_includes_and_extends_block )
-		include_also_extends( *includes_and_extends, & runtime_includes_and_extends_block )
+	  cluster_stack.include_includes_and_extends( ModuleCluster::Define::Cluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
 		return self
 	end
 
@@ -80,8 +71,7 @@ module ModuleCluster::Define::Cluster
 	######################################
 
 	def extend_also_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-		extend_also_includes( *includes_and_extends, & runtime_includes_and_extends_block )
-		extend_also_extends( *includes_and_extends, & runtime_includes_and_extends_block )
+	  cluster_stack.extend_includes_and_extends( ModuleCluster::Define::Cluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
 		return self
 	end
 
@@ -108,8 +98,7 @@ module ModuleCluster::Define::Cluster
 	###########################################
 
 	def include_prepends_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-		include_prepends_includes( *includes_and_extends, & runtime_includes_and_extends_block )
-		include_prepends_extends( *includes_and_extends, & runtime_includes_and_extends_block )
+	  cluster_stack.include_prepends_includes_and_extends( ModuleCluster::Define::Cluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
 		return self
 	end
 
@@ -136,8 +125,7 @@ module ModuleCluster::Define::Cluster
 	##########################################
 
 	def extend_prepends_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-		extend_prepends_includes( *includes_and_extends, & runtime_includes_and_extends_block )
-		extend_prepends_extends( *includes_and_extends, & runtime_includes_and_extends_block )
+	  cluster_stack.extend_prepends_includes_and_extends( ModuleCluster::Define::Cluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
 		return self
 	end
 	
