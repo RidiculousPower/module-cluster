@@ -34,7 +34,7 @@ describe ModuleCluster::Define::ClassOrInstanceCluster do
       end
       module Module2
       end
-      class_include_or_extend_or_instance_extend_also_includes_or_extends( Module1, Module2 )
+      class_include_or_extend_or_instance_extend_also_includes_or_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -89,7 +89,7 @@ describe ModuleCluster::Define::ClassOrInstanceCluster do
       end
       module Module2
       end
-      class_include_or_extend_or_instance_extend_also_extends( Module1, Module2 )
+      class_include_or_extend_or_instance_extend_also_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -144,7 +144,7 @@ describe ModuleCluster::Define::ClassOrInstanceCluster do
       end
       module Module2
       end
-      class_include_or_instance_extend_also_includes_or_extends( Module1, Module2 )
+      class_include_or_instance_extend_also_includes_or_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -199,7 +199,7 @@ describe ModuleCluster::Define::ClassOrInstanceCluster do
       end
       module Module2
       end
-      class_include_or_instance_extend_also_extends( Module1, Module2 )
+      class_include_or_instance_extend_also_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -254,7 +254,7 @@ describe ModuleCluster::Define::ClassOrInstanceCluster do
       end
       module Module2
       end
-      class_or_instance_extend_also_extends( Module1, Module2 )
+      class_or_instance_extend_also_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -309,7 +309,7 @@ describe ModuleCluster::Define::ClassOrInstanceCluster do
       end
       module Module2
       end
-      class_include_or_extend_or_instance_extend_prepends_includes_or_extends( Module1, Module2 )
+      class_include_or_extend_or_instance_extend_prepends_includes_or_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -364,7 +364,7 @@ describe ModuleCluster::Define::ClassOrInstanceCluster do
       end
       module Module2
       end
-      class_include_or_instance_extend_prepends_includes_or_extends( Module1, Module2 )
+      class_include_or_instance_extend_prepends_includes_or_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -419,7 +419,7 @@ describe ModuleCluster::Define::ClassOrInstanceCluster do
       end
       module Module2
       end
-      class_include_or_extend_or_instance_extend_prepends_extends( Module1, Module2 )
+      class_include_or_extend_or_instance_extend_prepends_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -474,7 +474,7 @@ describe ModuleCluster::Define::ClassOrInstanceCluster do
       end
       module Module2
       end
-      class_include_or_instance_extend_prepends_extends( Module1, Module2 )
+      class_include_or_instance_extend_prepends_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -529,7 +529,7 @@ describe ModuleCluster::Define::ClassOrInstanceCluster do
       end
       module Module2
       end
-      class_or_instance_extend_prepends_extends( Module1, Module2 )
+      class_or_instance_extend_prepends_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       respond_to?( :extended ).should == true
       module ModuleProof

@@ -1,10 +1,12 @@
 
 class ModuleCluster::ClusterStack
 
-  include ModuleCluster::ClusterStack::Block
-  include ModuleCluster::ClusterStack::Includes
-  include ModuleCluster::ClusterStack::Extends
-  include ModuleCluster::ClusterStack::PrependsIncludes
-  include ModuleCluster::ClusterStack::PrependsExtends
+  include Block
+  include Includes
+  include Extends
+  include PrependsIncludes
+  include PrependsExtends
+  include Status
+  include Suspend
   
 end

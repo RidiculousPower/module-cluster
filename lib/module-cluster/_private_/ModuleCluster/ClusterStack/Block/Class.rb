@@ -22,7 +22,7 @@ module ModuleCluster::ClusterStack::Block::Class
   ###########################
 
   def prepend_class_include( dependency_module, runtime_block )
-    prepending_include_hooks.push( ModuleCluster::ClusterStack::Block::Set.new( dependency_module, runtime_block ) )
+    prepend_include_hooks.push( ModuleCluster::ClusterStack::Block::Set.new( dependency_module, runtime_block ) )
   end
 
   ##########################
@@ -30,7 +30,7 @@ module ModuleCluster::ClusterStack::Block::Class
   ##########################
 
   def prepend_class_extend( dependency_module, runtime_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Block::Set.new( dependency_module, runtime_block ) )
+    prepend_extend_hooks.push( ModuleCluster::ClusterStack::Block::Set.new( dependency_module, runtime_block ) )
   end
 
 end

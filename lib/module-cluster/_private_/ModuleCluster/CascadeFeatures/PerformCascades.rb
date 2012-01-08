@@ -2,66 +2,73 @@
 module ModuleCluster::CascadeFeatures::PerformCascades
 
   ######################
-  #  cascade_features  #
+  #  perform_cascades  #
   ######################
   
-  def cascade_features( module_self, hooked_instance, set_stack )
+  def perform_cascades( module_self, action, hooked_instance, set_stack )
     
     # This method is called when a ModuleCluster module is included or extended.
     # It determines what modules should be included/extended and which should cascade.
-    
-    # for each set:
-    set_stack.each do |this_set|
 
-      # Block sets simply run a block at a hook. They do not include or extend returns from the block.
-      # The hooked module will not be extended by ModuleCluster.
-      if this_set.is_a?( ModuleCluster::ClusterStack::Block::Set )
-
-        if this_set.dependency_module.should_run_block?( hooked_instance )
-
-          case this_set.runtime_block.arity
-            when 0
-              module_self.instance_eval( & this_set.runtime_block )
-            else
-              module_self.instance_exec( hooked_instance, & this_set.runtime_block )
-          end
-
-        end
-        
-      # Other sets take parameters and an optional block. The optional block returns are included
-      # or extended like the parameters provided.
-      else
-        
-        # dependency modules can cause instances to be included/extended and/or cascade
-        should_include = this_set.dependency_module.should_include_or_extend?( hooked_instance )
-        should_cascade = this_set.dependency_module.should_cascade?( hooked_instance )
-
-        # cascade parameter modules as appropriate
-        cascade_modules_into_hooked_instance( module_self, hooked_instance, this_set, this_set.modules ) if should_cascade
-
-        # include/extend parameter modules as appropriate
-        include_extend_modules( module_self, hooked_instance, this_set, this_set.modules ) if should_include        
-        
-        # process runtime block if present
-        if this_set.runtime_includes_or_extends_block
-          
-          # if we have a runtime block, run block and collect returns as appropriate
-          if runtime_modules = collect_block_runtime_result_modules( module_self, hooked_instance, this_set )
-        
-            # cascade return modules if appropriate
-            cascade_modules_into_hooked_instance( module_self, hooked_instance, this_set, runtime_modules ) if should_cascade
-          
-            # include/extend return modules if appropriate
-            include_extend_modules( module_self, hooked_instance, this_set, runtime_modules ) if should_include
-          
-          end
-          
-        end
-        
-      end
+    unless module_self.hooks_suspended?( action )
       
+      # for each set:
+      set_stack.each do |this_set|
+        
+        # if this particular set is suspended, skip to the next
+        next if this_set.suspended
+        
+        # Block sets simply run a block at a hook. They do not include or extend returns from the block.
+        # The hooked module will not be extended by ModuleCluster.
+        if this_set.is_a?( ModuleCluster::ClusterStack::Block::Set )
+
+          if this_set.dependency_module.should_run_block?( hooked_instance )
+
+            case this_set.runtime_block.arity
+              when 0
+                module_self.instance_eval( & this_set.runtime_block )
+              else
+                module_self.instance_exec( hooked_instance, & this_set.runtime_block )
+            end
+
+          end
+        
+        # Other sets take parameters and an optional block. The optional block returns are included
+        # or extended like the parameters provided.
+        else
+        
+          # dependency modules can cause instances to be included/extended and/or cascade
+          should_include = this_set.dependency_module.should_include_or_extend?( hooked_instance )
+          should_cascade = this_set.dependency_module.should_cascade?( hooked_instance )
+
+          # cascade parameter modules as appropriate
+          cascade_modules_into_hooked_instance( module_self, hooked_instance, this_set, this_set.modules ) if should_cascade
+
+          # include/extend parameter modules as appropriate
+          include_extend_modules( module_self, hooked_instance, this_set, this_set.modules ) if should_include        
+        
+          # process runtime block if present
+          if this_set.runtime_includes_or_extends_block
+          
+            # if we have a runtime block, run block and collect returns as appropriate
+            if runtime_modules = collect_block_runtime_result_modules( module_self, hooked_instance, this_set )
+        
+              # cascade return modules if appropriate
+              cascade_modules_into_hooked_instance( module_self, hooked_instance, this_set, runtime_modules ) if should_cascade
+          
+              # include/extend return modules if appropriate
+              include_extend_modules( module_self, hooked_instance, this_set, runtime_modules ) if should_include
+          
+            end
+          
+          end
+        
+        end
+      
+      end
+    
     end
-            
+       
   end
 
   ############################
@@ -159,15 +166,26 @@ module ModuleCluster::CascadeFeatures::PerformCascades
   
     should_include_or_extend_instance = false
     
-    if module_class_instance_or_all == :all                                                                               or
-       module_class_instance_or_all == :module   && ( into_instance.is_a?( Module ) && ! into_instance.is_a?( Class ) )   or
-       module_class_instance_or_all == :class    && into_instance.is_a?( Class )                                          or
-       module_class_instance_or_all == :instance && ! into_instance.is_a?( Module )
-       
-      should_include_or_extend_instance = true
-    
+    case module_class_instance_or_all
+      when :all, :module_or_class_or_instance, :module_and_class_and_instance, 
+           :module_class_or_instance, :module_class_and_instance, :module_class_instance
+        should_include_or_extend_instance = true
+      when :module_or_class, :module_and_class, :module_class
+        should_include_or_extend_instance = into_instance.is_a?( Module )
+      when :module_or_instance, :module_and_instance, :module_instance
+        should_include_or_extend_instance = ( ! into_instance.is_a?( Module ) or
+                                              ( into_instance.is_a?( Module ) && ! into_instance.is_a?( Class ) ) )
+      when :class_or_instance, :class_and_instance, :class_instance
+        should_include_or_extend_instance = ( into_instance.is_a?( Class ) or
+                                              ! into_instance.is_a?( Module ) )
+      when :module
+        should_include_or_extend_instance = ( into_instance.is_a?( Module ) && ! into_instance.is_a?( Class ) )
+      when :class
+        should_include_or_extend_instance = into_instance.is_a?( Class )
+      when :instance
+        should_include_or_extend_instance = ! into_instance.is_a?( Module )
     end
-    
+
     return should_include_or_extend_instance
     
   end

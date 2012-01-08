@@ -29,7 +29,7 @@ Added block methods for nested declarations.
 
 == 8/25/2011
 
-Updates to :cascade_features to support cascading to extended instances.
+Updates to :perform_cascades to support cascading to extended instances.
 
 == 10/18/2011
 
@@ -37,7 +37,21 @@ Changes from :module_eval to :instance_eval for instance extend support.
 
 == 12/22/2011
 
-Full internals update/rewrite/restructure for instance support and more complete hooks.
+Full internals update/rewrite/restructure for instance support and more complete 
+hooks.
 
 Separated out public interface modules from internal implementation modules. 
+
+== 12/27/2011
+
+Added ModuleCluster::Define::Status to interrogate currently defined hooks.
+
+Added ModuleCluster::Suspend, which includes various methods to temporarily or 
+permanently modify hooks that have been created.
+
+Changed return values on interface methods from self to the set created by the method.
+This permits chaining of settings, such as appending .name( :set_name ).
+
+Added set names, which permit the later suspension of sets by name rather than having to
+describe which set(s) should be suspended (although this can also be done).
 

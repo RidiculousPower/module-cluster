@@ -24,7 +24,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      include_cascades_includes_to_class( Module1, Module2 )
+      include_cascades_includes_to_class( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       module ModuleProof1
         include ModuleCluster::Define::ClusterCascadesToClass::Mock01
@@ -72,7 +72,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      include_cascades_extends_to_class( Module1, Module2 )
+      include_cascades_extends_to_class( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       module ModuleProof1
         include ModuleCluster::Define::ClusterCascadesToClass::Mock02
@@ -120,7 +120,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      include_cascades_includes_and_extends_to_class( Module1, Module2 )
+      include_cascades_includes_and_extends_to_class( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       module ModuleProof1
         include ModuleCluster::Define::ClusterCascadesToClass::Mock03
@@ -168,7 +168,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      extend_cascades_includes_to_class( Module1, Module2 )
+      extend_cascades_includes_to_class( Module1, Module2 ).name = :some_name
       respond_to?( :extended ).should == true
       module ModuleProof1
         extend ModuleCluster::Define::ClusterCascadesToClass::Mock04
@@ -228,7 +228,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      extend_cascades_extends_to_class( Module1, Module2 )
+      extend_cascades_extends_to_class( Module1, Module2 ).name = :some_name
       respond_to?( :extended ).should == true
       module ModuleProof1
         extend ModuleCluster::Define::ClusterCascadesToClass::Mock05
@@ -288,7 +288,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      extend_cascades_includes_and_extends_to_class( Module1, Module2 )
+      extend_cascades_includes_and_extends_to_class( Module1, Module2 ).name = :some_name
       respond_to?( :extended ).should == true
       module ModuleProof1
         extend ModuleCluster::Define::ClusterCascadesToClass::Mock06
@@ -338,7 +338,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
   end
 
 	###################################################
-	#  include_cascades_to_class_prepending_includes  #
+	#  include_cascades_to_class_prepend_includes  #
 	###################################################
 
   it 'include other modules for any class this module or any including modules are included in, before this module or including module is included' do
@@ -348,7 +348,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      include_cascades_to_class_prepending_includes( Module1, Module2 )
+      include_cascades_to_class_prepend_includes( Module1, Module2 ).name = :some_name
       respond_to?( :append_features ).should == true
       module ModuleProof1
         include ModuleCluster::Define::ClusterCascadesToClass::Mock07
@@ -386,7 +386,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
   end
 	
 	##################################################
-	#  include_cascades_to_class_prepending_extends  #
+	#  include_cascades_to_class_prepend_extends  #
 	##################################################
 
   it 'extend other modules for any class this module or any including modules are included in, before this module or including module is included' do
@@ -396,7 +396,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      include_cascades_to_class_prepending_extends( Module1, Module2 )
+      include_cascades_to_class_prepend_extends( Module1, Module2 ).name = :some_name
       respond_to?( :append_features ).should == true
       module ModuleProof1
         include ModuleCluster::Define::ClusterCascadesToClass::Mock08
@@ -434,7 +434,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
   end
 	
 	###############################################################
-	#  include_cascades_to_class_prepending_includes_and_extends  #
+	#  include_cascades_to_class_prepend_includes_and_extends  #
 	###############################################################
 
   it 'include and extend other modules for any class this module or any including modules are included in, before this module or including module is included' do
@@ -444,7 +444,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      include_cascades_to_class_prepending_includes_and_extends( Module1, Module2 )
+      include_cascades_to_class_prepend_includes_and_extends( Module1, Module2 ).name = :some_name
       respond_to?( :append_features ).should == true
       module ModuleProof1
         include ModuleCluster::Define::ClusterCascadesToClass::Mock09
@@ -482,7 +482,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
   end
 
 	##################################################
-	#  extend_cascades_to_class_prepending_includes  #
+	#  extend_cascades_to_class_prepend_includes  #
 	##################################################
 
   it 'include other modules for any class this module or any including modules are included in, before this module is extended' do
@@ -492,7 +492,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      extend_cascades_to_class_prepending_includes( Module1, Module2 )
+      extend_cascades_to_class_prepend_includes( Module1, Module2 ).name = :some_name
       respond_to?( :extend_object ).should == true
       module ModuleProof1
         extend ModuleCluster::Define::ClusterCascadesToClass::Mock10
@@ -542,7 +542,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
   end
 	
 	#################################################
-	#  extend_cascades_to_class_prepending_extends  #
+	#  extend_cascades_to_class_prepend_extends  #
 	#################################################
 
   it 'extend other modules for any class this module or any including modules are included in, before this module is extended' do
@@ -552,7 +552,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      extend_cascades_to_class_prepending_extends( Module1, Module2 )
+      extend_cascades_to_class_prepend_extends( Module1, Module2 ).name = :some_name
       respond_to?( :extend_object ).should == true
       module ModuleProof1
         extend ModuleCluster::Define::ClusterCascadesToClass::Mock11
@@ -602,7 +602,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
   end
 	
 	##############################################################
-	#  extend_cascades_to_class_prepending_includes_and_extends  #
+	#  extend_cascades_to_class_prepend_includes_and_extends  #
 	##############################################################
 
   it 'include and extend other modules for any class this module or any including modules are included in, before this module is extended' do
@@ -612,7 +612,7 @@ describe ModuleCluster::Define::ClusterCascadesToClass do
       end
       module Module2
       end
-      extend_cascades_to_class_prepending_includes_and_extends( Module1, Module2 )
+      extend_cascades_to_class_prepend_includes_and_extends( Module1, Module2 ).name = :some_name
       respond_to?( :extend_object ).should == true
       module ModuleProof1
         extend ModuleCluster::Define::ClusterCascadesToClass::Mock12

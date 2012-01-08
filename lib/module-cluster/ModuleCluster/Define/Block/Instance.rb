@@ -2,6 +2,7 @@
 module ModuleCluster::Define::Block::Instance
   
   include ModuleCluster::CascadeFeatures::ClusterStack
+  include ModuleCluster::Suspend::WithoutHooks
   
   extend ModuleCluster::ExtendForCascade
 
@@ -18,7 +19,7 @@ module ModuleCluster::Define::Block::Instance
   #####################
 
   def instance_extend( & runtime_block )
-    cluster_stack.instance_extend( ModuleCluster::Define::Block::Instance, runtime_block )
+    return cluster_stack.instance_extend( ModuleCluster::Define::Block::Instance, runtime_block )
   end
 
   #############################
@@ -26,7 +27,7 @@ module ModuleCluster::Define::Block::Instance
   #############################
 
   def prepend_instance_extend( & runtime_block )
-    cluster_stack.prepend_instance_extend( ModuleCluster::Define::Block::Instance, runtime_block )
+    return cluster_stack.prepend_instance_extend( ModuleCluster::Define::Block::Instance, runtime_block )
   end
 
 end

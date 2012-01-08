@@ -2,6 +2,7 @@
 module ModuleCluster::Define::InstanceCluster
 
   include ModuleCluster::CascadeFeatures::ClusterStack
+  include ModuleCluster::Suspend::WithoutHooks
   
   extend ModuleCluster::ExtendForCascade
 
@@ -30,8 +31,7 @@ module ModuleCluster::Define::InstanceCluster
 	##################################
 	
 	def instance_extend_also_extends( *extends, & runtime_extends_block )
-	  cluster_stack.instance_extend_extends( ModuleCluster::Define::Cluster, __method__, extends, runtime_extends_block )
-		return self
+	  return cluster_stack.instance_extend_extends( ModuleCluster::Define::Cluster, __method__, extends, runtime_extends_block )
 	end
 	
 	######################################
@@ -39,8 +39,7 @@ module ModuleCluster::Define::InstanceCluster
 	######################################
 	
 	def instance_extend_prepends_extends( *extends, & runtime_extends_block )
-	  cluster_stack.instance_extend_prepends_extends( ModuleCluster::Define::Cluster, __method__, extends, runtime_extends_block )
-		return self
+	  return cluster_stack.instance_extend_prepends_extends( ModuleCluster::Define::Cluster, __method__, extends, runtime_extends_block )
 	end
 	
 end

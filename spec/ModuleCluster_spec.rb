@@ -4,11 +4,11 @@ describe ModuleCluster do
 
   it 'clusters other modules' do
     module ModuleCluster
-      is_a?( ModuleCluster::Define::Cluster )
-      is_a?( ModuleCluster::Define::ClusterCascades )
-      is_a?( ModuleCluster::Define::ClusterCascadesToClass )
-      is_a?( ModuleCluster::Define::ClusterCascadesToModule )
-      is_a?( ModuleCluster::Define::Deprecated )
+      is_a?( Define::Cluster )
+      is_a?( Define::ClusterCascades )
+      is_a?( Define::ClusterCascadesToClass )
+      is_a?( Define::ClusterCascadesToModule )
+      is_a?( Define::Deprecated )
     end
   end
   

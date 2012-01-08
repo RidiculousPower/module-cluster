@@ -2,6 +2,7 @@
 module ModuleCluster::Define::Block::Module
   
   include ModuleCluster::CascadeFeatures::ClusterStack
+  include ModuleCluster::Suspend::WithoutHooks
   
   extend ModuleCluster::ExtendForCascade
   
@@ -18,7 +19,7 @@ module ModuleCluster::Define::Block::Module
   ####################
 
   def module_include( & runtime_block )
-    cluster_stack.module_include( ModuleCluster::Define::Block::Module, runtime_block )
+    return cluster_stack.module_include( ModuleCluster::Define::Block::Module, runtime_block )
   end
 
   ###################
@@ -26,7 +27,7 @@ module ModuleCluster::Define::Block::Module
   ###################
 
   def module_extend( & runtime_block )
-    cluster_stack.module_extend( ModuleCluster::Define::Block::Module, runtime_block )
+    return cluster_stack.module_extend( ModuleCluster::Define::Block::Module, runtime_block )
   end
 
   ##############################
@@ -34,8 +35,9 @@ module ModuleCluster::Define::Block::Module
   ##############################
 
   def module_include_or_extend( & runtime_block )
-    module_include( & runtime_block )
-    module_extend( & runtime_block )
+    include_set = module_include( & runtime_block )
+    extend_set = module_extend( & runtime_block )
+    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
   end
 
   ############################
@@ -43,7 +45,7 @@ module ModuleCluster::Define::Block::Module
   ############################
 
   def prepend_module_include( & runtime_block )
-    cluster_stack.prepend_module_include( ModuleCluster::Define::Block::Module, runtime_block )
+    return cluster_stack.prepend_module_include( ModuleCluster::Define::Block::Module, runtime_block )
   end
 
   ###########################
@@ -51,7 +53,7 @@ module ModuleCluster::Define::Block::Module
   ###########################
 
   def prepend_module_extend( & runtime_block )
-    cluster_stack.prepend_module_extend( ModuleCluster::Define::Block::Module, runtime_block )
+    return cluster_stack.prepend_module_extend( ModuleCluster::Define::Block::Module, runtime_block )
   end
 
   ######################################
@@ -59,8 +61,9 @@ module ModuleCluster::Define::Block::Module
   ######################################
 
   def prepend_module_include_or_extend( & runtime_block )
-    prepend_module_include( & runtime_block )
-    prepend_module_extend( & runtime_block )
+    include_set = prepend_module_include( & runtime_block )
+    extend_set = prepend_module_extend( & runtime_block )
+    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
   end
   
 end

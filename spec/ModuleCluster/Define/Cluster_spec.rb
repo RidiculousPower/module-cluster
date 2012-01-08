@@ -14,7 +14,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_also_includes( Module1, Module2 )
+      include_also_includes( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock01
@@ -46,7 +46,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_also_extends( Module1, Module2 )
+      include_also_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock02
@@ -78,7 +78,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_also_includes_and_extends( Module1, Module2 )
+      include_also_includes_and_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock03
@@ -110,7 +110,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      extend_also_includes( Module1, Module2 )
+      extend_also_includes( Module1, Module2 ).name = :some_name
       respond_to?( :extended ).should == true
       module ModuleProof
         extend ModuleCluster::Define::Cluster::Mock04
@@ -142,7 +142,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      extend_also_extends( Module1, Module2 )
+      extend_also_extends( Module1, Module2 ).name = :some_name
       respond_to?( :extended ).should == true
       module ModuleProof
         extend ModuleCluster::Define::Cluster::Mock05
@@ -180,7 +180,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      extend_also_includes_and_extends( Module1, Module2 )
+      extend_also_includes_and_extends( Module1, Module2 ).name = :some_name
       respond_to?( :extended ).should == true
       module ModuleProof
         extend ModuleCluster::Define::Cluster::Mock06
@@ -218,7 +218,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_prepends_includes( Module1, Module2 )
+      include_prepends_includes( Module1, Module2 ).name = :some_name
       respond_to?( :append_features ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock07
@@ -250,7 +250,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_prepends_extends( Module1, Module2 )
+      include_prepends_extends( Module1, Module2 ).name = :some_name
       respond_to?( :append_features ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock08
@@ -282,7 +282,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_prepends_includes_and_extends( Module1, Module2 )
+      include_prepends_includes_and_extends( Module1, Module2 ).name = :some_name
       respond_to?( :append_features ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock09
@@ -314,7 +314,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      extend_prepends_includes( Module1, Module2 )
+      extend_prepends_includes( Module1, Module2 ).name = :some_name
       respond_to?( :extend_object ).should == true
       module ModuleProof
         extend ModuleCluster::Define::Cluster::Mock10
@@ -346,7 +346,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      extend_prepends_extends( Module1, Module2 )
+      extend_prepends_extends( Module1, Module2 ).name = :some_name
       respond_to?( :extend_object ).should == true
       module ModuleProof
         extend ModuleCluster::Define::Cluster::Mock11
@@ -384,7 +384,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      extend_prepends_includes_and_extends( Module1, Module2 )
+      extend_prepends_includes_and_extends( Module1, Module2 ).name = :some_name
       respond_to?( :extend_object ).should == true
       module ModuleProof
         extend ModuleCluster::Define::Cluster::Mock12
@@ -422,7 +422,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_or_extend_also_includes( Module1, Module2 )
+      include_or_extend_also_includes( Module1, Module2 ).name = :some_name
       respond_to?( :append_features ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock13
@@ -470,7 +470,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_or_extend_also_extends( Module1, Module2 )
+      include_or_extend_also_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock14
@@ -518,7 +518,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_or_extend_also_includes_and_extends( Module1, Module2 )
+      include_or_extend_also_includes_and_extends( Module1, Module2 ).name = :some_name
       respond_to?( :included ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock15
@@ -566,7 +566,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_or_extend_prepends_includes( Module1, Module2 )
+      include_or_extend_prepends_includes( Module1, Module2 ).name = :some_name
       respond_to?( :append_features ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock16
@@ -614,7 +614,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_or_extend_prepends_extends( Module1, Module2 )
+      include_or_extend_prepends_extends( Module1, Module2 ).name = :some_name
       respond_to?( :extend_object ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock17
@@ -668,7 +668,7 @@ describe ModuleCluster::Define::Cluster do
       end
       module Module2
       end
-      include_or_extend_prepends_includes_and_extends( Module1, Module2 )
+      include_or_extend_prepends_includes_and_extends( Module1, Module2 ).name = :some_name
       respond_to?( :append_features ).should == true
       module ModuleProof
         include ModuleCluster::Define::Cluster::Mock18

@@ -34,7 +34,7 @@ describe ModuleCluster::Define::InstanceCluster do
       end
       module Module2
       end
-      instance_extend_also_extends( Module1, Module2 )
+      instance_extend_also_extends( Module1, Module2 ).name = :some_name
       respond_to?( :extended ).should == true
       module ModuleProof
         extend ModuleCluster::Define::InstanceCluster::Mock01
@@ -72,7 +72,7 @@ describe ModuleCluster::Define::InstanceCluster do
       end
       module Module2
       end
-      instance_extend_prepends_extends( Module1, Module2 )
+      instance_extend_prepends_extends( Module1, Module2 ).name = :some_name
       respond_to?( :extend_object ).should == true
       module ModuleProof
         extend ModuleCluster::Define::InstanceCluster::Mock02

@@ -53,6 +53,90 @@ describe ModuleCluster::CascadeFeatures::PerformCascades do
     ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
     into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
     ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    module_class_instance_or_all = :module_class_or_instance
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    module_class_instance_or_all = :module_class_and_instance
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    module_class_instance_or_all = :module_class_instance
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    module_class_instance_or_all = :module_or_class
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == false
+    module_class_instance_or_all = :module_and_class
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == false
+    module_class_instance_or_all = :module_class
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == false
+    module_class_instance_or_all = :module_or_instance
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == false
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    module_class_instance_or_all = :module_and_instance
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == false
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    module_class_instance_or_all = :module_instance
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == false
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    module_class_instance_or_all = :class_or_instance
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == false
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    module_class_instance_or_all = :class_and_instance
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == false
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    module_class_instance_or_all = :class_instance
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == false
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
+    into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockClassInstance02.new
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
     module_class_instance_or_all = :module
     into_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
     ModuleCluster::CascadeFeatures::PerformCascades::Mock02.should_include_or_extend_instance?( module_class_instance_or_all, into_instance ).should == true
@@ -224,7 +308,7 @@ describe ModuleCluster::CascadeFeatures::PerformCascades do
   end
 
   ######################
-  #  cascade_features  #
+  #  perform_cascades  #
   ######################
 
   it 'can perform cascade of specified modules into instance' do
@@ -236,6 +320,15 @@ describe ModuleCluster::CascadeFeatures::PerformCascades do
       end
       def self.should_cascade?( hooked_instance )
         return true
+      end
+      def self.hooks_suspended?( action )
+        return @hooks_suspended ||= false
+      end
+      def self.suspend_hooks
+        @hooks_suspended = true
+      end
+      def self.unsuspend_hooks
+        @hooks_suspended = false
       end
       def declaration_method( modules )
         @declaration_method_called = true
@@ -264,7 +357,21 @@ describe ModuleCluster::CascadeFeatures::PerformCascades do
     set_two = ModuleCluster::ClusterStack::Set.new( module_self, :declaration_method, :all, :extend, [ ModuleCluster::CascadeFeatures::PerformCascades::MockHookedIncludeModule06B ] )
     set_three = ModuleCluster::ClusterStack::Set.new( module_self, :declaration_method, :all, :include_and_extend, [ ModuleCluster::CascadeFeatures::PerformCascades::MockHookedIncludeModule06C ] )
     set_stack = [ set_one, set_two, set_three ]
-    ModuleCluster::CascadeFeatures::PerformCascades::Mock06.cascade_features( module_self, hooked_instance, set_stack )
+
+    # test that suspending works - mocked for true/false
+    module_self.suspend_hooks
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock06.perform_cascades( module_self, :include, hooked_instance, set_stack )
+    hooked_instance.ancestors.include?( ModuleCluster::CascadeFeatures::PerformCascades::MockHookedIncludeModule06A ).should == false
+    hooked_instance.ancestors.include?( ModuleCluster::CascadeFeatures::PerformCascades::MockHookedIncludeModule06C ).should == false
+    eigenclass = class << hooked_instance ; self ; end
+    eigenclass.ancestors.include?( ModuleCluster::CascadeFeatures::PerformCascades::MockHookedIncludeModule06B ).should == false
+    eigenclass.ancestors.include?( ModuleCluster::CascadeFeatures::PerformCascades::MockHookedIncludeModule06C ).should == false
+    # also our dependency module should be extended
+    eigenclass.ancestors.include?( module_self ).should == false
+    module_self.unsuspend_hooks
+
+
+    ModuleCluster::CascadeFeatures::PerformCascades::Mock06.perform_cascades( module_self, :include, hooked_instance, set_stack )
     hooked_instance.ancestors.include?( ModuleCluster::CascadeFeatures::PerformCascades::MockHookedIncludeModule06A ).should == true
     hooked_instance.ancestors.include?( ModuleCluster::CascadeFeatures::PerformCascades::MockHookedIncludeModule06C ).should == true
     eigenclass = class << hooked_instance ; self ; end
@@ -273,6 +380,7 @@ describe ModuleCluster::CascadeFeatures::PerformCascades do
     # also our dependency module should be extended
     eigenclass.ancestors.include?( module_self ).should == true
     hooked_instance.called_declaration_method.should == true
+    
   end
 
 end

@@ -1,6 +1,6 @@
 
 module ModuleCluster::CascadeFeatures::ClusterStack
-
+  
   #########################
   #  self.cluster_stacks  #
   #########################

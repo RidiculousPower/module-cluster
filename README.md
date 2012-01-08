@@ -51,7 +51,7 @@ Blocks can be used to return dynamically-determined modules at runtime.
 ```ruby
 module SomeModule
   extend ModuleCluster
-  include_or_extend_cascades_prepending_extends do
+  include_or_extend_cascades_prepend_extends do
     method_that_returns_one_or_more_modules
   end
 end
@@ -61,7 +61,7 @@ Block methods can be used for nesting declarations, for instance to apply cascad
 
 ```ruby
 prepend_module_include do |class_or_module|
-  class_or_module.include_or_extend_cascades_prepending_extends do
+  class_or_module.include_or_extend_cascades_prepend_extends do
     method_that_returns_one_or_more_modules
   end
 end
@@ -207,18 +207,18 @@ Cascade methods (cascades to modules and classes):
 * extend_cascades_includes
 * extend_cascades_extends
 * extend_cascades_includes_and_extends
-* include_cascades_prepending_includes
-* include_cascades_prepending_extends
-* include_cascades_prepending_includes_and_extends
-* extend_cascades_prepending_includes
-* extend_cascades_prepending_extends
-* extend_cascades_prepending_includes_and_extends
+* include_cascades_prepend_includes
+* include_cascades_prepend_extends
+* include_cascades_prepend_includes_and_extends
+* extend_cascades_prepend_includes
+* extend_cascades_prepend_extends
+* extend_cascades_prepend_includes_and_extends
 * include_or_extend_cascades_includes
 * include_or_extend_cascades_extends
 * include_or_extend_cascades_includes_and_extends
-* include_or_extend_cascades_prepending_includes
-* include_or_extend_cascades_prepending_extends
-* include_or_extend_cascades_prepending_includes_and_extends
+* include_or_extend_cascades_prepend_includes
+* include_or_extend_cascades_prepend_extends
+* include_or_extend_cascades_prepend_includes_and_extends
 
 Cascade to class methods (does not cascade to modules):
 
@@ -228,18 +228,18 @@ Cascade to class methods (does not cascade to modules):
 * extend_cascades_includes_to_class
 * extend_cascades_extends_to_class
 * extend_cascades_includes_and_extends_to_class
-* include_cascades_to_class_prepending_includes
-* include_cascades_to_class_prepending_extends
-* include_cascades_to_class_prepending_includes_and_extends
-* extend_cascades_to_class_prepending_includes
-* extend_cascades_to_class_prepending_extends
-* extend_cascades_to_class_prepending_includes_and_extends
+* include_cascades_to_class_prepend_includes
+* include_cascades_to_class_prepend_extends
+* include_cascades_to_class_prepend_includes_and_extends
+* extend_cascades_to_class_prepend_includes
+* extend_cascades_to_class_prepend_extends
+* extend_cascades_to_class_prepend_includes_and_extends
 * include_or_extend_cascades_includes_to_class
 * include_or_extend_cascades_extends_to_class
 * include_or_extend_cascades_includes_and_extends_to_class
-* include_or_extend_cascades_to_class_prepending_includes
-* include_or_extend_cascades_to_class_prepending_extends
-* include_or_extend_cascades_to_class_prepending_includes_and_extends
+* include_or_extend_cascades_to_class_prepend_includes
+* include_or_extend_cascades_to_class_prepend_extends
+* include_or_extend_cascades_to_class_prepend_includes_and_extends
 
 Cascade to module methods (does not cascade to classes):
 
@@ -249,18 +249,18 @@ Cascade to module methods (does not cascade to classes):
 * extend_cascades_includes_to_module
 * extend_cascades_extends_to_module
 * extend_cascades_includes_and_extends_to_module
-* include_cascades_to_module_prepending_includes
-* include_cascades_to_module_prepending_extends
-* include_cascades_to_module_prepending_includes_and_extends
-* extend_cascades_to_module_prepending_includes
-* extend_cascades_to_module_prepending_extends
-* extend_cascades_to_module_prepending_includes_and_extends
+* include_cascades_to_module_prepend_includes
+* include_cascades_to_module_prepend_extends
+* include_cascades_to_module_prepend_includes_and_extends
+* extend_cascades_to_module_prepend_includes
+* extend_cascades_to_module_prepend_extends
+* extend_cascades_to_module_prepend_includes_and_extends
 * include_or_extend_cascades_includes_to_module
 * include_or_extend_cascades_extends_to_module
 * include_or_extend_cascades_includes_and_extends_to_module
-* include_or_extend_cascades_to_module_prepending_includes
-* include_or_extend_cascades_to_module_prepending_extends
-* include_or_extend_cascades_to_module_prepending_includes_and_extends
+* include_or_extend_cascades_to_module_prepend_includes
+* include_or_extend_cascades_to_module_prepend_extends
+* include_or_extend_cascades_to_module_prepend_includes_and_extends
 
 Module block methods:
 
@@ -320,6 +320,43 @@ Class or module or instance block methods:
 * prepend_class_or_module_or_instance_extend
 * prepend_class_or_module_include_or_instance_extend
 * prepend_class_or_module_include_or_extend_or_instance_extend
+
+Suspend methods:
+
+*  suspend_any_hooks
+*  suspend_any_include_hooks
+*  suspend_any_extend_hooks
+*  suspend_include_hooks
+*  suspend_extend_hooks
+*  suspend_prepend_include_hooks
+*  suspend_prepend_extend_hooks
+
+*  hooks_suspended?
+*  all_hooks_suspended?
+*  all_include_hooks_suspended?
+*  all_extend_hooks_suspended?
+*  include_hooks_suspended?
+*  extend_hooks_suspended?
+*  prepend_include_hooks_suspended?
+*  prepend_extend_hooks_suspended?
+
+*  resume_any_hooks
+*  resume_any_include_hooks
+*  resume_any_extend_hooks
+*  resume_include_hooks
+*  resume_extend_hooks
+*  resume_prepend_include_hooks
+*  resume_prepend_extend_hooks
+
+Suspend for block methods:
+
+*  without_any_hooks
+*  without_any_include_hooks
+*  without_any_extend_hooks
+*  without_include_hooks
+*  without_extend_hooks
+*  without_prepend_include_hooks
+*  without_prepend_extend_hooks
 
 # License #
 

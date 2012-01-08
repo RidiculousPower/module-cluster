@@ -2,11 +2,11 @@
 module ModuleCluster::ClusterStack::PrependsExtends
   
   #############################
-  #  prepending_extend_hooks  #
+  #  prepend_extend_hooks  #
   #############################
 
-  def prepending_extend_hooks
-    return @prepending_extend_hooks ||= Array.new
+  def prepend_extend_hooks
+    return @prepend_extend_hooks ||= ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new
   end
   
   ##############################
@@ -14,7 +14,9 @@ module ModuleCluster::ClusterStack::PrependsExtends
   ##############################
   
   def extend_prepends_includes( module_instance, method, includes, runtime_includes_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :all, :include, includes, runtime_includes_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :all, :include, includes, runtime_includes_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
   end
 
   #############################
@@ -22,7 +24,9 @@ module ModuleCluster::ClusterStack::PrependsExtends
   #############################
   
   def extend_prepends_extends( module_instance, method, extends, runtime_extends_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :all, :extend, extends, runtime_extends_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :all, :extend, extends, runtime_extends_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
   end
 
   ##########################################
@@ -30,7 +34,9 @@ module ModuleCluster::ClusterStack::PrependsExtends
   ##########################################
   
   def extend_prepends_includes_and_extends( module_instance, method, includes_and_extends, runtime_includes_and_extends_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :all, :include_and_extend, includes_and_extends, runtime_includes_and_extends_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :all, :include_and_extend, includes_and_extends, runtime_includes_and_extends_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
   end
 
   #####################################
@@ -38,7 +44,9 @@ module ModuleCluster::ClusterStack::PrependsExtends
   #####################################
   
   def module_extend_prepends_includes( module_instance, method, includes, runtime_includes_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :module, :include, includes, runtime_includes_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :module, :include, includes, runtime_includes_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
   end
 
   ####################################
@@ -46,7 +54,9 @@ module ModuleCluster::ClusterStack::PrependsExtends
   ####################################
   
   def module_extend_prepends_extends( module_instance, method, extends, runtime_extends_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :module, :extend, extends, runtime_extends_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :module, :extend, extends, runtime_extends_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
   end
 
   #################################################
@@ -54,7 +64,9 @@ module ModuleCluster::ClusterStack::PrependsExtends
   #################################################
   
   def module_extend_prepends_includes_and_extends( module_instance, method, includes_and_extends, runtime_includes_and_extends_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :module, :include_and_extend, includes_and_extends, runtime_includes_and_extends_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :module, :include_and_extend, includes_and_extends, runtime_includes_and_extends_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
   end
 
   ####################################
@@ -62,7 +74,9 @@ module ModuleCluster::ClusterStack::PrependsExtends
   ####################################
   
   def class_extend_prepends_includes( module_instance, method, includes, runtime_includes_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :class, :include, includes, runtime_includes_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :class, :include, includes, runtime_includes_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
   end
 
   ###################################
@@ -70,7 +84,9 @@ module ModuleCluster::ClusterStack::PrependsExtends
   ###################################
   
   def class_extend_prepends_extends( module_instance, method, extends, runtime_extends_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :class, :extend, extends, runtime_extends_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :class, :extend, extends, runtime_extends_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
   end
 
   ################################################
@@ -78,7 +94,9 @@ module ModuleCluster::ClusterStack::PrependsExtends
   ################################################
   
   def class_extend_prepends_includes_and_extends( module_instance, method, includes_and_extends, runtime_includes_and_extends_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :class, :include_and_extend, includes_and_extends, runtime_includes_and_extends_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :class, :include_and_extend, includes_and_extends, runtime_includes_and_extends_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
   end
 
   #######################################
@@ -86,7 +104,9 @@ module ModuleCluster::ClusterStack::PrependsExtends
   #######################################
   
   def instance_extend_prepends_includes( module_instance, method, includes, runtime_includes_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :instance, :include, includes, runtime_includes_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :instance, :include, includes, runtime_includes_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
   end
 
   ######################################
@@ -94,7 +114,9 @@ module ModuleCluster::ClusterStack::PrependsExtends
   ######################################
   
   def instance_extend_prepends_extends( module_instance, method, extends, runtime_extends_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :instance, :extend, extends, runtime_extends_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :instance, :extend, extends, runtime_extends_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
   end
 
   ###################################################
@@ -102,7 +124,17 @@ module ModuleCluster::ClusterStack::PrependsExtends
   ###################################################
   
   def instance_extend_prepends_includes_and_extends( module_instance, method, includes_and_extends, runtime_includes_and_extends_block )
-    prepending_extend_hooks.push( ModuleCluster::ClusterStack::Set.new( module_instance, method, :instance, :include_and_extend, includes_and_extends, runtime_includes_and_extends_block ) )
+    new_set = ModuleCluster::ClusterStack::Set.new( module_instance, method, :instance, :include_and_extend, includes_and_extends, runtime_includes_and_extends_block )
+    prepend_extend_hooks.push( new_set )
+    return new_set
+  end
+
+  ##############################
+  #  has_prepend_extend_hook?  #
+  ##############################
+  
+  def has_prepend_extend_hook?( description )
+    return prepend_extend_hooks.hooks_with( description ) || false
   end
   
 end
