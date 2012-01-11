@@ -55,3 +55,6 @@ This permits chaining of settings, such as appending .name( :set_name ).
 Added set names, which permit the later suspension of sets by name rather than having to
 describe which set(s) should be suspended (although this can also be done).
 
+== 1/11/2011
+
+Added support for Class#subclass block hook.

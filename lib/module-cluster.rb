@@ -8,6 +8,8 @@ module ModuleCluster
       end
       module Module
       end
+      module Inherited
+      end
     end
     module Status
     end
@@ -15,6 +17,16 @@ module ModuleCluster
     end
   end
   module CascadeFeatures
+    module Subclass
+    end
+    module ClusterStack
+    end
+    module PerformCascades
+    end
+  end
+  module ExtendForCascade
+    module Subclass
+    end
   end
   module Define
     module Block
@@ -67,9 +79,11 @@ end
 
 require_relative 'module-cluster/_private_/ModuleCluster/CascadeFeatures/ClusterStack.rb'
 require_relative 'module-cluster/_private_/ModuleCluster/CascadeFeatures/PerformCascades.rb'
+require_relative 'module-cluster/_private_/ModuleCluster/CascadeFeatures/Subclass.rb'
 require_relative 'module-cluster/_private_/ModuleCluster/CascadeFeatures.rb'
 
 require_relative 'module-cluster/_private_/ModuleCluster/ExtendForCascade.rb'
+require_relative 'module-cluster/_private_/ModuleCluster/ExtendForCascade/Subclass.rb'
 
 require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/Set.rb'
 require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/Set/MultiSetProxy.rb'
@@ -80,6 +94,7 @@ require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/Extends.rb
 require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/PrependsIncludes.rb'
 require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/PrependsExtends.rb'
 require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/Block/Set.rb'
+require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/Block/Inherited.rb'
 require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/Block/Class.rb'
 require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/Block/Instance.rb'
 require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/Block/Module.rb'
@@ -91,6 +106,7 @@ require_relative 'module-cluster/ModuleCluster/Suspend/WithoutHooks.rb'
 require_relative 'module-cluster/ModuleCluster/Suspend.rb'
 
 require_relative 'module-cluster/ModuleCluster/Define/Block/Class.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/Subclass.rb'
 require_relative 'module-cluster/ModuleCluster/Define/Block/Instance.rb'
 require_relative 'module-cluster/ModuleCluster/Define/Block/Module.rb'
 require_relative 'module-cluster/ModuleCluster/Define/Block/ClassOrInstance.rb'
