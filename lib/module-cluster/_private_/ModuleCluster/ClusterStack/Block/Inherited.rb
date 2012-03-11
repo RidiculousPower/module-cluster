@@ -1,5 +1,5 @@
 
-module ModuleCluster::ClusterStack::Block::Inherited
+module ::ModuleCluster::ClusterStack::Block::Inherited
   
   #####################
   #  inherited_hooks  #
@@ -13,8 +13,8 @@ module ModuleCluster::ClusterStack::Block::Inherited
   #  subclass  #
   ##############
   
-  def subclass( dependency_module, runtime_block )
-    inherited_hooks.push( ModuleCluster::ClusterStack::Block::Set.new( dependency_module, runtime_block ) )
+  def subclass( dependency_module, dependency_method, runtime_block )
+    inherited_hooks.push( ::ModuleCluster::ClusterStack::Block::Set.new( dependency_module, dependency_method, runtime_block ) )
   end
 
 end

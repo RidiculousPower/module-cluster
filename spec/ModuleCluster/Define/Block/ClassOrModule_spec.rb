@@ -1,19 +1,19 @@
 
 require_relative '../../../../lib/module-cluster.rb'
 
-describe ModuleCluster::Define::Block::ClassOrModule do
+describe ::ModuleCluster::Define::Block::ClassOrModule do
 
   #############################
   #  class_or_module_include  #
   #############################
 
   it 'can run a block on class or module include' do
-    module ModuleCluster::Define::Block::ClassOrModule::Mock01
+    module ::ModuleCluster::Define::Block::ClassOrModule::Mock01
       extend ::ModuleCluster::Define::Block::ClassOrModule
       block_ran = false
       class_or_module_include do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModule::Mock01
+        self.should == ::ModuleCluster::Define::Block::ClassOrModule::Mock01
       end
       respond_to?( :included ).should == true
       class ClassProof
@@ -45,12 +45,12 @@ describe ModuleCluster::Define::Block::ClassOrModule do
   ############################
 
   it 'can run a block on class or module extend' do
-    module ModuleCluster::Define::Block::ClassOrModule::Mock02
+    module ::ModuleCluster::Define::Block::ClassOrModule::Mock02
       extend ::ModuleCluster::Define::Block::ClassOrModule
       block_ran = false
       class_or_module_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModule::Mock02
+        self.should == ::ModuleCluster::Define::Block::ClassOrModule::Mock02
       end
       respond_to?( :extended ).should == true
       class ClassProof
@@ -81,12 +81,12 @@ describe ModuleCluster::Define::Block::ClassOrModule do
   #######################################
 
   it 'can run a block on class or module include or extend' do
-    module ModuleCluster::Define::Block::ClassOrModule::Mock03
+    module ::ModuleCluster::Define::Block::ClassOrModule::Mock03
       extend ::ModuleCluster::Define::Block::ClassOrModule
       block_ran = false
       class_or_module_include_or_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModule::Mock03
+        self.should == ::ModuleCluster::Define::Block::ClassOrModule::Mock03
       end
       respond_to?( :extended ).should == true
       class ClassProof
@@ -120,12 +120,12 @@ describe ModuleCluster::Define::Block::ClassOrModule do
   #####################################
 
   it 'can run a block before class or module include' do
-    module ModuleCluster::Define::Block::ClassOrModule::Mock04
+    module ::ModuleCluster::Define::Block::ClassOrModule::Mock04
       extend ::ModuleCluster::Define::Block::ClassOrModule
       block_ran = false
       prepend_class_or_module_include do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModule::Mock04
+        self.should == ::ModuleCluster::Define::Block::ClassOrModule::Mock04
       end
       respond_to?( :included ).should == true
       class ClassProof
@@ -157,12 +157,12 @@ describe ModuleCluster::Define::Block::ClassOrModule do
   ####################################
 
   it 'can run a block before class or module extend' do
-    module ModuleCluster::Define::Block::ClassOrModule::Mock05
+    module ::ModuleCluster::Define::Block::ClassOrModule::Mock05
       extend ::ModuleCluster::Define::Block::ClassOrModule
       block_ran = false
       prepend_class_or_module_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModule::Mock05
+        self.should == ::ModuleCluster::Define::Block::ClassOrModule::Mock05
       end
       respond_to?( :extended ).should == true
       class ClassProof
@@ -194,12 +194,12 @@ describe ModuleCluster::Define::Block::ClassOrModule do
   ###############################################
 
   it 'can run a block before class or module include or extend' do
-    module ModuleCluster::Define::Block::ClassOrModule::Mock06
+    module ::ModuleCluster::Define::Block::ClassOrModule::Mock06
       extend ::ModuleCluster::Define::Block::ClassOrModule
       block_ran = false
       prepend_class_or_module_include_or_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModule::Mock06
+        self.should == ::ModuleCluster::Define::Block::ClassOrModule::Mock06
       end
       respond_to?( :extended ).should == true
       class ClassProof

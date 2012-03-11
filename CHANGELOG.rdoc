@@ -44,9 +44,9 @@ Separated out public interface modules from internal implementation modules.
 
 == 12/27/2011
 
-Added ModuleCluster::Define::Status to interrogate currently defined hooks.
+Added ::ModuleCluster::Define::Status to interrogate currently defined hooks.
 
-Added ModuleCluster::Suspend, which includes various methods to temporarily or 
+Added ::ModuleCluster::Suspend, which includes various methods to temporarily or 
 permanently modify hooks that have been created.
 
 Changed return values on interface methods from self to the set created by the method.
@@ -64,3 +64,8 @@ Added support for Class#subclass block hook.
 Added support for declaring subclass blocks in a module. 
 Added support for declaring class_or_module_include_or_subclass hooks, class_include_or_subclass,
   and module_include_or_subclass.
+
+== 3/11/2011
+
+Added support for cascading block methods.
+

@@ -1,19 +1,19 @@
 
 require_relative '../../../../lib/module-cluster.rb'
 
-describe ModuleCluster::Define::Block::Instance do
+describe ::ModuleCluster::Define::Block::Instance do
 
   #####################
   #  instance_extend  #
   #####################
 
   it 'can run a block on instance extend' do
-    module ModuleCluster::Define::Block::Instance::Mock01
+    module ::ModuleCluster::Define::Block::Instance::Mock01
       extend ::ModuleCluster::Define::Block::Instance
       block_ran = false
       instance_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::Instance::Mock01
+        self.should == ::ModuleCluster::Define::Block::Instance::Mock01
       end
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -44,12 +44,12 @@ describe ModuleCluster::Define::Block::Instance do
   #############################
 
   it 'can run a block before instance extend' do
-    module ModuleCluster::Define::Block::Instance::Mock02
+    module ::ModuleCluster::Define::Block::Instance::Mock02
       extend ::ModuleCluster::Define::Block::Instance
       block_ran = false
       prepend_instance_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::Instance::Mock02
+        self.should == ::ModuleCluster::Define::Block::Instance::Mock02
       end
       respond_to?( :extended ).should == true
       module ModuleProof

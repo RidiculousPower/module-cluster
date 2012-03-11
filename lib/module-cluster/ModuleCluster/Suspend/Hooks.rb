@@ -1,5 +1,5 @@
 
-module ModuleCluster::Suspend::Hooks
+module ::ModuleCluster::Suspend::Hooks
     
   #######################
   #  suspend_any_hooks  #

@@ -1,5 +1,5 @@
 
-module ModuleCluster::Define::Block::ModuleOrSubclass
+module ::ModuleCluster::Define::Block::ModuleOrSubclass
 
   include ::ModuleCluster::CascadeFeatures::ClusterStack
   include ::ModuleCluster::Define::Block::Module
@@ -9,6 +9,14 @@ module ModuleCluster::Define::Block::ModuleOrSubclass
   extend ::ModuleCluster::ExtendForCascade::Subclass
   extend ::ModuleCluster::ExtendForCascade
 
+  ##########################
+  #  self.should_cascade?  #
+  ##########################
+
+  def self.should_cascade?( class_or_module )
+    return false
+  end
+
   ################################
   #  module_include_or_subclass  #
   ################################
@@ -16,7 +24,7 @@ module ModuleCluster::Define::Block::ModuleOrSubclass
   def module_include_or_subclass( & runtime_block )
     module_set = module_include( & runtime_block )
     subclass_set = subclass( & runtime_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( module_set, subclass_set )    
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( module_set, subclass_set )    
   end
 
 end

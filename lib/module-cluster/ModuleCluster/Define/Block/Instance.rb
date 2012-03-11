@@ -1,10 +1,18 @@
 
-module ModuleCluster::Define::Block::Instance
+module ::ModuleCluster::Define::Block::Instance
   
   include ::ModuleCluster::CascadeFeatures::ClusterStack
   include ::ModuleCluster::Suspend::WithoutHooks
   
   extend ::ModuleCluster::ExtendForCascade
+
+  ##########################
+  #  self.should_cascade?  #
+  ##########################
+
+  def self.should_cascade?( class_or_module )
+    return false
+  end
 
   ############################
   #  self.should_run_block?  #
@@ -19,7 +27,9 @@ module ModuleCluster::Define::Block::Instance
   #####################
 
   def instance_extend( & runtime_block )
-    return cluster_stack.instance_extend( ModuleCluster::Define::Block::Instance, runtime_block )
+    return cluster_stack.instance_extend( ::ModuleCluster::Define::Block::Instance, 
+                                          __method__, 
+                                          runtime_block )
   end
 
   #############################
@@ -27,7 +37,9 @@ module ModuleCluster::Define::Block::Instance
   #############################
 
   def prepend_instance_extend( & runtime_block )
-    return cluster_stack.prepend_instance_extend( ModuleCluster::Define::Block::Instance, runtime_block )
+    return cluster_stack.prepend_instance_extend( ::ModuleCluster::Define::Block::Instance, 
+                                                  __method__, 
+                                                  runtime_block )
   end
 
 end

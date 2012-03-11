@@ -1,19 +1,19 @@
 
 require_relative '../../../../lib/module-cluster.rb'
 
-describe ModuleCluster::Define::Block::ClassOrModuleOrInstance do
+describe ::ModuleCluster::Define::Block::ClassOrModuleOrInstance do
 
   ########################################
   #  class_or_module_or_instance_extend  #
   ########################################
 
   it 'can run a block on class or module extend' do
-    module ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock01
+    module ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock01
       extend ::ModuleCluster::Define::Block::ClassOrModuleOrInstance
       block_ran = false
       class_or_module_or_instance_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock01
+        self.should == ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock01
       end
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -46,12 +46,12 @@ describe ModuleCluster::Define::Block::ClassOrModuleOrInstance do
   ################################################
 
   it 'can run a block on class or module include or instance extend' do
-    module ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock02
+    module ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock02
       extend ::ModuleCluster::Define::Block::ClassOrModuleOrInstance
       block_ran = false
       class_or_module_include_or_instance_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock02
+        self.should == ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock02
       end
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -84,12 +84,12 @@ describe ModuleCluster::Define::Block::ClassOrModuleOrInstance do
   ##########################################################
 
   it 'can run a block on class or module include or extend or instance extend' do
-    module ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock03
+    module ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock03
       extend ::ModuleCluster::Define::Block::ClassOrModuleOrInstance
       block_ran = false
       class_or_module_include_or_extend_or_instance_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock03
+        self.should == ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock03
       end
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -124,12 +124,12 @@ describe ModuleCluster::Define::Block::ClassOrModuleOrInstance do
   ################################################
 
   it 'can run a block before class or module extend' do
-    module ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock04
+    module ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock04
       extend ::ModuleCluster::Define::Block::ClassOrModuleOrInstance
       block_ran = false
       prepend_class_or_module_or_instance_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock04
+        self.should == ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock04
       end
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -162,12 +162,12 @@ describe ModuleCluster::Define::Block::ClassOrModuleOrInstance do
   ########################################################
 
   it 'can run a block before class or module include or instance extend' do
-    module ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock05
+    module ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock05
       extend ::ModuleCluster::Define::Block::ClassOrModuleOrInstance
       block_ran = false
       prepend_class_or_module_include_or_instance_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock05
+        self.should == ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock05
       end
       respond_to?( :extended ).should == true
       module ModuleProof
@@ -200,12 +200,12 @@ describe ModuleCluster::Define::Block::ClassOrModuleOrInstance do
   ##################################################################
 
   it 'can run a block before class or module include or extend or instance extend' do
-    module ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock06
+    module ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock06
       extend ::ModuleCluster::Define::Block::ClassOrModuleOrInstance
       block_ran = false
       prepend_class_or_module_include_or_extend_or_instance_extend do
         block_ran = true
-        self.should == ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock06
+        self.should == ::ModuleCluster::Define::Block::ClassOrModuleOrInstance::Mock06
       end
       respond_to?( :extended ).should == true
       module ModuleProof

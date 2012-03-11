@@ -1,5 +1,5 @@
 
-module ModuleCluster::Suspend::WithoutHooks
+module ::ModuleCluster::Suspend::WithoutHooks
 
   include ::ModuleCluster::Suspend::Hooks
   

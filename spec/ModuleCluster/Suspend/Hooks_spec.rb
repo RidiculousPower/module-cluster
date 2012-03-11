@@ -1,7 +1,7 @@
 
 require_relative '../../../lib/module-cluster.rb'
 
-describe ModuleCluster::Suspend::Hooks do
+describe ::ModuleCluster::Suspend::Hooks do
 
   ##########################
   #  suspend_any_hooks     #
@@ -10,7 +10,7 @@ describe ModuleCluster::Suspend::Hooks do
   ##########################
   
   it 'can suspend and resume all hooks at once or all hooks matching a description' do
-    module ModuleCluster::Suspend::Hooks::Mock01
+    module ::ModuleCluster::Suspend::Hooks::Mock01
       extend ::ModuleCluster::Suspend::Hooks
       # required to provide #cluster_stack
       extend ::ModuleCluster::CascadeFeatures::ClusterStack
@@ -23,37 +23,37 @@ describe ModuleCluster::Suspend::Hooks do
       module Module4
       end
       # prepend include
-      prepend_include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
-      prepend_include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
-      prepend_include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
-      prepend_include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
+      prepend_include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
+      prepend_include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
+      prepend_include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
+      prepend_include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_one )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_two )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_three )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_four )
       # prepend extend
-      prepend_extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      prepend_extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
-      prepend_extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      prepend_extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      prepend_extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      prepend_extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
+      prepend_extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      prepend_extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_one )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_two )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_three )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_four )
       # include
-      include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
-      include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
+      include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.include_hooks.push( include_set_one )
       cluster_stack.include_hooks.push( include_set_two )
       cluster_stack.include_hooks.push( include_set_three )
       cluster_stack.include_hooks.push( include_set_four )
       # extend
-      extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
+      extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
       cluster_stack.extend_hooks.push( extend_set_one )
       cluster_stack.extend_hooks.push( extend_set_two )
       cluster_stack.extend_hooks.push( extend_set_three )
@@ -91,7 +91,7 @@ describe ModuleCluster::Suspend::Hooks do
   ##################################
   
   it 'can suspend and resume all include or prepending include hooks at once or any include or prepending include hooks matching a description' do
-    module ModuleCluster::Suspend::Hooks::Mock02
+    module ::ModuleCluster::Suspend::Hooks::Mock02
       extend ::ModuleCluster::Suspend::Hooks
       # required to provide #cluster_stack
       extend ::ModuleCluster::CascadeFeatures::ClusterStack
@@ -104,37 +104,37 @@ describe ModuleCluster::Suspend::Hooks do
       module Module4
       end
       # prepend include
-      prepend_include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
-      prepend_include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
-      prepend_include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
-      prepend_include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
+      prepend_include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
+      prepend_include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
+      prepend_include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
+      prepend_include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_one )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_two )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_three )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_four )
       # prepend extend
-      prepend_extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      prepend_extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
-      prepend_extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      prepend_extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      prepend_extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      prepend_extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
+      prepend_extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      prepend_extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_one )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_two )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_three )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_four )
       # include
-      include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
-      include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
+      include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.include_hooks.push( include_set_one )
       cluster_stack.include_hooks.push( include_set_two )
       cluster_stack.include_hooks.push( include_set_three )
       cluster_stack.include_hooks.push( include_set_four )
       # extend
-      extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
+      extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
       cluster_stack.extend_hooks.push( extend_set_one )
       cluster_stack.extend_hooks.push( extend_set_two )
       cluster_stack.extend_hooks.push( extend_set_three )
@@ -172,7 +172,7 @@ describe ModuleCluster::Suspend::Hooks do
   #################################
   
   it 'can suspend and resume all extend or prepending extend hooks at once or any extend or prepending extend hooks matching a description' do
-    module ModuleCluster::Suspend::Hooks::Mock03
+    module ::ModuleCluster::Suspend::Hooks::Mock03
       extend ::ModuleCluster::Suspend::Hooks
       # required to provide #cluster_stack
       extend ::ModuleCluster::CascadeFeatures::ClusterStack
@@ -185,37 +185,37 @@ describe ModuleCluster::Suspend::Hooks do
       module Module4
       end
       # prepend include
-      prepend_include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
-      prepend_include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
-      prepend_include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
-      prepend_include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
+      prepend_include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
+      prepend_include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
+      prepend_include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
+      prepend_include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_one )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_two )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_three )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_four )
       # prepend extend
-      prepend_extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      prepend_extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
-      prepend_extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      prepend_extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      prepend_extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      prepend_extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
+      prepend_extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      prepend_extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_one )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_two )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_three )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_four )
       # include
-      include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
-      include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
+      include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.include_hooks.push( include_set_one )
       cluster_stack.include_hooks.push( include_set_two )
       cluster_stack.include_hooks.push( include_set_three )
       cluster_stack.include_hooks.push( include_set_four )
       # extend
-      extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
+      extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
       cluster_stack.extend_hooks.push( extend_set_one )
       cluster_stack.extend_hooks.push( extend_set_two )
       cluster_stack.extend_hooks.push( extend_set_three )
@@ -253,7 +253,7 @@ describe ModuleCluster::Suspend::Hooks do
   ##############################
   
   it 'can suspend and resume all include hooks at once or any include hooks matching a description' do
-    module ModuleCluster::Suspend::Hooks::Mock04
+    module ::ModuleCluster::Suspend::Hooks::Mock04
       extend ::ModuleCluster::Suspend::Hooks
       # required to provide #cluster_stack
       extend ::ModuleCluster::CascadeFeatures::ClusterStack
@@ -266,37 +266,37 @@ describe ModuleCluster::Suspend::Hooks do
       module Module4
       end
       # prepend include
-      prepend_include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
-      prepend_include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
-      prepend_include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
-      prepend_include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
+      prepend_include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
+      prepend_include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
+      prepend_include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
+      prepend_include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_one )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_two )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_three )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_four )
       # prepend extend
-      prepend_extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      prepend_extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
-      prepend_extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      prepend_extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      prepend_extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      prepend_extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
+      prepend_extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      prepend_extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_one )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_two )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_three )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_four )
       # include
-      include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
-      include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
+      include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.include_hooks.push( include_set_one )
       cluster_stack.include_hooks.push( include_set_two )
       cluster_stack.include_hooks.push( include_set_three )
       cluster_stack.include_hooks.push( include_set_four )
       # extend
-      extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
+      extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
       cluster_stack.extend_hooks.push( extend_set_one )
       cluster_stack.extend_hooks.push( extend_set_two )
       cluster_stack.extend_hooks.push( extend_set_three )
@@ -334,7 +334,7 @@ describe ModuleCluster::Suspend::Hooks do
   #############################
   
   it 'can suspend and resume all extend hooks at once or any extend hooks matching a description' do
-    module ModuleCluster::Suspend::Hooks::Mock05
+    module ::ModuleCluster::Suspend::Hooks::Mock05
       extend ::ModuleCluster::Suspend::Hooks
       # required to provide #cluster_stack
       extend ::ModuleCluster::CascadeFeatures::ClusterStack
@@ -347,37 +347,37 @@ describe ModuleCluster::Suspend::Hooks do
       module Module4
       end
       # prepend include
-      prepend_include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
-      prepend_include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
-      prepend_include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
-      prepend_include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
+      prepend_include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
+      prepend_include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
+      prepend_include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
+      prepend_include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_one )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_two )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_three )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_four )
       # prepend extend
-      prepend_extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      prepend_extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
-      prepend_extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      prepend_extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      prepend_extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      prepend_extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
+      prepend_extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      prepend_extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_one )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_two )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_three )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_four )
       # include
-      include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
-      include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
+      include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.include_hooks.push( include_set_one )
       cluster_stack.include_hooks.push( include_set_two )
       cluster_stack.include_hooks.push( include_set_three )
       cluster_stack.include_hooks.push( include_set_four )
       # extend
-      extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
+      extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
       cluster_stack.extend_hooks.push( extend_set_one )
       cluster_stack.extend_hooks.push( extend_set_two )
       cluster_stack.extend_hooks.push( extend_set_three )
@@ -415,7 +415,7 @@ describe ModuleCluster::Suspend::Hooks do
   ######################################
   
   it 'can suspend and resume all prepending include hooks at once or any prepending include hooks matching a description' do
-    module ModuleCluster::Suspend::Hooks::Mock06
+    module ::ModuleCluster::Suspend::Hooks::Mock06
       extend ::ModuleCluster::Suspend::Hooks
       # required to provide #cluster_stack
       extend ::ModuleCluster::CascadeFeatures::ClusterStack
@@ -428,37 +428,37 @@ describe ModuleCluster::Suspend::Hooks do
       module Module4
       end
       # prepend include
-      prepend_include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
-      prepend_include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
-      prepend_include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
-      prepend_include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
+      prepend_include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
+      prepend_include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
+      prepend_include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
+      prepend_include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_one )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_two )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_three )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_four )
       # prepend extend
-      prepend_extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      prepend_extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
-      prepend_extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      prepend_extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      prepend_extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      prepend_extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
+      prepend_extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      prepend_extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_one )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_two )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_three )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_four )
       # include
-      include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
-      include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
+      include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.include_hooks.push( include_set_one )
       cluster_stack.include_hooks.push( include_set_two )
       cluster_stack.include_hooks.push( include_set_three )
       cluster_stack.include_hooks.push( include_set_four )
       # extend
-      extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
+      extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
       cluster_stack.extend_hooks.push( extend_set_one )
       cluster_stack.extend_hooks.push( extend_set_two )
       cluster_stack.extend_hooks.push( extend_set_three )
@@ -496,7 +496,7 @@ describe ModuleCluster::Suspend::Hooks do
   #####################################
   
   it 'can suspend and resume all prepending extend hooks at once or any prepending extend hooks matching a description' do
-    module ModuleCluster::Suspend::Hooks::Mock07
+    module ::ModuleCluster::Suspend::Hooks::Mock07
       extend ::ModuleCluster::Suspend::Hooks
       # required to provide #cluster_stack
       extend ::ModuleCluster::CascadeFeatures::ClusterStack
@@ -509,37 +509,37 @@ describe ModuleCluster::Suspend::Hooks do
       module Module4
       end
       # prepend include
-      prepend_include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
-      prepend_include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
-      prepend_include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
-      prepend_include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
+      prepend_include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one )
+      prepend_include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two )
+      prepend_include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three )
+      prepend_include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_one )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_two )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_three )
       cluster_stack.prepend_include_hooks.push( prepend_include_set_four )
       # prepend extend
-      prepend_extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      prepend_extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
-      prepend_extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      prepend_extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      prepend_extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      prepend_extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, true, :two  )
+      prepend_extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      prepend_extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_one )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_two )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_three )
       cluster_stack.prepend_extend_hooks.push( prepend_extend_set_four )
       # include
-      include_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      include_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      include_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
-      include_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
+      include_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      include_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      include_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, true, :three  )
+      include_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, false, :four  )
       cluster_stack.include_hooks.push( include_set_one )
       cluster_stack.include_hooks.push( include_set_two )
       cluster_stack.include_hooks.push( include_set_three )
       cluster_stack.include_hooks.push( include_set_four )
       # extend
-      extend_set_one = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
-      extend_set_two = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
-      extend_set_three = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
-      extend_set_four = ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
+      extend_set_one = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module1 ], nil, false, :one  )
+      extend_set_two = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include, [ Module2 ], nil, false, :two  )
+      extend_set_three = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :extend, [ Module3 ], nil, false, :three  )
+      extend_set_four = ::ModuleCluster::ClusterStack::Set.new( Kernel, :some_method, :all, :include_and_extend, [ Module4 ], nil, true, :four  )
       cluster_stack.extend_hooks.push( extend_set_one )
       cluster_stack.extend_hooks.push( extend_set_two )
       cluster_stack.extend_hooks.push( extend_set_three )

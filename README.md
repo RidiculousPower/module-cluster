@@ -271,6 +271,13 @@ Module block methods:
 * prepend_module_extend
 * prepend_module_include_or_extend
 
+* cascading_module_include
+* cascading_module_extend
+* cascading_module_include_or_extend
+* cascading_prepend_module_include
+* cascading_prepend_module_extend
+* cascading_prepend_module_include_or_extend
+
 Class block methods:
 
 * class_include
@@ -279,6 +286,13 @@ Class block methods:
 * prepend_class_include
 * prepend_class_extend
 * prepend_class_include_or_extend
+
+* cascading_class_include
+* cascading_class_extend
+* cascading_class_include_or_extend
+* cascading_prepend_class_include
+* cascading_prepend_class_extend
+* cascading_prepend_class_include_or_extend
 
 Instance block methods:
 
@@ -293,6 +307,13 @@ Class or module block methods:
 * prepend_class_or_module_include
 * prepend_class_or_module_extend
 * prepend_class_or_module_include_or_extend
+
+* cascading_class_or_module_include
+* cascading_class_or_module_extend
+* cascading_class_or_module_include_or_extend
+* cascading_prepend_class_or_module_include
+* cascading_prepend_class_or_module_extend
+* cascading_prepend_class_or_module_include_or_extend
 
 Module or instance block methods:
 

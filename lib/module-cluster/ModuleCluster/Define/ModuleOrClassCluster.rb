@@ -1,5 +1,5 @@
 
-module ModuleCluster::Define::ModuleOrClassCluster
+module ::ModuleCluster::Define::ModuleOrClassCluster
 
   include ::ModuleCluster::CascadeFeatures::ClusterStack
   include ::ModuleCluster::Suspend::WithoutHooks
@@ -31,9 +31,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	###########################################
 
 	def module_or_class_include_also_includes( *includes, & runtime_includes_block )
-	  include_set = cluster_stack.module_include_includes( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
-	  extend_set = cluster_stack.class_include_includes( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_include_includes( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
+	  extend_set = cluster_stack.class_include_includes( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 	
 	##########################################
@@ -41,9 +41,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	##########################################
 	
 	def module_or_class_include_also_extends( *extends, & runtime_extends_block )
-	  include_set = cluster_stack.module_include_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
-	  extend_set = cluster_stack.class_include_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_include_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
+	  extend_set = cluster_stack.class_include_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 	
 	#######################################################
@@ -51,9 +51,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	#######################################################
 
 	def module_or_class_include_also_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-	  include_set = cluster_stack.module_include_includes_and_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
-	  extend_set = cluster_stack.class_include_includes_and_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_include_includes_and_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
+	  extend_set = cluster_stack.class_include_includes_and_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 
 	##########################################
@@ -61,9 +61,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	##########################################
 
 	def module_or_class_extend_also_includes( *includes, & runtime_includes_block )
-	  include_set = cluster_stack.module_extend_includes( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
-	  extend_set = cluster_stack.class_extend_includes( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_extend_includes( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
+	  extend_set = cluster_stack.class_extend_includes( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 	
 	#########################################
@@ -71,9 +71,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	#########################################
 	
 	def module_or_class_extend_also_extends( *extends, & runtime_extends_block )
-	  include_set = cluster_stack.module_extend_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
-	  extend_set = cluster_stack.class_extend_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_extend_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
+	  extend_set = cluster_stack.class_extend_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 	
 	######################################################
@@ -81,9 +81,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	######################################################
 
 	def module_or_class_extend_also_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-	  include_set = cluster_stack.module_extend_includes_and_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
-	  extend_set = cluster_stack.class_extend_includes_and_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_extend_includes_and_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
+	  extend_set = cluster_stack.class_extend_includes_and_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 
 	###############################################
@@ -91,9 +91,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	###############################################
 
 	def module_or_class_include_prepends_includes( *includes, & runtime_includes_block )
-	  include_set = cluster_stack.module_include_prepends_includes( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
-	  extend_set = cluster_stack.class_include_prepends_includes( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_include_prepends_includes( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
+	  extend_set = cluster_stack.class_include_prepends_includes( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 
 	##############################################
@@ -101,9 +101,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	##############################################
 	
 	def module_or_class_include_prepends_extends( *extends, & runtime_extends_block )
-	  include_set = cluster_stack.module_include_prepends_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
-	  extend_set = cluster_stack.class_include_prepends_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_include_prepends_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
+	  extend_set = cluster_stack.class_include_prepends_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 	
 	###########################################################
@@ -111,9 +111,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	###########################################################
 
 	def module_or_class_include_prepends_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-	  include_set = cluster_stack.module_include_prepends_includes_and_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
-	  extend_set = cluster_stack.class_include_prepends_includes_and_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_include_prepends_includes_and_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
+	  extend_set = cluster_stack.class_include_prepends_includes_and_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 
 	##############################################
@@ -121,9 +121,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	##############################################
 
 	def module_or_class_extend_prepends_includes( *includes, & runtime_includes_block )
-	  include_set = cluster_stack.module_extend_prepends_includes( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
-	  extend_set = cluster_stack.class_extend_prepends_includes( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_extend_prepends_includes( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
+	  extend_set = cluster_stack.class_extend_prepends_includes( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes, runtime_includes_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 
 	#############################################
@@ -131,9 +131,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	#############################################
 	
 	def module_or_class_extend_prepends_extends( *extends, & runtime_extends_block )
-	  include_set = cluster_stack.module_extend_prepends_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
-	  extend_set = cluster_stack.class_extend_prepends_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_extend_prepends_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
+	  extend_set = cluster_stack.class_extend_prepends_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, extends, runtime_extends_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 	
 	##########################################################
@@ -141,9 +141,9 @@ module ModuleCluster::Define::ModuleOrClassCluster
 	##########################################################
 
 	def module_or_class_extend_prepends_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-	  include_set = cluster_stack.module_extend_prepends_includes_and_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
-	  extend_set = cluster_stack.class_extend_prepends_includes_and_extends( ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+	  include_set = cluster_stack.module_extend_prepends_includes_and_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
+	  extend_set = cluster_stack.class_extend_prepends_includes_and_extends( ::ModuleCluster::Define::ModuleOrClassCluster, __method__, includes_and_extends, runtime_includes_and_extends_block )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
 	end
 	
 	#####################################################
@@ -153,7 +153,7 @@ module ModuleCluster::Define::ModuleOrClassCluster
   def module_or_class_include_or_extend_also_includes( *includes, & runtime_includes_block )
     include_set = module_or_class_include_also_includes( *includes, & runtime_includes_block )
     extend_set = module_or_class_extend_also_includes( *includes, & runtime_includes_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
   end
 
 	####################################################
@@ -163,7 +163,7 @@ module ModuleCluster::Define::ModuleOrClassCluster
   def module_or_class_include_or_extend_also_extends( *extends, & runtime_extends_block )
     include_set = module_or_class_include_also_extends( *extends, & runtime_extends_block )
     extend_set = module_or_class_extend_also_extends( *extends, & runtime_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
   end
 
 	#################################################################
@@ -173,7 +173,7 @@ module ModuleCluster::Define::ModuleOrClassCluster
   def module_or_class_include_or_extend_also_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
     include_set = module_or_class_include_prepends_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
     extend_set = module_or_class_extend_prepends_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
   end
 
 	#########################################################
@@ -183,7 +183,7 @@ module ModuleCluster::Define::ModuleOrClassCluster
   def module_or_class_include_or_extend_prepends_includes( *includes, & runtime_includes_block )
     include_set = module_or_class_include_prepends_includes( *includes, & runtime_includes_block )
     extend_set = module_or_class_extend_prepends_includes( *includes, & runtime_includes_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
   end
 
 	########################################################
@@ -193,7 +193,7 @@ module ModuleCluster::Define::ModuleOrClassCluster
   def module_or_class_include_or_extend_prepends_extends( *extends, & runtime_extends_block )
     include_set = module_or_class_include_prepends_extends( *extends, & runtime_extends_block )
     extend_set = module_or_class_extend_prepends_extends( *extends, & runtime_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
   end
 
 	#####################################################################
@@ -203,7 +203,7 @@ module ModuleCluster::Define::ModuleOrClassCluster
   def module_or_class_include_or_extend_prepends_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
     include_set = module_or_class_include_prepends_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
     extend_set = module_or_class_extend_prepends_includes_and_extends( *includes_and_extends, & runtime_includes_and_extends_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
   end
 
 end

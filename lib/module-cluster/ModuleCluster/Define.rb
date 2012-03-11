@@ -1,5 +1,5 @@
 
-module ModuleCluster::Define
+module ::ModuleCluster::Define
   
   include Block
   include Cluster

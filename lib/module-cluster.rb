@@ -1,5 +1,5 @@
 
-module ModuleCluster
+module ::ModuleCluster
   class ClusterStack
     module Block
       module Class
@@ -48,6 +48,14 @@ module ModuleCluster
       end
       module ModuleOrSubclass
       end
+      module CascadingClass
+      end
+      module CascadingClassOrModule
+      end
+      module CascadingModule
+      end
+      module CascadingModuleOrSubclass
+      end
     end
     module ClusterStack
     end
@@ -67,7 +75,7 @@ module ModuleCluster
     end
     module InstanceCluster
     end
-    module ModuleCluster
+    module ::ModuleCluster
     end
     module ModuleOrClassCluster
     end
@@ -133,6 +141,10 @@ require_relative 'module-cluster/ModuleCluster/Define/Block/ClassOrModuleOrSubcl
 require_relative 'module-cluster/ModuleCluster/Define/Block/Subclass.rb'
 require_relative 'module-cluster/ModuleCluster/Define/Block/ModuleOrSubclass.rb'
 require_relative 'module-cluster/ModuleCluster/Define/Block/ClassOrSubclass.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/CascadingClass.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/CascadingModule.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/CascadingClassOrModule.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/CascadingModuleOrSubclass.rb'
 require_relative 'module-cluster/ModuleCluster/Define/Block.rb'
 
 require_relative 'module-cluster/ModuleCluster/Define/Deprecated.rb'

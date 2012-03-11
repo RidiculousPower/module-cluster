@@ -1,5 +1,5 @@
 
-class ModuleCluster::ClusterStack
+class ::ModuleCluster::ClusterStack
 
   include Block
   include Includes

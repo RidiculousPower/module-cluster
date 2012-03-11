@@ -1,5 +1,5 @@
 
-module ModuleCluster::Define::Status
+module ::ModuleCluster::Define::Status
   
   ###################
   #  include_hooks  #

@@ -1,5 +1,5 @@
 
-module ModuleCluster::Define::Block::Subclass
+module ::ModuleCluster::Define::Block::Subclass
 
   include ::ModuleCluster::CascadeFeatures::ClusterStack
   include ::ModuleCluster::Suspend::WithoutHooks
@@ -15,6 +15,15 @@ module ModuleCluster::Define::Block::Subclass
   
   extend ::ModuleCluster::ExtendForCascade::Subclass
   
+  ##########################
+  #  self.should_cascade?  #
+  ##########################
+
+  def self.should_cascade?( class_or_module )
+    # cascades anyway due to nature of subclassing
+    return true
+  end
+
   ############################
   #  self.should_run_block?  #
   ############################
@@ -46,7 +55,9 @@ module ModuleCluster::Define::Block::Subclass
   ##############
 
   def subclass( & runtime_block )
-    return cluster_stack.subclass( ModuleCluster::Define::Block::Subclass, runtime_block )
+    return cluster_stack.subclass( ::ModuleCluster::Define::Block::Subclass, 
+                                   __method__, 
+                                   runtime_block )
   end
 
 end

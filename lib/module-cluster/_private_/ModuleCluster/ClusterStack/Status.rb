@@ -1,5 +1,5 @@
 
-module ModuleCluster::ClusterStack::Status
+module ::ModuleCluster::ClusterStack::Status
 
   ###############
   #  all_hooks  #

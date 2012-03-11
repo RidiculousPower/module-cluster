@@ -1,5 +1,5 @@
 
-module ModuleCluster::CascadeFeatures::ClusterStack
+module ::ModuleCluster::CascadeFeatures::ClusterStack
   
   #########################
   #  self.cluster_stacks  #
@@ -21,7 +21,7 @@ module ModuleCluster::CascadeFeatures::ClusterStack
     
     unless cluster_stack_for_class_or_module = cluster_stacks[ class_or_module ]
       
-      cluster_stack_for_class_or_module = ModuleCluster::ClusterStack.new
+      cluster_stack_for_class_or_module = ::ModuleCluster::ClusterStack.new
       
       cluster_stacks[ class_or_module ] = cluster_stack_for_class_or_module
       
@@ -37,7 +37,7 @@ module ModuleCluster::CascadeFeatures::ClusterStack
 
   def cluster_stack
     
-    return ModuleCluster::CascadeFeatures::ClusterStack.cluster_stack( self )
+    return ::ModuleCluster::CascadeFeatures::ClusterStack.cluster_stack( self )
      
   end
 

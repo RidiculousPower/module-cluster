@@ -1,5 +1,5 @@
 
-module ModuleCluster::ClusterStack::Suspend
+module ::ModuleCluster::ClusterStack::Suspend
 
   #######################
   #  suspend_any_hooks  #

@@ -1,5 +1,5 @@
 
-class ModuleCluster::ClusterStack::Set::MultiSetProxy < Array
+class ::ModuleCluster::ClusterStack::Set::MultiSetProxy < Array
 
   ################
   #  initialize  #

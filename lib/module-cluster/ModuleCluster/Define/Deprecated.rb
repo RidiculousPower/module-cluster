@@ -1,5 +1,5 @@
 
-module ModuleCluster::Define::Deprecated
+module ::ModuleCluster::Define::Deprecated
 
   def define_module_included
     raise NoMethodError, 'This method has been replaced by :include_also_includes and :include_also_extends.'

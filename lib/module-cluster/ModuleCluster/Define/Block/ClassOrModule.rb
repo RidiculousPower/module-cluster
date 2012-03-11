@@ -1,5 +1,5 @@
 
-module ModuleCluster::Define::Block::ClassOrModule
+module ::ModuleCluster::Define::Block::ClassOrModule
   
   include ::ModuleCluster::Define::Block::Class
   include ::ModuleCluster::Define::Block::Module
@@ -7,6 +7,14 @@ module ModuleCluster::Define::Block::ClassOrModule
   
   extend ::ModuleCluster::ExtendForCascade
   
+  ##########################
+  #  self.should_cascade?  #
+  ##########################
+
+  def self.should_cascade?( class_or_module )
+    return false
+  end
+
   #############################
   #  class_or_module_include  #
   #############################
@@ -14,7 +22,7 @@ module ModuleCluster::Define::Block::ClassOrModule
   def class_or_module_include( & runtime_block )
     class_set = class_include( & runtime_block )
     module_set = module_include( & runtime_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( class_set, module_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( class_set, module_set )
   end
 
   ############################
@@ -24,7 +32,7 @@ module ModuleCluster::Define::Block::ClassOrModule
   def class_or_module_extend( & runtime_block )
     class_set = class_extend( & runtime_block )
     module_set = module_extend( & runtime_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( class_set, module_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( class_set, module_set )
   end
 
   #######################################
@@ -34,7 +42,7 @@ module ModuleCluster::Define::Block::ClassOrModule
   def class_or_module_include_or_extend( & runtime_block )
     include_set = class_or_module_include( & runtime_block )
     extend_set = class_or_module_extend( & runtime_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
   end
 
   #####################################
@@ -44,7 +52,7 @@ module ModuleCluster::Define::Block::ClassOrModule
   def prepend_class_or_module_include( & runtime_block )
     class_set = prepend_class_include( & runtime_block )
     module_set = prepend_module_include( & runtime_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( class_set, module_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( class_set, module_set )
   end
 
   ####################################
@@ -54,7 +62,7 @@ module ModuleCluster::Define::Block::ClassOrModule
   def prepend_class_or_module_extend( & runtime_block )
     class_set = prepend_class_extend( & runtime_block )
     module_set = prepend_module_extend( & runtime_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( class_set, module_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( class_set, module_set )
   end
 
   ###############################################
@@ -64,7 +72,7 @@ module ModuleCluster::Define::Block::ClassOrModule
   def prepend_class_or_module_include_or_extend( & runtime_block )
     include_set = prepend_class_or_module_include( & runtime_block )
     extend_set = prepend_class_or_module_extend( & runtime_block )
-    return ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
+    return ::ModuleCluster::ClusterStack::Set::MultiSetProxy.new( include_set, extend_set )
   end
   
 end

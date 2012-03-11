@@ -1,5 +1,5 @@
 
-module ModuleCluster::Define::Block
+module ::ModuleCluster::Define::Block
   
   include ClassOrModule
   include ClassOrInstance

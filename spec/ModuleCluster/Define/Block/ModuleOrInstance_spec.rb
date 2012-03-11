@@ -1,7 +1,7 @@
 
 require_relative '../../../../lib/module-cluster.rb'
 
-describe ModuleCluster::Define::Block::ModuleOrInstance do
+describe ::ModuleCluster::Define::Block::ModuleOrInstance do
 
   ###############################
   #  module_or_instance_extend  #

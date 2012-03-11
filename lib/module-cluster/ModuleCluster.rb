@@ -1,5 +1,5 @@
 
-module ModuleCluster
+module ::ModuleCluster
 	
 	extend ::ModuleCluster::ExtendForCascade
     

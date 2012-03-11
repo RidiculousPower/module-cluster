@@ -1,14 +1,14 @@
 
 require_relative '../../../../lib/module-cluster.rb'
 
-describe ModuleCluster::Define::Block::ModuleOrSubclass do
+describe ::ModuleCluster::Define::Block::ModuleOrSubclass do
 
   ################################
   #  module_include_or_subclass  #
   ################################
 
   it 'can run a block on class or module extend' do
-    module ModuleCluster::Define::Block::ModuleOrSubclass::Mock01
+    module ::ModuleCluster::Define::Block::ModuleOrSubclass::Mock01
       extend ::ModuleCluster::Define::Block::ModuleOrSubclass
       block_ran = false
       module_include_or_subclass do
@@ -39,12 +39,10 @@ describe ModuleCluster::Define::Block::ModuleOrSubclass do
       end
       block_ran.should == false
       class SubClassProof < ClassProof
-        include ::ModuleCluster::Define::Block::ModuleOrSubclass::Mock01
       end
       block_ran.should == true
       block_ran = false
       class SubSubClassProof < SubClassProof
-        include ::ModuleCluster::Define::Block::ModuleOrSubclass::Mock01
       end
       block_ran.should == true
     end    
