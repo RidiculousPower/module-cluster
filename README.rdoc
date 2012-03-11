@@ -19,7 +19,7 @@ Provides methods for clustering modules so that when the main module is included
 Simply:
 
 module SomeModule
-  extend ModuleCluster
+  extend ::ModuleCluster
 end
 
 Definition methods accept modules as arguments. 
@@ -27,14 +27,14 @@ Definition methods accept modules as arguments.
 For example:
 
 module SomeModule
-  extend ModuleCluster
+  extend ::ModuleCluster
   include_also_includes( SomeOtherModule )
 end
 
 Additionally, all methods accept a block that returns one or more modules; the modules will be added *after* any modules specified in the parameters:
 
 module SomeModule
-  extend ModuleCluster
+  extend ::ModuleCluster
   include_also_includes( SomeOtherModule ) do
     AnotherModule
   end
@@ -43,7 +43,7 @@ end
 Blocks can be used to return dynamically-determined modules at runtime.
 
 module SomeModule
-  extend ModuleCluster
+  extend ::ModuleCluster
   include_or_extend_cascades_prepend_extends do
     method_that_returns_one_or_more_modules
   end

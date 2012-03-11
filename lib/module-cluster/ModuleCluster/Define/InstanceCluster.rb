@@ -1,10 +1,10 @@
 
 module ModuleCluster::Define::InstanceCluster
 
-  include ModuleCluster::CascadeFeatures::ClusterStack
-  include ModuleCluster::Suspend::WithoutHooks
+  include ::ModuleCluster::CascadeFeatures::ClusterStack
+  include ::ModuleCluster::Suspend::WithoutHooks
   
-  extend ModuleCluster::ExtendForCascade
+  extend ::ModuleCluster::ExtendForCascade
 
   ####################################
   #  self.should_include_or_extend?  #

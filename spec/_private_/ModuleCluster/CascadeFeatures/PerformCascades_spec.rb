@@ -19,7 +19,7 @@ describe ModuleCluster::CascadeFeatures::PerformCascades do
     end
     # we need a mock instance to use our methods
     module ModuleCluster::CascadeFeatures::PerformCascades::Mock01
-      extend ModuleCluster::CascadeFeatures::PerformCascades
+      extend ::ModuleCluster::CascadeFeatures::PerformCascades
     end
     module_self = ModuleCluster::CascadeFeatures::PerformCascades::MockCascadeModule01
     hooked_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleIncludingMockCascadeModule01
@@ -39,7 +39,7 @@ describe ModuleCluster::CascadeFeatures::PerformCascades do
 
   it 'can report whether an instance should be included or extended based on a descriptor symbol' do
     module ModuleCluster::CascadeFeatures::PerformCascades::Mock02
-      extend ModuleCluster::CascadeFeatures::PerformCascades
+      extend ::ModuleCluster::CascadeFeatures::PerformCascades
     end
     module ModuleCluster::CascadeFeatures::PerformCascades::MockModuleInstance02
     end
@@ -180,7 +180,7 @@ describe ModuleCluster::CascadeFeatures::PerformCascades do
     end
     # we need a mock instance to use our methods
     module ModuleCluster::CascadeFeatures::PerformCascades::Mock03
-      extend ModuleCluster::CascadeFeatures::PerformCascades
+      extend ::ModuleCluster::CascadeFeatures::PerformCascades
     end
     module_self = ModuleCluster::CascadeFeatures::PerformCascades::MockCascadeModule03
     set = ModuleCluster::ClusterStack::Set.new( module_self, :declaration_method, :all, :include, [ ModuleCluster::CascadeFeatures::PerformCascades::MockHookedIncludeModule03 ] )
@@ -239,7 +239,7 @@ describe ModuleCluster::CascadeFeatures::PerformCascades do
     end
     # we need a mock instance to use our methods
     module ModuleCluster::CascadeFeatures::PerformCascades::Mock04
-      extend ModuleCluster::CascadeFeatures::PerformCascades
+      extend ::ModuleCluster::CascadeFeatures::PerformCascades
     end
     module_self = ModuleCluster::CascadeFeatures::PerformCascades::MockCascadeModule04
     hooked_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleIncludingMockCascadeModule04
@@ -273,7 +273,7 @@ describe ModuleCluster::CascadeFeatures::PerformCascades do
     end
     # we need a mock instance to use our methods
     module ModuleCluster::CascadeFeatures::PerformCascades::Mock05
-      extend ModuleCluster::CascadeFeatures::PerformCascades
+      extend ::ModuleCluster::CascadeFeatures::PerformCascades
     end
     module_self = ModuleCluster::CascadeFeatures::PerformCascades::MockCascadeModule05
 
@@ -349,7 +349,7 @@ describe ModuleCluster::CascadeFeatures::PerformCascades do
     end
     # we need a mock instance to use our methods
     module ModuleCluster::CascadeFeatures::PerformCascades::Mock06
-      extend ModuleCluster::CascadeFeatures::PerformCascades
+      extend ::ModuleCluster::CascadeFeatures::PerformCascades
     end
     module_self = ModuleCluster::CascadeFeatures::PerformCascades::MockCascadeModule06
     hooked_instance = ModuleCluster::CascadeFeatures::PerformCascades::MockModuleIncludingMockCascadeModule06

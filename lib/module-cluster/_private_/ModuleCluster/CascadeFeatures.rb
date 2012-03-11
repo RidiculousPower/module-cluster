@@ -1,7 +1,7 @@
 
 module ModuleCluster::CascadeFeatures
   
-  extend ModuleCluster::CascadeFeatures::PerformCascades
+  extend ::ModuleCluster::CascadeFeatures::PerformCascades
   
   #####################
   #  append_features  #

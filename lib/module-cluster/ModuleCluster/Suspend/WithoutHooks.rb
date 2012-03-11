@@ -1,7 +1,7 @@
 
 module ModuleCluster::Suspend::WithoutHooks
 
-  include ModuleCluster::Suspend::Hooks
+  include ::ModuleCluster::Suspend::Hooks
   
   #######################
   #  without_any_hooks  #

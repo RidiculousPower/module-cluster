@@ -29,7 +29,7 @@ describe ModuleCluster::Define::InstanceCluster do
 	
   it 'can extend other modules when this one extends a module or instance' do
     module ModuleCluster::Define::InstanceCluster::Mock01
-      extend ModuleCluster::Define::InstanceCluster
+      extend ::ModuleCluster::Define::InstanceCluster
       module Module1
       end
       module Module2
@@ -37,7 +37,7 @@ describe ModuleCluster::Define::InstanceCluster do
       instance_extend_also_extends( Module1, Module2 ).name = :some_name
       respond_to?( :extended ).should == true
       module ModuleProof
-        extend ModuleCluster::Define::InstanceCluster::Mock01
+        extend ::ModuleCluster::Define::InstanceCluster::Mock01
         ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock01::Module1 ).should == false
         ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock01::Module2 ).should == false
         eigenclass = class << self ; self ; end
@@ -45,7 +45,7 @@ describe ModuleCluster::Define::InstanceCluster do
         eigenclass.ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock01::Module2 ).should == false
       end
       class ClassProof
-        extend ModuleCluster::Define::InstanceCluster::Mock01
+        extend ::ModuleCluster::Define::InstanceCluster::Mock01
         ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock01::Module1 ).should == false
         ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock01::Module2 ).should == false
         eigenclass = class << self ; self ; end
@@ -53,7 +53,7 @@ describe ModuleCluster::Define::InstanceCluster do
         eigenclass.ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock01::Module2 ).should == false
       end
       Object.new.instance_eval do
-        extend ModuleCluster::Define::InstanceCluster::Mock01
+        extend ::ModuleCluster::Define::InstanceCluster::Mock01
         eigenclass = class << self ; self ; end
         eigenclass.ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock01::Module1 ).should == true
         eigenclass.ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock01::Module2 ).should == true
@@ -67,7 +67,7 @@ describe ModuleCluster::Define::InstanceCluster do
 	
   it 'can extend other modules before this one when this one extends an instance' do
     module ModuleCluster::Define::InstanceCluster::Mock02
-      extend ModuleCluster::Define::InstanceCluster
+      extend ::ModuleCluster::Define::InstanceCluster
       module Module1
       end
       module Module2
@@ -75,7 +75,7 @@ describe ModuleCluster::Define::InstanceCluster do
       instance_extend_prepends_extends( Module1, Module2 ).name = :some_name
       respond_to?( :extend_object ).should == true
       module ModuleProof
-        extend ModuleCluster::Define::InstanceCluster::Mock02
+        extend ::ModuleCluster::Define::InstanceCluster::Mock02
         ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock02::Module1 ).should == false
         ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock02::Module2 ).should == false
         eigenclass = class << self ; self ; end
@@ -83,7 +83,7 @@ describe ModuleCluster::Define::InstanceCluster do
         eigenclass.ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock02::Module2 ).should == false
       end
       class ClassProof
-        extend ModuleCluster::Define::InstanceCluster::Mock02
+        extend ::ModuleCluster::Define::InstanceCluster::Mock02
         ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock02::Module1 ).should == false
         ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock02::Module2 ).should == false
         eigenclass = class << self ; self ; end
@@ -91,7 +91,7 @@ describe ModuleCluster::Define::InstanceCluster do
         eigenclass.ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock02::Module2 ).should == false
       end
       Object.new.instance_eval do
-        extend ModuleCluster::Define::InstanceCluster::Mock02
+        extend ::ModuleCluster::Define::InstanceCluster::Mock02
         eigenclass = class << self ; self ; end
         eigenclass.ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock02::Module1 ).should == true
         eigenclass.ancestors.include?( ModuleCluster::Define::InstanceCluster::Mock02::Module2 ).should == true

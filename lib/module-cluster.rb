@@ -36,11 +36,17 @@ module ModuleCluster
       end
       module ClassOrInstance
       end
+      module ClassOrSubclass
+      end
+      module ClassOrModuleOrSubclass
+      end
       module Instance
       end
       module Module
       end
       module ModuleOrInstance
+      end
+      module ModuleOrSubclass
       end
     end
     module ClusterStack
@@ -105,16 +111,6 @@ require_relative 'module-cluster/ModuleCluster/Suspend/Hooks.rb'
 require_relative 'module-cluster/ModuleCluster/Suspend/WithoutHooks.rb'
 require_relative 'module-cluster/ModuleCluster/Suspend.rb'
 
-require_relative 'module-cluster/ModuleCluster/Define/Block/Class.rb'
-require_relative 'module-cluster/ModuleCluster/Define/Block/Subclass.rb'
-require_relative 'module-cluster/ModuleCluster/Define/Block/Instance.rb'
-require_relative 'module-cluster/ModuleCluster/Define/Block/Module.rb'
-require_relative 'module-cluster/ModuleCluster/Define/Block/ClassOrInstance.rb'
-require_relative 'module-cluster/ModuleCluster/Define/Block/ClassOrModule.rb'
-require_relative 'module-cluster/ModuleCluster/Define/Block/ModuleOrInstance.rb'
-require_relative 'module-cluster/ModuleCluster/Define/Block/ClassOrModuleOrInstance.rb'
-require_relative 'module-cluster/ModuleCluster/Define/Block.rb'
-
 require_relative 'module-cluster/ModuleCluster/Define/Cluster.rb'
 require_relative 'module-cluster/ModuleCluster/Define/ModuleCluster.rb'
 require_relative 'module-cluster/ModuleCluster/Define/ClassCluster.rb'
@@ -125,6 +121,19 @@ require_relative 'module-cluster/ModuleCluster/Define/InstanceCluster.rb'
 require_relative 'module-cluster/ModuleCluster/Define/ClusterCascades.rb'
 require_relative 'module-cluster/ModuleCluster/Define/ClusterCascadesToClass.rb'
 require_relative 'module-cluster/ModuleCluster/Define/ClusterCascadesToModule.rb'
+
+require_relative 'module-cluster/ModuleCluster/Define/Block/Class.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/Instance.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/Module.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/ClassOrInstance.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/ClassOrModule.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/ModuleOrInstance.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/ClassOrModuleOrInstance.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/ClassOrModuleOrSubclass.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/Subclass.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/ModuleOrSubclass.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block/ClassOrSubclass.rb'
+require_relative 'module-cluster/ModuleCluster/Define/Block.rb'
 
 require_relative 'module-cluster/ModuleCluster/Define/Deprecated.rb'
 

@@ -1,17 +1,44 @@
 
 module ModuleCluster::Define::Block::Subclass
 
-  include ModuleCluster::CascadeFeatures::ClusterStack
-  include ModuleCluster::Suspend::WithoutHooks
+  include ::ModuleCluster::CascadeFeatures::ClusterStack
+  include ::ModuleCluster::Suspend::WithoutHooks
+  extend ::ModuleCluster::Define::Block::Module
   
-  extend ModuleCluster::ExtendForCascade::Subclass
-
+#  module_extend do |module_instance|
+#    module_instance.module_eval do
+#      extend ::ModuleCluster::Define::Block::Class
+#      class_include do |class_instance|
+#      end
+#    end
+#  end
+  
+  extend ::ModuleCluster::ExtendForCascade::Subclass
+  
   ############################
   #  self.should_run_block?  #
   ############################
   
   def self.should_run_block?( hooked_instance )
-    return hooked_instance.is_a?( Class )
+
+    should_run_block = false
+
+    if hooked_instance.is_a?( Module )
+      
+      if hooked_instance.is_a?( Class )
+
+        # subclass instance
+        if hooked_instance.ancestors[ 1 ].is_a?( Class )
+          should_run_block = true
+        end
+        # class instance - don't run
+      end
+      # module instance - don't run
+      
+    end
+    
+    return should_run_block
+
   end
 
   ##############

@@ -58,3 +58,9 @@ describe which set(s) should be suspended (although this can also be done).
 == 1/11/2011
 
 Added support for Class#subclass block hook.
+
+== 3/10/2011
+
+Added support for declaring subclass blocks in a module. 
+Added support for declaring class_or_module_include_or_subclass hooks, class_include_or_subclass,
+  and module_include_or_subclass.

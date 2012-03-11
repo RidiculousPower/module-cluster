@@ -9,9 +9,9 @@ describe ModuleCluster::Suspend::WithoutHooks do
   
   it 'can suspend and resume all hooks at once or all hooks matching a description' do
     module ModuleCluster::Suspend::WithoutHooks::Mock01
-      extend ModuleCluster::Suspend::WithoutHooks
+      extend ::ModuleCluster::Suspend::WithoutHooks
       # required to provide #cluster_stack
-      extend ModuleCluster::CascadeFeatures::ClusterStack
+      extend ::ModuleCluster::CascadeFeatures::ClusterStack
       module Module1
       end
       module Module2
@@ -88,9 +88,9 @@ describe ModuleCluster::Suspend::WithoutHooks do
   
   it 'can suspend and resume all include or prepending include hooks at once or any include or prepending include hooks matching a description' do
     module ModuleCluster::Suspend::WithoutHooks::Mock02
-      extend ModuleCluster::Suspend::WithoutHooks
+      extend ::ModuleCluster::Suspend::WithoutHooks
       # required to provide #cluster_stack
-      extend ModuleCluster::CascadeFeatures::ClusterStack
+      extend ::ModuleCluster::CascadeFeatures::ClusterStack
       module Module1
       end
       module Module2
@@ -167,9 +167,9 @@ describe ModuleCluster::Suspend::WithoutHooks do
   
   it 'can suspend and resume all extend or prepending extend hooks at once or any extend or prepending extend hooks matching a description' do
     module ModuleCluster::Suspend::WithoutHooks::Mock03
-      extend ModuleCluster::Suspend::WithoutHooks
+      extend ::ModuleCluster::Suspend::WithoutHooks
       # required to provide #cluster_stack
-      extend ModuleCluster::CascadeFeatures::ClusterStack
+      extend ::ModuleCluster::CascadeFeatures::ClusterStack
       module Module1
       end
       module Module2
@@ -246,9 +246,9 @@ describe ModuleCluster::Suspend::WithoutHooks do
   
   it 'can suspend and resume all include hooks at once or any include hooks matching a description' do
     module ModuleCluster::Suspend::WithoutHooks::Mock04
-      extend ModuleCluster::Suspend::WithoutHooks
+      extend ::ModuleCluster::Suspend::WithoutHooks
       # required to provide #cluster_stack
-      extend ModuleCluster::CascadeFeatures::ClusterStack
+      extend ::ModuleCluster::CascadeFeatures::ClusterStack
       module Module1
       end
       module Module2
@@ -325,9 +325,9 @@ describe ModuleCluster::Suspend::WithoutHooks do
   
   it 'can suspend and resume all extend hooks at once or any extend hooks matching a description' do
     module ModuleCluster::Suspend::WithoutHooks::Mock05
-      extend ModuleCluster::Suspend::WithoutHooks
+      extend ::ModuleCluster::Suspend::WithoutHooks
       # required to provide #cluster_stack
-      extend ModuleCluster::CascadeFeatures::ClusterStack
+      extend ::ModuleCluster::CascadeFeatures::ClusterStack
       module Module1
       end
       module Module2
@@ -404,9 +404,9 @@ describe ModuleCluster::Suspend::WithoutHooks do
   
   it 'can suspend and resume all prepending include hooks at once or any prepending include hooks matching a description' do
     module ModuleCluster::Suspend::WithoutHooks::Mock06
-      extend ModuleCluster::Suspend::WithoutHooks
+      extend ::ModuleCluster::Suspend::WithoutHooks
       # required to provide #cluster_stack
-      extend ModuleCluster::CascadeFeatures::ClusterStack
+      extend ::ModuleCluster::CascadeFeatures::ClusterStack
       module Module1
       end
       module Module2
@@ -483,9 +483,9 @@ describe ModuleCluster::Suspend::WithoutHooks do
 
   it 'can suspend and resume all prepending extend hooks at once or any prepending extend hooks matching a description' do
     module ModuleCluster::Suspend::WithoutHooks::Mock07
-      extend ModuleCluster::Suspend::WithoutHooks
+      extend ::ModuleCluster::Suspend::WithoutHooks
       # required to provide #cluster_stack
-      extend ModuleCluster::CascadeFeatures::ClusterStack
+      extend ::ModuleCluster::CascadeFeatures::ClusterStack
       module Module1
       end
       module Module2

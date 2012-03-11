@@ -17,17 +17,17 @@ module ModuleCluster::Define::Status
     return cluster_stack.extend_hooks
   end
 
-  ##############################
+  ###########################
   #  prepend_include_hooks  #
-  ##############################
+  ###########################
   
   def prepend_include_hooks
     return cluster_stack.prepend_include_hooks
   end
   
-  #############################
+  ##########################
   #  prepend_extend_hooks  #
-  #############################
+  ##########################
 
   def prepend_extend_hooks
     return cluster_stack.prepend_extend_hooks

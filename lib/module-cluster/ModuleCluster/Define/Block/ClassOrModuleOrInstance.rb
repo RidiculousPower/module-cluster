@@ -1,11 +1,11 @@
 
 module ModuleCluster::Define::Block::ClassOrModuleOrInstance
   
-  include ModuleCluster::Define::Block::ClassOrModule
-  include ModuleCluster::Define::Block::Instance
-  include ModuleCluster::Suspend::WithoutHooks
+  include ::ModuleCluster::Define::Block::ClassOrModule
+  include ::ModuleCluster::Define::Block::Instance
+  include ::ModuleCluster::Suspend::WithoutHooks
   
-  extend ModuleCluster::ExtendForCascade
+  extend ::ModuleCluster::ExtendForCascade
   
   ########################################
   #  class_or_module_or_instance_extend  #
