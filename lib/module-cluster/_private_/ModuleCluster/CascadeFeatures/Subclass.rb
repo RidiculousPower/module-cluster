@@ -7,17 +7,16 @@ module ::ModuleCluster::CascadeFeatures::Subclass
 	
 	def inherited( hooked_instance )
 
-    # all future subclasses should receive cascading hook
-    hooked_instance.extend( ::ModuleCluster::CascadeFeatures::Subclass )
-    hooked_instance.cluster_stack.inherited_hooks.concat( cluster_stack.inherited_hooks )
-    
     ::ModuleCluster::CascadeFeatures.perform_cascades( self, 
-                                                     :inherited, 
-                                                     hooked_instance, 
-                                                     cluster_stack.inherited_hooks )
+                                                       :inherited, 
+                                                       hooked_instance, 
+                                                       cluster_stack.inherited_hooks )
     
-    super
-
+    # we don't call super because we don't want to run our inherited action multiple times
+    # that means if you are messing with #inherited on your own (whoever is reading this code)
+    # then you need to consider the order your #inherited will be inserted in relation to
+    # the one provided by module-cluster
+    
   end
   
 end

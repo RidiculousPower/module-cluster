@@ -1,12 +1,13 @@
 
 module ::ModuleCluster::CascadeFeatures::PerformCascades
 
+  $this_time = 0
   ######################
   #  perform_cascades  #
   ######################
   
   def perform_cascades( module_self, action, hooked_instance, set_stack )
-    
+
     # This method is called when a ::ModuleCluster module is included or extended.
     # It determines what modules should be included/extended and which should cascade.
 
@@ -138,7 +139,7 @@ module ::ModuleCluster::CascadeFeatures::PerformCascades
 
     existing_inherit_hooks = module_self.cluster_stack.inherited_hooks
     hooked_instance.cluster_stack.inherited_hooks.concat( existing_inherit_hooks )
-
+    
   end
   
   #######################################
