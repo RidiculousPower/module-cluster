@@ -46,8 +46,9 @@ describe ::ModuleCluster::Define::Block::Subclass do
       end
       respond_to?( :included ).should == true
       respond_to?( :extended ).should == true
-      respond_to?( :append_features ).should == false
-      respond_to?( :extend_object ).should == false
+      respond_to?( :append_features ).should == true
+      respond_to?( :extend_object ).should == true
+      respond_to?( :inherited ).should == false
       class ClassProof
         include ::ModuleCluster::Define::Block::Subclass::Mock02
         respond_to?( :inherited ).should == true

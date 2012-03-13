@@ -1,6 +1,8 @@
 
 module ::ModuleCluster::CascadeFeatures::Subclass
 
+  extend ::ModuleCluster::CascadeFeatures::PerformCascades
+
 	###############
 	#  inherited  #
 	###############

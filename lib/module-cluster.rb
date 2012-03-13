@@ -97,7 +97,6 @@ require_relative 'module-cluster/_private_/ModuleCluster/CascadeFeatures/Subclas
 require_relative 'module-cluster/_private_/ModuleCluster/CascadeFeatures.rb'
 
 require_relative 'module-cluster/_private_/ModuleCluster/ExtendForCascade.rb'
-require_relative 'module-cluster/_private_/ModuleCluster/ExtendForCascade/Subclass.rb'
 
 require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/Set.rb'
 require_relative 'module-cluster/_private_/ModuleCluster/ClusterStack/Set/MultiSetProxy.rb'

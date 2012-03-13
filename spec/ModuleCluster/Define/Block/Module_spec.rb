@@ -15,25 +15,31 @@ describe ::ModuleCluster::Define::Block::Module do
         block_ran = true
         self.should == ::ModuleCluster::Define::Block::Module::Mock01
       end
+      cluster_stack.include_hooks.count.should == 1
       respond_to?( :included ).should == true
       class ClassProof
         extend ::ModuleCluster::Define::Block::Module::Mock01
+        respond_to?( :cluster_stack ).should == false
       end
       block_ran.should == false
       class ClassProof2
         include ::ModuleCluster::Define::Block::Module::Mock01
+        respond_to?( :cluster_stack ).should == false
       end
       block_ran.should == false
       Object.new.instance_eval do
         extend ::ModuleCluster::Define::Block::Module::Mock01
+        respond_to?( :cluster_stack ).should == false
       end
       block_ran.should == false
       module ModuleProof
         extend ::ModuleCluster::Define::Block::Module::Mock01
+        respond_to?( :cluster_stack ).should == false
       end
       block_ran.should == false
       module ModuleProof2
         include ::ModuleCluster::Define::Block::Module::Mock01
+        respond_to?( :cluster_stack ).should == false
       end
       block_ran.should == true
     end

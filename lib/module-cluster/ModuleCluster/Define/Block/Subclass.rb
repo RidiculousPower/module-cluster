@@ -3,18 +3,9 @@ module ::ModuleCluster::Define::Block::Subclass
 
   include ::ModuleCluster::CascadeFeatures::ClusterStack
   include ::ModuleCluster::Suspend::WithoutHooks
-  extend ::ModuleCluster::Define::Block::Module
   
-#  module_extend do |module_instance|
-#    module_instance.module_eval do
-#      extend ::ModuleCluster::Define::Block::Class
-#      class_include do |class_instance|
-#      end
-#    end
-#  end
-  
-  extend ::ModuleCluster::ExtendForCascade::Subclass
-  
+  extend ::ModuleCluster::ExtendForCascade
+    
   ##########################
   #  self.should_cascade?  #
   ##########################
@@ -55,9 +46,11 @@ module ::ModuleCluster::Define::Block::Subclass
   ##############
 
   def subclass( & runtime_block )
+    
     return cluster_stack.subclass( ::ModuleCluster::Define::Block::Subclass, 
                                    __method__, 
                                    runtime_block )
+  
   end
 
 end

@@ -1,7 +1,6 @@
 
 module ::ModuleCluster::CascadeFeatures::PerformCascades
 
-  $this_time = 0
   ######################
   #  perform_cascades  #
   ######################
@@ -26,7 +25,7 @@ module ::ModuleCluster::CascadeFeatures::PerformCascades
 
           # if our blocks are set to cascade then we need to copy inherit hooks
           if this_set.dependency_module.should_cascade?( hooked_instance )
-            cascade_block_into_hooked_instance( module_self, hooked_instance, this_set )
+            cascade_block_into_hooked_instance( module_self, action, hooked_instance, this_set )
           end
           
           if this_set.dependency_module.should_run_block?( hooked_instance )
@@ -129,16 +128,28 @@ module ::ModuleCluster::CascadeFeatures::PerformCascades
   #  cascade_block_into_hooked_instance  #
   ########################################
 
-  def cascade_block_into_hooked_instance( module_self, hooked_instance, set )
-
-    # if we are supposed to cascade we need to extend with the ::ModuleCluster dependency module
+  def cascade_block_into_hooked_instance( module_self, action, hooked_instance, set )
+    
     hooked_instance.extend( set.dependency_module )
+          
+    if hooked_instance.is_a?( Class )
+      
+      if action == :inherited
 
-    # and we call the set's definition method to cascade
-    hooked_instance.__send__( set.method, & set.runtime_block )
+        unless set.dependency_module == ::ModuleCluster::CascadeFeatures::Subclass
+          hooked_instance.extend( ::ModuleCluster::CascadeFeatures::Subclass )
+        end
+        
+        hooked_instance.subclass( & set.runtime_block )
 
-    existing_inherit_hooks = module_self.cluster_stack.inherited_hooks
-    hooked_instance.cluster_stack.inherited_hooks.concat( existing_inherit_hooks )
+      end
+      
+    else
+
+      # and we call the set's definition method to cascade
+      hooked_instance.__send__( set.method, & set.runtime_block )
+
+    end
     
   end
   

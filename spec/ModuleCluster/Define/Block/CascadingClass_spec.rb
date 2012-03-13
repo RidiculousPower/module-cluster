@@ -14,12 +14,21 @@ describe ::ModuleCluster::Define::Block::CascadingClass do
       cascading_class_include do
         block_ran = true
       end
+      cluster_stack.inherited_hooks.count.should == 1
       respond_to?( :included ).should == true
       module ModuleProof
         include ::ModuleCluster::Define::Block::CascadingClass::Mock01
+        respond_to?( :cluster_stack ).should == true
+        cluster_stack.inherited_hooks.count.should == 1
       end
       block_ran.should == false
       module ModuleProof2
+        include ::ModuleCluster::Define::Block::CascadingClass::Mock01::ModuleProof
+        respond_to?( :cluster_stack ).should == true
+        cluster_stack.inherited_hooks.count.should == 1
+      end
+      block_ran.should == false
+      module ModuleProofExtended
         extend ::ModuleCluster::Define::Block::CascadingClass::Mock01
       end
       block_ran.should == false
@@ -33,10 +42,14 @@ describe ::ModuleCluster::Define::Block::CascadingClass do
       block_ran.should == false
       class CascadingClassProof
         include ::ModuleCluster::Define::Block::CascadingClass::Mock01
+        respond_to?( :cluster_stack ).should == true
+        cluster_stack.inherited_hooks.count.should == 1
       end
       block_ran.should == true
       block_ran = false
       class CascadingClassProof2 < CascadingClassProof
+        respond_to?( :cluster_stack ).should == true
+        cluster_stack.inherited_hooks.count.should == 1
       end
       block_ran.should == true
     end

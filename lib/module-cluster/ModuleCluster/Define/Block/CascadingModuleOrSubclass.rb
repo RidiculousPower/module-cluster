@@ -6,7 +6,6 @@ module ::ModuleCluster::Define::Block::CascadingModuleOrSubclass
   include ::ModuleCluster::Define::Block::Subclass
   include ::ModuleCluster::Suspend::WithoutHooks
   
-  extend ::ModuleCluster::ExtendForCascade::Subclass
   extend ::ModuleCluster::ExtendForCascade
 
   ##########################################
