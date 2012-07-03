@@ -69,3 +69,6 @@ Added support for declaring class_or_module_include_or_subclass hooks, class_inc
 
 Added support for cascading block methods.
 
+== 7/03/2011
+
+Total interface rewrite.
