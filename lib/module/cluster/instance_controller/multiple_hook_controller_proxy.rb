@@ -2,7 +2,7 @@
 ###
 # Proxies before include or extend definitions to both include and extend controllers.
 #
-class ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy
+class ::Module::Cluster::InstanceController::MultipleHookControllerProxy
     
   Name = :multiple_hook_controller_proxy
   

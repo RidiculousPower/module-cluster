@@ -1,22 +1,28 @@
 
 ###
-# @private
+# Interface implementation for {::Module::Cluster::InstanceController Module::Cluster::InstanceController}. 
+#   Implementation provided separately for ease of overloading.
 #
-# Controls event hook stacks for a given Module or Class instance.
-#   Holds controllers for before and after include and extend and after subclass events. 
-#   Controllers hold action stacks, which include/extend modules, perform block actions, 
-#   or cascade actions to an inheriting instance.
-#
-class ::Module::Cluster::Cluster::InstanceController
-  
+module ::Module::Cluster::InstanceController::InstanceControllerInterface
+
   ################
   #  initialize  #
   ################
   
-  def initialize( instance_cluster )
+  def initialize( instance )
     
-    @instance_cluster = instance_cluster
+    @instance = instance
     
+  end
+
+  #########################
+  #  subclass_controller  #
+  #########################
+  
+  def subclass_controller
+
+    return @subclass_controller ||= self.class::HookController.new( :subclass, self )
+
   end
   
   ###############################
@@ -46,8 +52,8 @@ class ::Module::Cluster::Cluster::InstanceController
   def before_include_extend_proxy
 
     return @before_include_extend_proxy ||= self.class::MultipleHookControllerProxy.new( :before_include_extend,
-                                                                                         before_include_proxy,
-                                                                                         before_extend_proxy )
+                                                                                         before_include_controller,
+                                                                                         before_extend_controller )
 
   end
 
@@ -58,8 +64,8 @@ class ::Module::Cluster::Cluster::InstanceController
   def before_include_subclass_proxy
 
     return @before_include_subclass_proxy ||= self.class::MultipleHookControllerProxy.new( :before_include_subclass,
-                                                                                           before_include_proxy,
-                                                                                           before_extend_proxy )
+                                                                                           before_include_controller,
+                                                                                           subclass_controller )
 
   end
 
@@ -70,8 +76,8 @@ class ::Module::Cluster::Cluster::InstanceController
   def before_extend_subclass_proxy
 
     return @before_extend_subclass_proxy ||= self.class::MultipleHookControllerProxy.new( :before_extend_subclass,
-                                                                                          before_include_proxy,
-                                                                                          before_extend_proxy )
+                                                                                          before_include_controller,
+                                                                                          subclass_controller )
 
   end
 
@@ -83,8 +89,9 @@ class ::Module::Cluster::Cluster::InstanceController
 
     @before_include_extend_subclass_proxy ||= self.class::
                                               MultipleHookControllerProxy.new( :before_include_extend_subclass,
-                                                                               before_include_proxy,
-                                                                               before_extend_proxy )
+                                                                               before_include_controller,
+                                                                               before_extend_controller,
+                                                                               subclass_controller )
     return @before_include_extend_subclass_proxy
 
   end
@@ -116,8 +123,8 @@ class ::Module::Cluster::Cluster::InstanceController
   def after_include_extend_proxy
 
     return @after_include_extend_proxy ||= self.class::MultipleHookControllerProxy.new( :after_include_extend,
-                                                                                        after_include_proxy,
-                                                                                        after_extend_proxy )
+                                                                                        after_include_controller,
+                                                                                        after_extend_controller )
 
   end
 
@@ -128,8 +135,8 @@ class ::Module::Cluster::Cluster::InstanceController
   def after_include_subclass_proxy
 
     return @after_include_subclass_proxy ||= self.class::MultipleHookControllerProxy.new( :after_include_subclass,
-                                                                                          after_include_proxy,
-                                                                                          after_extend_proxy )
+                                                                                          after_include_controller,
+                                                                                          subclass_controller )
 
   end
 
@@ -140,8 +147,8 @@ class ::Module::Cluster::Cluster::InstanceController
   def after_extend_subclass_proxy
 
     return @after_extend_subclass_proxy ||= self.class::MultipleHookControllerProxy.new( :after_extend_subclass,
-                                                                                         after_include_proxy,
-                                                                                         after_extend_proxy )
+                                                                                         after_extend_controller,
+                                                                                         subclass_controller )
 
   end
 
@@ -153,10 +160,26 @@ class ::Module::Cluster::Cluster::InstanceController
 
     @after_include_extend_subclass_proxy ||= self.class::
                                              MultipleHookControllerProxy.new( :after_include_extend_subclass,
-                                                                              after_include_proxy,
-                                                                              after_extend_proxy )
-    return @after_include_extend_proxy
+                                                                              after_include_controller,
+                                                                              after_extend_controller,
+                                                                              subclass_controller )
+    return @after_include_extend_subclass_proxy
 
   end
+
+  ##################################################################################################
+  #   private ######################################################################################
+  ##################################################################################################
+
+  ###
+  # These methods are not actually in private space but are internal methods for inter-object
+  # communications. They aren't intended for public interfacing.
+  #
+
+  ##############
+  #  instance  #
+  ##############
+  
+  attr_reader :instance
   
 end

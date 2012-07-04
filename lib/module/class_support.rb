@@ -6,6 +6,10 @@ module ::Module::Cluster::ClassSupport
   ###############
   
   def inherited( subclass_instance )
+
+    super if defined?( super )
+    
+    hook_cluster_events( self, subclass_instance, :subclass )
     
   end
 

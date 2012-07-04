@@ -4,7 +4,7 @@
 #   The action stack manages stack frames, each of which provides details for an action to be performed
 #   at event hook.
 #
-class ::Module::Cluster::Cluster::InstanceController::HookController
+class ::Module::Cluster::InstanceController::HookController
   
   #############
   #  extend!  #
@@ -28,6 +28,6 @@ class ::Module::Cluster::Cluster::InstanceController::HookController
     alias_method :include!, :include
   end
   
-  include ::Module::Cluster::Cluster::InstanceController::HookController::HookControllerInterface
+  include ::Module::Cluster::InstanceController::HookController::HookControllerInterface
     
 end

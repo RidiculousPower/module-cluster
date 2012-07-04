@@ -1,10 +1,10 @@
 
-require_relative '../../../../../lib/module/cluster.rb'
+require_relative '../../../../lib/module/cluster.rb'
 
-describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy do
+describe ::Module::Cluster::InstanceController::MultipleHookControllerProxy do
   
   before :all do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock
 
       module Instance
       end
@@ -25,12 +25,12 @@ describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerP
   #############
 
   it 'can put modules on its stack for including at later event hook' do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::IncludeMock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::IncludeMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
-      HookControllerA = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
-      HookControllerB = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
-      multi_hook_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
+      instance_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
+      HookControllerA = ::Module::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
+      HookControllerB = ::Module::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
+      multi_hook_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
 
       module A
       end
@@ -85,12 +85,12 @@ describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerP
   ############
 
   it 'can put modules on its stack for extending at later event hook' do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::ExtendMock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
-      HookControllerA = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
-      HookControllerB = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
-      multi_hook_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
+      instance_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
+      HookControllerA = ::Module::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
+      HookControllerB = ::Module::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
+      multi_hook_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
 
       module A
       end
@@ -145,12 +145,12 @@ describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerP
   ########################
 
   it 'can put modules on its stack for including and extending at later event hook' do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::IncludeAndExtendMock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::IncludeAndExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
-      HookControllerA = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
-      HookControllerB = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
-      multi_hook_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
+      instance_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
+      HookControllerA = ::Module::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
+      HookControllerB = ::Module::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
+      multi_hook_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
 
       module A
       end
@@ -253,12 +253,12 @@ describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerP
   ############
   
   it 'can create a block action to perform at hook' do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::ActionMock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ActionMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
-      HookControllerA = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
-      HookControllerB = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
-      multi_hook_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
+      instance_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
+      HookControllerA = ::Module::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
+      HookControllerB = ::Module::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
+      multi_hook_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
       
       block_ran = false
       action_proc = ::Proc.new do
@@ -287,15 +287,15 @@ describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerP
   #################
   
   it 'can provide a proxy to return context-chained calls to self' do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::ProxyMock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ProxyMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
-      HookControllerA = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
-      HookControllerB = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
-      multi_hook_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
+      instance_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
+      HookControllerA = ::Module::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
+      HookControllerB = ::Module::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
+      multi_hook_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
 
       chain_proxy = multi_hook_controller.chain_proxy
-      chain_proxy.is_a?( ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy ).should == true
+      chain_proxy.is_a?( ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy ).should == true
       chain_proxy.should == multi_hook_controller.chain_proxy
       
     end
@@ -306,12 +306,12 @@ describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerP
   ####################
   
   it 'can chain methods specifying context for include/extend as before a given module include event' do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::BeforeIncludeMock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::BeforeIncludeMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
-      HookControllerA = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
-      HookControllerB = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
-      multi_hook_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
+      instance_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
+      HookControllerA = ::Module::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
+      HookControllerB = ::Module::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
+      multi_hook_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
 
       module A
       end
@@ -435,12 +435,12 @@ describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerP
   ###################
   
   it 'can chain methods specifying context for include/extend as before a given module extend event' do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::BeforeExtendMock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::BeforeExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
-      HookControllerA = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
-      HookControllerB = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
-      multi_hook_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
+      instance_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
+      HookControllerA = ::Module::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
+      HookControllerB = ::Module::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
+      multi_hook_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
 
       module A
       end
@@ -564,12 +564,12 @@ describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerP
   ##############################
   
   it 'can chain methods specifying context for include/extend as before a given module include or extend event' do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::BeforeIncludeOrExtendMock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::BeforeIncludeOrExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
-      HookControllerA = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
-      HookControllerB = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
-      multi_hook_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
+      instance_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
+      HookControllerA = ::Module::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
+      HookControllerB = ::Module::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
+      multi_hook_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
 
       module A
       end
@@ -773,12 +773,12 @@ describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerP
   ###################
   
   it 'can chain methods specifying context for include/extend as after a given module include event' do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::AfterIncludeMock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::AfterIncludeMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
-      HookControllerA = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
-      HookControllerB = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
-      multi_hook_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
+      instance_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
+      HookControllerA = ::Module::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
+      HookControllerB = ::Module::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
+      multi_hook_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
 
       module A
       end
@@ -902,12 +902,12 @@ describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerP
   ##################
   
   it 'can chain methods specifying context for include/extend as after a given module extend event' do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::AfterExtendMock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::AfterExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
-      HookControllerA = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
-      HookControllerB = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
-      multi_hook_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
+      instance_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
+      HookControllerA = ::Module::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
+      HookControllerB = ::Module::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
+      multi_hook_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
 
       module A
       end
@@ -1031,12 +1031,12 @@ describe ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerP
   #############################
 
   it 'can chain methods specifying context for include/extend as after a given module include or extend event' do
-    module ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::AfterIncludeOrExtendMock
+    module ::Module::Cluster::InstanceController::MultipleHookControllerProxy::AfterIncludeOrExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
-      HookControllerA = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
-      HookControllerB = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
-      multi_hook_controller = ::Module::Cluster::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
+      instance_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy::Mock::InstanceController
+      HookControllerA = ::Module::Cluster::InstanceController::HookController.new( :mock_A, instance_controller )
+      HookControllerB = ::Module::Cluster::InstanceController::HookController.new( :mock_B, instance_controller )
+      multi_hook_controller = ::Module::Cluster::InstanceController::MultipleHookControllerProxy.new( :mock, HookControllerA, HookControllerB )
 
       module A
       end

@@ -1,9 +1,9 @@
 
 module ::Module::Cluster
   class Cluster
-    class InstanceController
-      class HookController
-      end
+  end
+  class InstanceController
+    class HookController
     end
   end
   class Exception

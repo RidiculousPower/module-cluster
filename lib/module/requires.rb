@@ -3,15 +3,16 @@ basepath = 'cluster'
 
 files = [
     
-  'cluster/instance_controller',
+  'instance_controller/hook_controller/hook_controller_interface',
+  'instance_controller/hook_controller',
 
-  'cluster/instance_controller/hook_controller/hook_controller_interface',
-  'cluster/instance_controller/hook_controller',
+  'instance_controller/hook_controller/chain_proxy',
 
-  'cluster/instance_controller/hook_controller/chain_proxy',
+  'instance_controller/multiple_hook_controller_proxy',
+  'instance_controller/multiple_hook_controller_proxy/chain_proxy',
 
-  'cluster/instance_controller/multiple_hook_controller_proxy',
-  'cluster/instance_controller/multiple_hook_controller_proxy/chain_proxy',
+  'instance_controller/instance_controller_interface',
+  'instance_controller',
 
   'cluster/cluster_interface',
 

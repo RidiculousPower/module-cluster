@@ -1,10 +1,10 @@
 
-require_relative '../../../../../lib/module/cluster.rb'
+require_relative '../../../../lib/module/cluster.rb'
 
-describe ::Module::Cluster::Cluster::InstanceController::HookController do
+describe ::Module::Cluster::InstanceController::HookController do
   
   before :all do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::Mock
+    module ::Module::Cluster::InstanceController::HookController::Mock
 
       module Instance
       end
@@ -26,10 +26,10 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   ################
   
   it 'can initialize for a parent instance controller' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::InitializeMock
+    module ::Module::Cluster::InstanceController::HookController::InitializeMock
       
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
       
       hook_controller.instance_variable_get( :@parent_instance_controller ).should == instance_controller
       hook_controller.stack.is_a?( ::Array ).should == true
@@ -42,10 +42,10 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   #############
 
   it 'can put modules on its stack for including at later event hook' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::IncludeMock
+    module ::Module::Cluster::InstanceController::HookController::IncludeMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end
@@ -82,10 +82,10 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   ############
 
   it 'can put modules on its stack for extending at later event hook' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::ExtendMock
+    module ::Module::Cluster::InstanceController::HookController::ExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end
@@ -122,10 +122,10 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   ########################
 
   it 'can put modules on its stack for including and extending at later event hook' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::IncludeAndExtendMock
+    module ::Module::Cluster::InstanceController::HookController::IncludeAndExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end
@@ -192,11 +192,11 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   
   it 'can return indexes corresponding to include actions on event stack' do
     rspec = self
-    ::Module::Cluster::Cluster::InstanceController::HookController::IndexesMock = ::Module.new
-    ::Module::Cluster::Cluster::InstanceController::HookController::IndexesMock.module_eval do
+    ::Module::Cluster::InstanceController::HookController::IndexesMock = ::Module.new
+    ::Module::Cluster::InstanceController::HookController::IndexesMock.module_eval do
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end
@@ -236,11 +236,11 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
 
   it 'can return the highest index for provided modules; throws exception if module provided is not found in stack' do
     rspec = self
-    ::Module::Cluster::Cluster::InstanceController::HookController::LowestIndexMock = ::Module.new
-    ::Module::Cluster::Cluster::InstanceController::HookController::LowestIndexMock.module_eval do
+    ::Module::Cluster::InstanceController::HookController::LowestIndexMock = ::Module.new
+    ::Module::Cluster::InstanceController::HookController::LowestIndexMock.module_eval do
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end
@@ -280,11 +280,11 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
     
   it 'can return the highest index for provided modules; throws exception if module provided is not found in stack' do
     rspec = self
-    ::Module::Cluster::Cluster::InstanceController::HookController::HighestIndexMock = ::Module.new
-    ::Module::Cluster::Cluster::InstanceController::HookController::HighestIndexMock.module_eval do
+    ::Module::Cluster::InstanceController::HookController::HighestIndexMock = ::Module.new
+    ::Module::Cluster::InstanceController::HookController::HighestIndexMock.module_eval do
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end
@@ -327,10 +327,10 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   ############
   
   it 'can create a block action to perform at hook' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::ActionMock
+    module ::Module::Cluster::InstanceController::HookController::ActionMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
       
       block_ran = false
       action_proc = ::Proc.new do
@@ -352,13 +352,13 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   ###########
   
   it 'can provide a proxy to return context-chained calls to self' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::ProxyMock
+    module ::Module::Cluster::InstanceController::HookController::ProxyMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       chain_proxy = hook_controller.chain_proxy
-      chain_proxy.is_a?( ::Module::Cluster::Cluster::InstanceController::HookController::ChainProxy ).should == true
+      chain_proxy.is_a?( ::Module::Cluster::InstanceController::HookController::ChainProxy ).should == true
       chain_proxy.should == hook_controller.chain_proxy
       
     end
@@ -369,10 +369,10 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   ####################
   
   it 'can chain methods specifying context for include/extend as before a given module include event' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::BeforeIncludeMock
+    module ::Module::Cluster::InstanceController::HookController::BeforeIncludeMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end
@@ -448,10 +448,10 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   ###################
   
   it 'can chain methods specifying context for include/extend as before a given module extend event' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::BeforeExtendMock
+    module ::Module::Cluster::InstanceController::HookController::BeforeExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end
@@ -527,10 +527,10 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   ##############################
   
   it 'can chain methods specifying context for include/extend as before a given module include or extend event' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::BeforeIncludeOrExtendMock
+    module ::Module::Cluster::InstanceController::HookController::BeforeIncludeOrExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end
@@ -646,10 +646,10 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   ###################
   
   it 'can chain methods specifying context for include/extend as after a given module include event' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::AfterIncludeMock
+    module ::Module::Cluster::InstanceController::HookController::AfterIncludeMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end
@@ -725,10 +725,10 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   ##################
   
   it 'can chain methods specifying context for include/extend as after a given module extend event' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::AfterExtendMock
+    module ::Module::Cluster::InstanceController::HookController::AfterExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end
@@ -804,10 +804,10 @@ describe ::Module::Cluster::Cluster::InstanceController::HookController do
   #############################
   
   it 'can chain methods specifying context for include/extend as after a given module include or extend event' do
-    module ::Module::Cluster::Cluster::InstanceController::HookController::AfterIncludeOrExtendMock
+    module ::Module::Cluster::InstanceController::HookController::AfterIncludeOrExtendMock
 
-      instance_controller = ::Module::Cluster::Cluster::InstanceController::HookController::Mock::InstanceController
-      hook_controller = ::Module::Cluster::Cluster::InstanceController::HookController.new( :mock, instance_controller )
+      instance_controller = ::Module::Cluster::InstanceController::HookController::Mock::InstanceController
+      hook_controller = ::Module::Cluster::InstanceController::HookController.new( :mock, instance_controller )
 
       module A
       end

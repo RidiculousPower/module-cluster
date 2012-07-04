@@ -18,10 +18,23 @@ module ::Module::Cluster::Cluster::ClusterInterface
   def initialize( instance, name )
     
     @instance = instance
-    @instance_controller = self.class::InstanceController.new( self )
+    @instance_controller = ::Module::Cluster.instance_controller( instance )
     @name = name
     
   end
+
+  ##############
+  #  instance  #
+  ##############
+
+  ###
+  # Instance for which cluster is operative.
+  #
+  # @!attribute [reader] Instance.
+  #
+  # @return [Object] Instance.
+  #
+  attr_reader :instance
   
   ##########
   #  name  #
@@ -45,7 +58,7 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::IncludeEventProxy] 
   #
-  def before_include( & block )
+  def before_include( *contexts, & block )
     
     hook_controller = @instance_controller.before_include_controller
     
@@ -53,7 +66,7 @@ module ::Module::Cluster::Cluster::ClusterInterface
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
     
   end
 
@@ -66,15 +79,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::IncludeEventProxy] 
   #
-  def after_include( & block )
+  def after_include( *contexts, & block )
 
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.after_include_controller
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
 
   end
   
@@ -87,15 +100,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::ExtendEventProxy] 
   #
-  def before_extend( & block )
+  def before_extend( *contexts, & block )
     
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.before_extend_controller
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
     
   end
   
@@ -108,15 +121,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::ExtendEventProxy] 
   #
-  def after_extend( & block )
+  def after_extend( *contexts, & block )
 
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.after_extend_controller
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
 
   end
   
@@ -129,15 +142,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
   # 
   # @return [ModuleCluster::Cluster::EventProxy::SubclassEventProxy] 
   #
-  def subclass( & block )
+  def subclass( *contexts, & block )
 
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.subclass_controller
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
 
   end
   
@@ -151,15 +164,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::IncludeOrExtendEventProxy] 
   #
-  def before_include_or_extend( & block )
+  def before_include_or_extend( *contexts, & block )
     
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.before_include_extend_proxy
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
     
   end
   
@@ -175,15 +188,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::IncludeOrExtendEventProxy] 
   #
-  def after_include_or_extend( & block )
+  def after_include_or_extend( *contexts, & block )
     
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.after_include_extend_proxy
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
     
   end
   
@@ -199,15 +212,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::IncludeOrSubclassEventProxy] 
   #
-  def before_include_or_subclass( & block )
+  def before_include_or_subclass( *contexts, & block )
 
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.before_include_subclass_proxy
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
 
   end
 
@@ -223,15 +236,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::IncludeOrSubclassEventProxy] 
   #
-  def after_include_or_subclass( & block )
+  def after_include_or_subclass( *contexts, & block )
 
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.after_include_subclass_proxy
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
 
   end
   
@@ -247,15 +260,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::ExtendOrSubclassEventProxy] 
   #
-  def before_extend_or_subclass( & block )
+  def before_extend_or_subclass( *contexts, & block )
 
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.before_extend_subclass_proxy
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
 
   end
 
@@ -271,19 +284,19 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::ExtendOrSubclassEventProxy] 
   #
-  def after_extend_or_subclass( & block )
+  def after_extend_or_subclass( *contexts, & block )
 
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.after_extend_subclass_proxy
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
 
   end
   
-  alias_method :after_subclass_or_include, :after_include_or_subclass
+  alias_method :after_subclass_or_extend, :after_extend_or_subclass
   
   ##########################################
   #  before_include_or_extend_or_subclass  #
@@ -299,15 +312,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::IncludeOrExtendOrSubclassEventProxy] 
   #
-  def before_include_or_extend_or_subclass( & block )
+  def before_include_or_extend_or_subclass( *contexts, & block )
 
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.before_include_extend_subclass_proxy
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
 
   end
 
@@ -331,15 +344,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   # @return [ModuleCluster::Cluster::EventProxy::IncludeOrExtendOrSubclassEventProxy] 
   #
-  def after_include_or_extend_or_subclass( & block )
+  def after_include_or_extend_or_subclass( *contexts, & block )
 
-    hook_controller = @instance_controller.before_include_controller
+    hook_controller = @instance_controller.after_include_extend_subclass_proxy
     
     if block_given?
       hook_controller.action( & block )
     end
     
-    return hook_controller
+    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
 
   end
   
@@ -349,39 +362,4 @@ module ::Module::Cluster::Cluster::ClusterInterface
   alias_method :after_subclass_or_include_or_extend, :after_include_or_extend_or_subclass
   alias_method :after_subclass_or_extend_or_include, :after_include_or_extend_or_subclass
 
-  ######################
-  #  include_cascades  #
-  ######################
-  
-  def include_cascades( *context, & block )
-    
-    return chain_proxy.context( *context )
-    
-  end
-
-  #####################
-  #  extend_cascades  #
-  #####################
-
-  def extend_cascades( *context, & block )
-
-    return chain_proxy.context( *context )
-
-  end
-  
-  ################################
-  #  include_or_extend_cascades  #
-  #  extend_or_include_cascades  #
-  ################################
-  
-  def include_or_extend_cascades( *context, & block )
-    
-    
-    
-    return chain_proxy.context( *context )
-    
-  end
-
-  alias_method :extend_or_include_cascades, :include_or_extend_cascades
-  
 end
