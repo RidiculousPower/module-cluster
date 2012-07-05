@@ -31,15 +31,19 @@ describe ::Module::Cluster::Cluster do
       block_instance = ::Proc.new do
         block_ran = true
       end
-      proxy = cluster_instance.before_include( :class, :module, & block_instance )
+      
+      proxy = cluster_instance.before_include( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_hook_controller.name.should == :before_include
       proxy.contexts.should == [ :class, :module ]
+      proxy.cascades_to.should == [ :class ]
+      
       hook_controller = proxy.parent_hook_controller
       hook_controller.stack[ 0 ].module.should == nil
       hook_controller.stack[ 0 ].owner.should == Instance
       hook_controller.stack[ 0 ].action.should == nil
-      hook_controller.stack[ 0 ].cascades.should == nil
+      hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+      hook_controller.stack[ 0 ].cascades.should == [ :class ]
       hook_controller.stack[ 0 ].block.should == block_instance
       
     end
@@ -59,7 +63,8 @@ describe ::Module::Cluster::Cluster do
       block_instance = ::Proc.new do
         block_ran = true
       end
-      proxy = cluster_instance.after_include( :class, :module, & block_instance )
+      
+      proxy = cluster_instance.after_include( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_hook_controller.name.should == :after_include
       proxy.contexts.should == [ :class, :module ]
@@ -67,7 +72,8 @@ describe ::Module::Cluster::Cluster do
       hook_controller.stack[ 0 ].module.should == nil
       hook_controller.stack[ 0 ].owner.should == Instance
       hook_controller.stack[ 0 ].action.should == nil
-      hook_controller.stack[ 0 ].cascades.should == nil
+      hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+      hook_controller.stack[ 0 ].cascades.should == [ :class ]
       hook_controller.stack[ 0 ].block.should == block_instance
       
     end
@@ -87,7 +93,7 @@ describe ::Module::Cluster::Cluster do
       block_instance = ::Proc.new do
         block_ran = true
       end
-      proxy = cluster_instance.before_extend( :class, :module, & block_instance )
+      proxy = cluster_instance.before_extend( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_hook_controller.name.should == :before_extend
       proxy.contexts.should == [ :class, :module ]
@@ -95,7 +101,8 @@ describe ::Module::Cluster::Cluster do
       hook_controller.stack[ 0 ].module.should == nil
       hook_controller.stack[ 0 ].owner.should == Instance
       hook_controller.stack[ 0 ].action.should == nil
-      hook_controller.stack[ 0 ].cascades.should == nil
+      hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+      hook_controller.stack[ 0 ].cascades.should == [ :class ]
       hook_controller.stack[ 0 ].block.should == block_instance
       
     end
@@ -115,7 +122,7 @@ describe ::Module::Cluster::Cluster do
       block_instance = ::Proc.new do
         block_ran = true
       end
-      proxy = cluster_instance.after_extend( :class, :module, & block_instance )
+      proxy = cluster_instance.after_extend( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_hook_controller.name.should == :after_extend
       proxy.contexts.should == [ :class, :module ]
@@ -123,7 +130,8 @@ describe ::Module::Cluster::Cluster do
       hook_controller.stack[ 0 ].module.should == nil
       hook_controller.stack[ 0 ].owner.should == Instance
       hook_controller.stack[ 0 ].action.should == nil
-      hook_controller.stack[ 0 ].cascades.should == nil
+      hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+      hook_controller.stack[ 0 ].cascades.should == [ :class ]
       hook_controller.stack[ 0 ].block.should == block_instance
       
     end
@@ -143,7 +151,7 @@ describe ::Module::Cluster::Cluster do
       block_instance = ::Proc.new do
         block_ran = true
       end
-      proxy = cluster_instance.subclass( :class, :module, & block_instance )
+      proxy = cluster_instance.subclass( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_hook_controller.name.should == :subclass
       proxy.contexts.should == [ :class, :module ]
@@ -151,7 +159,8 @@ describe ::Module::Cluster::Cluster do
       hook_controller.stack[ 0 ].module.should == nil
       hook_controller.stack[ 0 ].owner.should == Instance
       hook_controller.stack[ 0 ].action.should == nil
-      hook_controller.stack[ 0 ].cascades.should == nil
+      hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+      hook_controller.stack[ 0 ].cascades.should == [ :class ]
       hook_controller.stack[ 0 ].block.should == block_instance
       
     end
@@ -164,6 +173,7 @@ describe ::Module::Cluster::Cluster do
   
   it 'can create before-include-or-extend hooks' do
     module ::Module::Cluster::Cluster::BeforeIncludeExtendMock
+      
       ::Module::Cluster::Cluster.instance_method( :before_include_or_extend ).should == ::Module::Cluster::Cluster.instance_method( :before_extend_or_include )
       
       Instance = ::Module.new
@@ -174,7 +184,7 @@ describe ::Module::Cluster::Cluster do
         block_ran = true
       end
       
-      proxy = cluster_instance.before_include_or_extend( :class, :module, & block_instance )
+      proxy = cluster_instance.before_include_or_extend( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_multiple_hook_controller_proxy.name.should == :before_include_extend
 
@@ -184,7 +194,8 @@ describe ::Module::Cluster::Cluster do
         this_hook_controller.stack[ 0 ].module.should == nil
         this_hook_controller.stack[ 0 ].owner.should == Instance
         this_hook_controller.stack[ 0 ].action.should == nil
-        this_hook_controller.stack[ 0 ].cascades.should == nil
+        this_hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+        this_hook_controller.stack[ 0 ].cascades.should == [ :class ]
         this_hook_controller.stack[ 0 ].block.should == block_instance
       end
       
@@ -198,6 +209,7 @@ describe ::Module::Cluster::Cluster do
   
   it 'can create after-include-or-extend hooks' do
     module ::Module::Cluster::Cluster::AfterIncludeExtendMock
+      
       ::Module::Cluster::Cluster.instance_method( :after_include_or_extend ).should == ::Module::Cluster::Cluster.instance_method( :after_extend_or_include )
       
       Instance = ::Module.new
@@ -208,7 +220,7 @@ describe ::Module::Cluster::Cluster do
         block_ran = true
       end
       
-      proxy = cluster_instance.after_include_or_extend( :class, :module, & block_instance )
+      proxy = cluster_instance.after_include_or_extend( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_multiple_hook_controller_proxy.name.should == :after_include_extend
 
@@ -218,7 +230,8 @@ describe ::Module::Cluster::Cluster do
         this_hook_controller.stack[ 0 ].module.should == nil
         this_hook_controller.stack[ 0 ].owner.should == Instance
         this_hook_controller.stack[ 0 ].action.should == nil
-        this_hook_controller.stack[ 0 ].cascades.should == nil
+        this_hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+        this_hook_controller.stack[ 0 ].cascades.should == [ :class ]
         this_hook_controller.stack[ 0 ].block.should == block_instance
       end
       
@@ -232,6 +245,7 @@ describe ::Module::Cluster::Cluster do
   
   it 'can create before-include-or-subclass hooks' do
     module ::Module::Cluster::Cluster::BeforeIncludeSubclassMock
+      
       ::Module::Cluster::Cluster.instance_method( :before_include_or_subclass ).should == ::Module::Cluster::Cluster.instance_method( :before_subclass_or_include )
       
       Instance = ::Module.new
@@ -242,7 +256,7 @@ describe ::Module::Cluster::Cluster do
         block_ran = true
       end
       
-      proxy = cluster_instance.before_include_or_subclass( :class, :module, & block_instance )
+      proxy = cluster_instance.before_include_or_subclass( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_multiple_hook_controller_proxy.name.should == :before_include_subclass
 
@@ -252,7 +266,8 @@ describe ::Module::Cluster::Cluster do
         this_hook_controller.stack[ 0 ].module.should == nil
         this_hook_controller.stack[ 0 ].owner.should == Instance
         this_hook_controller.stack[ 0 ].action.should == nil
-        this_hook_controller.stack[ 0 ].cascades.should == nil
+        this_hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+        this_hook_controller.stack[ 0 ].cascades.should == [ :class ]
         this_hook_controller.stack[ 0 ].block.should == block_instance
       end
       
@@ -266,6 +281,7 @@ describe ::Module::Cluster::Cluster do
   
   it 'can create after-include-or-subclass hooks' do
     module ::Module::Cluster::Cluster::AfterIncludeSubclassMock
+      
       ::Module::Cluster::Cluster.instance_method( :after_include_or_subclass ).should == ::Module::Cluster::Cluster.instance_method( :after_subclass_or_include )
       
       Instance = ::Module.new
@@ -276,7 +292,7 @@ describe ::Module::Cluster::Cluster do
         block_ran = true
       end
       
-      proxy = cluster_instance.after_include_or_subclass( :class, :module, & block_instance )
+      proxy = cluster_instance.after_include_or_subclass( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_multiple_hook_controller_proxy.name.should == :after_include_subclass
 
@@ -286,7 +302,8 @@ describe ::Module::Cluster::Cluster do
         this_hook_controller.stack[ 0 ].module.should == nil
         this_hook_controller.stack[ 0 ].owner.should == Instance
         this_hook_controller.stack[ 0 ].action.should == nil
-        this_hook_controller.stack[ 0 ].cascades.should == nil
+        this_hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+        this_hook_controller.stack[ 0 ].cascades.should == [ :class ]
         this_hook_controller.stack[ 0 ].block.should == block_instance
       end
       
@@ -300,6 +317,7 @@ describe ::Module::Cluster::Cluster do
   
   it 'can create before-extend-or-subclass hooks' do
     module ::Module::Cluster::Cluster::BeforeExtendSubclassMock
+      
       ::Module::Cluster::Cluster.instance_method( :before_extend_or_subclass ).should == ::Module::Cluster::Cluster.instance_method( :before_subclass_or_extend )
       
       Instance = ::Module.new
@@ -310,7 +328,7 @@ describe ::Module::Cluster::Cluster do
         block_ran = true
       end
       
-      proxy = cluster_instance.before_extend_or_subclass( :class, :module, & block_instance )
+      proxy = cluster_instance.before_extend_or_subclass( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_multiple_hook_controller_proxy.name.should == :before_extend_subclass
 
@@ -320,7 +338,8 @@ describe ::Module::Cluster::Cluster do
         this_hook_controller.stack[ 0 ].module.should == nil
         this_hook_controller.stack[ 0 ].owner.should == Instance
         this_hook_controller.stack[ 0 ].action.should == nil
-        this_hook_controller.stack[ 0 ].cascades.should == nil
+        this_hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+        this_hook_controller.stack[ 0 ].cascades.should == [ :class ]
         this_hook_controller.stack[ 0 ].block.should == block_instance
       end
       
@@ -334,6 +353,7 @@ describe ::Module::Cluster::Cluster do
   
   it 'can create after-extend-or-subclass hooks' do
     module ::Module::Cluster::Cluster::AfterExtendSubclassMock
+      
       ::Module::Cluster::Cluster.instance_method( :after_extend_or_subclass ).should == ::Module::Cluster::Cluster.instance_method( :after_subclass_or_extend )
       
       Instance = ::Module.new
@@ -344,7 +364,7 @@ describe ::Module::Cluster::Cluster do
         block_ran = true
       end
       
-      proxy = cluster_instance.after_extend_or_subclass( :class, :module, & block_instance )
+      proxy = cluster_instance.after_extend_or_subclass( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_multiple_hook_controller_proxy.name.should == :after_extend_subclass
 
@@ -354,7 +374,8 @@ describe ::Module::Cluster::Cluster do
         this_hook_controller.stack[ 0 ].module.should == nil
         this_hook_controller.stack[ 0 ].owner.should == Instance
         this_hook_controller.stack[ 0 ].action.should == nil
-        this_hook_controller.stack[ 0 ].cascades.should == nil
+        this_hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+        this_hook_controller.stack[ 0 ].cascades.should == [ :class ]
         this_hook_controller.stack[ 0 ].block.should == block_instance
       end
       
@@ -372,6 +393,7 @@ describe ::Module::Cluster::Cluster do
   
   it 'can create before-include-or-extend-or-subclass hooks' do
     module ::Module::Cluster::Cluster::BeforeIncludeExtendSubclassMock
+      
       ::Module::Cluster::Cluster.instance_method( :before_include_or_subclass_or_extend ).should == ::Module::Cluster::Cluster.instance_method( :before_include_or_extend_or_subclass )
       ::Module::Cluster::Cluster.instance_method( :before_extend_or_include_or_subclass ).should == ::Module::Cluster::Cluster.instance_method( :before_include_or_extend_or_subclass )
       ::Module::Cluster::Cluster.instance_method( :before_extend_or_subclass_or_include ).should == ::Module::Cluster::Cluster.instance_method( :before_include_or_extend_or_subclass )
@@ -386,7 +408,7 @@ describe ::Module::Cluster::Cluster do
         block_ran = true
       end
       
-      proxy = cluster_instance.before_include_or_extend_or_subclass( :class, :module, & block_instance )
+      proxy = cluster_instance.before_include_or_extend_or_subclass( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_multiple_hook_controller_proxy.name.should == :before_include_extend_subclass
 
@@ -396,7 +418,8 @@ describe ::Module::Cluster::Cluster do
         this_hook_controller.stack[ 0 ].module.should == nil
         this_hook_controller.stack[ 0 ].owner.should == Instance
         this_hook_controller.stack[ 0 ].action.should == nil
-        this_hook_controller.stack[ 0 ].cascades.should == nil
+        this_hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+        this_hook_controller.stack[ 0 ].cascades.should == [ :class ]
         this_hook_controller.stack[ 0 ].block.should == block_instance
       end
       
@@ -414,6 +437,7 @@ describe ::Module::Cluster::Cluster do
   
   it 'can create after-include-or-extend-or-subclass hooks' do
     module ::Module::Cluster::Cluster::AfterIncludeExtendSubclassMock
+      
       ::Module::Cluster::Cluster.instance_method( :after_include_or_subclass_or_extend ).should == ::Module::Cluster::Cluster.instance_method( :after_include_or_extend_or_subclass )
       ::Module::Cluster::Cluster.instance_method( :after_extend_or_include_or_subclass ).should == ::Module::Cluster::Cluster.instance_method( :after_include_or_extend_or_subclass )
       ::Module::Cluster::Cluster.instance_method( :after_extend_or_subclass_or_include ).should == ::Module::Cluster::Cluster.instance_method( :after_include_or_extend_or_subclass )
@@ -428,7 +452,7 @@ describe ::Module::Cluster::Cluster do
         block_ran = true
       end
 
-      proxy = cluster_instance.after_include_or_extend_or_subclass( :class, :module, & block_instance )
+      proxy = cluster_instance.after_include_or_extend_or_subclass( :class, :module ).cascade_to( :class, & block_instance )
       
       proxy.parent_multiple_hook_controller_proxy.name.should == :after_include_extend_subclass
 
@@ -438,7 +462,8 @@ describe ::Module::Cluster::Cluster do
         this_hook_controller.stack[ 0 ].module.should == nil
         this_hook_controller.stack[ 0 ].owner.should == Instance
         this_hook_controller.stack[ 0 ].action.should == nil
-        this_hook_controller.stack[ 0 ].cascades.should == nil
+        this_hook_controller.stack[ 0 ].context.should == [ :class, :module ]
+        this_hook_controller.stack[ 0 ].cascades.should == [ :class ]
         this_hook_controller.stack[ 0 ].block.should == block_instance
       end
       

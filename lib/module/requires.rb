@@ -16,9 +16,12 @@ files = [
 
   'cluster/cluster_interface',
 
+  'cluster',
+
   'exception/module_not_in_stack',
 
-  'cluster'
+  'class_support',
+  'module_support'
     
 ]
 

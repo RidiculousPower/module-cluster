@@ -184,62 +184,111 @@ module ::Module::Cluster
   #
   def self.hook_cluster_events( instance, hooked_instance, event_context )
     
+    requires_module_cluster_enable = false
+    
+    # Subclass hooks always cascade to the first subclass.
+    # If it should casade for each subclass that has to be declared explicitly and will be handled below.
+    unless event_context == :subclass
+      instance_controller = instance_controller( instance )
+      if instance_controller.instance_variable_defined?( :@subclass_controller )
+        hooked_instance_controller = instance_controller( hooked_instance )
+        hooked_instance_controller.subclass_controller.stack.concat( instance_controller.subclass_controller.stack )
+        requires_module_cluster_enable = true
+      end
+    end
+
     hook_controller_for_context( instance, event_context ).stack.each do |this_frame|
-      
+
+      cascade_controller = event_context
+
       # test to see if this frame's cluster is disabled
       unless cluster( instance, this_frame.cluster ).disabled?
          
         should_cascade = false
+        should_perform_action = nil
          
         # if we cascade we do that first - test to see if we should cascade into instance
         if cascade_context = this_frame.cascades
-                    
-          case instance
-            when ::Class
-              if event_context == :subclass
-                if cascade_context.include?( :subclass )
-                  should_cascade = true
+
+          if cascade_context.include?( :any )
+
+            should_cascade = true
+            should_perform_action = true
+            
+            case hooked_instance
+              when ::Class
+                cascade_controller = :subclass
+            end
+
+          else
+
+            case hooked_instance
+              when ::Class
+                if event_context == :subclass
+                  if cascade_context.include?( :subclass )
+                    should_cascade = true
+                    should_perform_action = true
+                  end
+                else
+                  has_subclass = cascade_context.include?( :subclass )
+                  has_class = cascade_context.include?( :class )
+                  if has_class and has_subclass
+                    should_cascade = true
+                    should_perform_action = true
+                    cascade_controller = :subclass
+                  elsif has_class
+                    should_cascade = true
+                    should_perform_action = true
+                  elsif has_subclass
+                    should_cascade = true
+                    should_perform_action = false
+                    cascade_controller = :subclass
+                  end
                 end
-              else
-                if cascade_context.include?( :class )
+              when ::Module
+                if cascade_context.include?( :module )
                   should_cascade = true
+                  should_perform_action = true
+                elsif cascade_context.include?( :class ) or cascade_context.include?( :subclass )
+                  should_cascade = true
+                  should_perform_action = false
                 end
-              end
-            when ::Module
-              if cascade_context.include?( :module )
-                should_cascade = true
-              end
+            end
+
           end
           
           if should_cascade
-            hook_controller_for_context( hooked_instance, event_context ).stack.push( this_frame )
+            requires_module_cluster_enable = true
+            hook_controller_for_context( hooked_instance, cascade_controller ).stack.push( this_frame )
           end
 
         end
         
-        should_perform_action = false
-      
-        if match_context = this_frame.context
+        if cascade_context
+          
+          # already handled
+        
+        elsif match_context = this_frame.context
 
           # if we have a context we test against instance to see if we match, then we perform action
-          case instance
+          case hooked_instance
             when ::Class
               if event_context == :subclass
                 if match_context.include?( :subclass )
-                  should_cascade = true
+                  should_perform_action = true
                 end
               else
                 if match_context.include?( :class )
-                  should_cascade = true
+                  should_perform_action = true
                 end
               end
             when ::Module
               if match_context.include?( :module )
-                should_cascade = true
+                should_perform_action = true
               end
             else
               if match_context.include?( :instance )
-                should_cascade = true
+                should_perform_action = true
               end
           end
           
@@ -250,7 +299,7 @@ module ::Module::Cluster
           should_perform_action = true
 
         end
-        
+
         if should_perform_action
 
           # if we have a module to include/extend
@@ -266,12 +315,23 @@ module ::Module::Cluster
           end
       
           # if we have a block it runs last
-          if this_block = this_block.block
-            hooked_instance.instance_eval( & this_block )
+          if this_block = this_frame.block
+            this_block.call( hooked_instance )
           end
 
         end
 
+      end
+
+    end
+    
+    if requires_module_cluster_enable
+      
+      case hooked_instance
+        when ::Class
+          hooked_instance.extend( ::Module::Cluster::ClassSupport )
+        when ::Module
+          hooked_instance.extend( ::Module::Cluster::ModuleSupport )
       end
       
     end

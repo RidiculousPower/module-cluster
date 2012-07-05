@@ -9,7 +9,7 @@ module ::Module::Cluster::ModuleSupport
     
     super if defined?( super )
     
-    hook_cluster_events( self, hooked_instance, :before_include )
+    ::Module::Cluster.hook_cluster_events( self, hooked_instance, :before_include )
     
   end
 
@@ -21,7 +21,7 @@ module ::Module::Cluster::ModuleSupport
 
     super if defined?( super )
     
-    hook_cluster_events( self, hooked_instance, :after_include )
+    ::Module::Cluster.hook_cluster_events( self, hooked_instance, :after_include )
     
   end
 
@@ -33,7 +33,7 @@ module ::Module::Cluster::ModuleSupport
 
     super if defined?( super )
     
-    hook_cluster_events( self, hooked_instance, :before_extend )
+    ::Module::Cluster.hook_cluster_events( self, hooked_instance, :before_extend )
     
   end
 
@@ -41,11 +41,11 @@ module ::Module::Cluster::ModuleSupport
   #  extended  #
   ##############
   
-  def extended( instance )
+  def extended( hooked_instance )
 
     super if defined?( super )
     
-    hook_cluster_events( self, hooked_instance, :after_extend )
+    ::Module::Cluster.hook_cluster_events( self, hooked_instance, :after_extend )
     
   end
 

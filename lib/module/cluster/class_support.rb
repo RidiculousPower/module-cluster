@@ -9,7 +9,7 @@ module ::Module::Cluster::ClassSupport
 
     super if defined?( super )
     
-    hook_cluster_events( self, subclass_instance, :subclass )
+    ::Module::Cluster.hook_cluster_events( self, subclass_instance, :subclass )
     
   end
 

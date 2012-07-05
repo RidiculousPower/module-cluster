@@ -21,6 +21,8 @@ module ::Module::Cluster::Cluster::ClusterInterface
     @instance_controller = ::Module::Cluster.instance_controller( instance )
     @name = name
     
+    @enabled = true
+    
   end
 
   ##############
@@ -49,6 +51,52 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #
   attr_reader :name
 
+  ###############
+  #  enabled?   #
+  ###############
+  
+  def enabled?
+    
+    return @enabled
+    
+  end
+  
+  ################
+  #  disabled?   #
+  #  suspended?  #
+  ################
+  
+  def disabled?
+    
+    return ! @enabled
+    
+  end
+  
+  alias_method :suspended?, :disabled?
+  
+  #############
+  #  disable  #
+  #  suspend  #
+  #############
+  
+  def disable
+    
+    @enabled = false
+    
+  end
+
+  alias_method :suspend, :disable
+
+  ############
+  #  enable  #
+  ############
+  
+  def enable
+    
+    @enabled = true
+    
+  end
+
   ####################
   #  before_include  #
   ####################
@@ -62,11 +110,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
     
     hook_controller = @instance_controller.before_include_controller
     
+    chain_proxy_instance = hook_controller.chain_proxy
+    
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
     
   end
 
@@ -82,6 +134,8 @@ module ::Module::Cluster::Cluster::ClusterInterface
   def after_include( *contexts, & block )
 
     hook_controller = @instance_controller.after_include_controller
+    
+    chain_proxy_instance = hook_controller.chain_proxy
     
     if block_given?
       hook_controller.action( & block )
@@ -104,11 +158,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
     
     hook_controller = @instance_controller.before_extend_controller
     
+    chain_proxy_instance = hook_controller.chain_proxy
+    
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
     
   end
   
@@ -125,11 +183,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
 
     hook_controller = @instance_controller.after_extend_controller
     
+    chain_proxy_instance = hook_controller.chain_proxy
+    
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
 
   end
   
@@ -146,11 +208,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
 
     hook_controller = @instance_controller.subclass_controller
     
+    chain_proxy_instance = hook_controller.chain_proxy
+
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
 
   end
   
@@ -168,11 +234,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
     
     hook_controller = @instance_controller.before_include_extend_proxy
     
+    chain_proxy_instance = hook_controller.chain_proxy
+    
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
     
   end
   
@@ -192,11 +262,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
     
     hook_controller = @instance_controller.after_include_extend_proxy
     
+    chain_proxy_instance = hook_controller.chain_proxy
+    
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
     
   end
   
@@ -216,11 +290,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
 
     hook_controller = @instance_controller.before_include_subclass_proxy
     
+    chain_proxy_instance = hook_controller.chain_proxy
+    
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
 
   end
 
@@ -240,11 +318,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
 
     hook_controller = @instance_controller.after_include_subclass_proxy
     
+    chain_proxy_instance = hook_controller.chain_proxy
+    
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
 
   end
   
@@ -264,11 +346,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
 
     hook_controller = @instance_controller.before_extend_subclass_proxy
     
+    chain_proxy_instance = hook_controller.chain_proxy
+    
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
 
   end
 
@@ -288,11 +374,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
 
     hook_controller = @instance_controller.after_extend_subclass_proxy
     
+    chain_proxy_instance = hook_controller.chain_proxy
+    
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
 
   end
   
@@ -316,11 +406,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
 
     hook_controller = @instance_controller.before_include_extend_subclass_proxy
     
+    chain_proxy_instance = hook_controller.chain_proxy
+    
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
 
   end
 
@@ -348,11 +442,15 @@ module ::Module::Cluster::Cluster::ClusterInterface
 
     hook_controller = @instance_controller.after_include_extend_subclass_proxy
     
+    chain_proxy_instance = hook_controller.chain_proxy
+    
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
 
   end
   

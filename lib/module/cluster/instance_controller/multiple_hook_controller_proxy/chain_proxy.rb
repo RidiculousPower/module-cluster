@@ -1,6 +1,7 @@
 
 ###
-# A MultipleHookControllerProxy uses a MultipleHookControllerProxy::ChainProxy to chain commands that rely on chained state.
+# A MultipleHookControllerProxy uses a MultipleHookControllerProxy::ChainProxy 
+#   to chain commands that rely on chained state.
 #
 class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy
   
@@ -24,8 +25,8 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
 
   def include( *modules )
     
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.include( *modules )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.include( *modules )
     end
 
     return self
@@ -38,8 +39,8 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
 
   def extend( *modules )
 
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.extend( *modules )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.extend( *modules )
     end
 
     return self
@@ -52,8 +53,8 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
 
   def include_and_extend( *modules )
     
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.include_and_extend( *modules )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.include_and_extend( *modules )
     end
 
     return self
@@ -66,8 +67,8 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
 
   def extend_and_include( *modules )
     
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.extend_and_include( *modules )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.extend_and_include( *modules )
     end
 
     return self
@@ -80,29 +81,39 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
   
   def action( & block )
     
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.action( & block )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.action( & block )
+    end
+    
+    return self
+    
+  end
+
+  ################
+  #  cascade     #
+  #  cascade_to  #
+  ################
+  
+  def cascade( *cascade_contexts, & block )
+    
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.cascade( *cascade_contexts, & block )
     end
     
     return self
     
   end
   
+  alias_method :cascade_to, :cascade
+  
   ###################
   #  before_extend  #
   ###################
   
-  ###
-  # @private
-  #
-  # Used internally by {::Module::Cluster::InstanceController::MultipleHookControllerProxy 
-  #   Module::Cluster::InstanceController::MultipleHookControllerProxy} for setting up
-  #   proxies to hook controllers.
-  # 
   def before_extend( *modules )
     
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.before_extend( *modules )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.before_extend( *modules )
     end
     
     return self
@@ -113,17 +124,10 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
   #  before_include  #
   ####################
   
-  ###
-  # @private
-  #
-  # Used internally by {::Module::Cluster::InstanceController::MultipleHookControllerProxy 
-  #   Module::Cluster::InstanceController::MultipleHookControllerProxy} for setting up
-  #   proxies to hook controllers.
-  # 
   def before_include( *modules )
     
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.before_include( *modules )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.before_include( *modules )
     end
     
     return self
@@ -135,17 +139,10 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
   #  before_extend_or_include  #
   ##############################
   
-  ###
-  # @private
-  #
-  # Used internally by {::Module::Cluster::InstanceController::MultipleHookControllerProxy 
-  #   Module::Cluster::InstanceController::MultipleHookControllerProxy} for setting up
-  #   proxies to hook controllers.
-  # 
   def before_include_or_extend( *modules )
 
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.before_include_or_extend( *modules )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.before_include_or_extend( *modules )
     end
     
     return self
@@ -158,17 +155,10 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
   #  after_include  #
   ###################
   
-  ###
-  # @private
-  #
-  # Used internally by {::Module::Cluster::InstanceController::MultipleHookControllerProxy 
-  #   Module::Cluster::InstanceController::MultipleHookControllerProxy} for setting up
-  #   proxies to hook controllers.
-  # 
   def after_include( *modules )
 
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.after_include( *modules )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.after_include( *modules )
     end
     
     return self
@@ -179,17 +169,10 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
   #  after_extend  #
   ##################
   
-  ###
-  # @private
-  #
-  # Used internally by {::Module::Cluster::InstanceController::MultipleHookControllerProxy 
-  #   Module::Cluster::InstanceController::MultipleHookControllerProxy} for setting up
-  #   proxies to hook controllers.
-  # 
   def after_extend( *modules )
 
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.after_extend( *modules )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.after_extend( *modules )
     end
     
     return self
@@ -201,17 +184,10 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
   #  after_extend_or_include  #
   #############################
   
-  ###
-  # @private
-  #
-  # Used internally by {::Module::Cluster::InstanceController::MultipleHookControllerProxy 
-  #   Module::Cluster::InstanceController::MultipleHookControllerProxy} for setting up
-  #   proxies to hook controllers.
-  # 
   def after_include_or_extend( *modules )
     
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.after_include_or_extend( *modules )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.after_include_or_extend( *modules )
     end
     
     return self
@@ -273,8 +249,8 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
   #
   def cluster_name( cluster_name )
     
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.cluster_name( cluster_name )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.cluster_name( cluster_name )
     end
     
     return self
@@ -292,8 +268,8 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainP
   #
   def context( *contexts )
     
-    @proxies.each do |this_hook_controller|
-      this_hook_controller.context( *contexts )
+    @proxies.each do |this_hook_controller_chain_proxy|
+      this_hook_controller_chain_proxy.context( *contexts )
     end
     
     return self

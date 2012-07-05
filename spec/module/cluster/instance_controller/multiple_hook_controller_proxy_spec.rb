@@ -456,7 +456,7 @@ describe ::Module::Cluster::InstanceController::MultipleHookControllerProxy do
       end
       
       multi_hook_controller.include( A, B ).extend( C, D )
-      
+
       multi_hook_controller.before_extend( C ).extend( F )
       multi_hook_controller.before_extend( D ).include( E )
 
