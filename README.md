@@ -2,13 +2,13 @@
 
 http://rubygems.org/gems/module-cluster
 
-# Description #
-
-Adds methods for defining module clusters using #included, #extended, #append_features, and #extend_object.
-
 # Summary #
 
-Provides methods for clustering modules so that when the main module is included other modules are also included or extended, either before or after the main module. There are currently three variants: cluster, cascade, cascade to class. Cluster causes the next module to be affected. Cascade causes all subsequent modules to be affected. Cascade to class causes the first including/extending class to be affected, but not any modules prior to it (although the effects will cascade through those unaffected modules). 
+Provides an interface for event hooks at any point during module include/extend or class subclassing.
+
+# Description #
+
+Provides hooks via :included, :extended, :append_features, :extend_object, :subclass. Define behavior at hooks via simple interface.
 
 # Install #
 
@@ -16,374 +16,166 @@ Provides methods for clustering modules so that when the main module is included
 
 # Usage #
 
-Simply:
+Extend the module that you want to enable:
 
 ```ruby
 module SomeModule
-  extend ::ModuleCluster
+
+  extend Module::Cluster
+
 end
 ```
 
-Definition methods accept modules as arguments. 
+## Basic Hooks ##
 
-For example:
+Hooks are defined on named clusters, that way they can be enabled/disabled later on.
+
+There are four type of module hooks:
+
+* before_include
+* after_include
+* before_extend
+* after_extend
+
+There are also subclass hooks:
+
+* subclass
+
+Any of these hooks can be defined on a cluster:
 
 ```ruby
 module SomeModule
-  extend ::ModuleCluster
-  include_also_includes( SomeOtherModule )
+  # Create a hook to be activated before this module is included
+  cluster( :some_cluster_name ).before_include
 end
 ```
 
-Additionally, all methods accept a block that returns one or more modules; the modules will be added *after* any modules specified in the parameters:
+Then declarations can be made by chaining calls.
+
+### Block Hooks ###
 
 ```ruby
-module SomeModule
-  extend ::ModuleCluster
-  include_also_includes( SomeOtherModule ) do
-    AnotherModule
+module SomeModule  
+  cluster( :some_cluster_name ).before_include do |hooked_instance|
+    # some stuff
   end
 end
 ```
 
-Blocks can be used to return dynamically-determined modules at runtime.
+The block passed to :before_include will be run when SomeModule is included in another module.
+
+### Include/Extend Hooks ###
 
 ```ruby
+# Some other module we want to extend at include time
+module AnotherModule
+end
+
+module SomeModule  
+  cluster( :some_cluster_name ).before_include.extend( AnotherModule )
+end
+```
+
+Now if SomeModule is included, the module in which it is included will also be extended by AnotherModule.
+
+What if we only want to extend classes but not modules?
+
+```ruby
+# Some other module we want to extend at include time
+module AnotherModule
+end
+
+module SomeModule  
+  cluster( :some_cluster_name ).before_include( :class ).extend( AnotherModule )
+end
+```
+
+The same works for :any, :class, :module, :instance.
+
+## Cascading Hooks ##
+
+Sometimes we want to be able to declare that actions should happen well down the line. For instance, ModuleA should take action on the first class but might be included in any number of intermediate modules first. We can easily handle this case by declaring cascading behavior.
+
+```ruby
+# Some other module we want to extend at include time
+module AnotherModule
+end
+
 module SomeModule
-  extend ::ModuleCluster
-  include_or_extend_cascades_prepend_extends do
-    method_that_returns_one_or_more_modules
-  end
+  cluster( :some_cluster_name ).before_include.cascade.extend( AnotherModule )
 end
 ```
 
-Block methods can be used for nesting declarations, for instance to apply cascades only after first module/class:
+Now any module or class that includes SomeModule or any module or class that includes that module (and so on) will be extended by AnotherModule.
+
+If we only want certain contexts to receive the cascading functionality we can limit it the same way we limited include/extend contexts:
 
 ```ruby
-prepend_module_include do |class_or_module|
-  class_or_module.include_or_extend_cascades_prepend_extends do
-    method_that_returns_one_or_more_modules
-  end
+# Some other module we want to extend at include time
+module AnotherModule
+end
+
+module SomeModule
+  cluster( :some_cluster_name ).before_include.cascade_to( :class ).extend( AnotherModule )
 end
 ```
 
-Calls to the various functions are cumulative and stack in the order called. This permits multiple calls, whether subsequently or otherwise.
+:cascade_to is simply an alias to :cascade that is more readable when specifying contexts.
 
-# Methods #
+Now any module that includes SomeModule will cause the first class that includes it to be extended by AnotherModule.
 
-Cluster methods:
+# Interface Rundown #
 
-* include_also_includes
-* include_also_extends
-* include_also_includes_and_extends
-* extend_also_includes
-* extend_also_extends
-* extend_also_includes_and_extends
-* include_prepends_includes
-* include_prepends_extends
-* include_prepends_includes_and_extends
-* extend_prepends_includes
-* extend_prepends_extends
-* extend_prepends_includes_and_extends
-* include_or_extend_also_includes
-* include_or_extend_also_extends
-* include_or_extend_also_includes_and_extends
-* include_or_extend_prepends_includes
-* include_or_extend_prepends_extends
-* include_or_extend_prepends_includes_and_extends
+Create a cluster to group together hooks. From the cluster declarations specify what context will cause event hooks to occur:
 
-Module cluster methods:
+## Hook Contexts ##
 
-* module_include_also_includes
-* module_include_also_extends
-* module_include_also_includes_and_extends
-* module_extend_also_includes
-* module_extend_also_extends
-* module_extend_also_includes_and_extends
-* module_include_prepends_includes
-* module_include_prepends_extends
-* module_include_prepends_includes_and_extends
-* module_extend_prepends_includes
-* module_extend_prepends_extends
-* module_extend_prepends_includes_and_extends
-* module_include_or_extend_also_includes
-* module_include_or_extend_also_extends
-* module_include_or_extend_also_includes_and_extends
-* module_include_or_extend_prepends_includes
-* module_include_or_extend_prepends_extends
-* module_include_or_extend_prepends_includes_and_extends
+* :before\_include
+* :after\_include
+* :before\_extend
+* :after\_extend
+* :subclass
+* :before\_include\_or\_extend
+* :after\_include\_or\_extend
+* :before\_include\_or\_subclass
+* :after\_include\_or\_subclass
+* :before\_extend\_or\_subclass
+* :after\_extend\_or\_subclass
+* :before\_include\_or\_extend\_or\_subclass
+* :after\_include\_or\_extend\_or\_subclass
 
-Class cluster methods:
+Any of these declarations will return a reference to a {::Module::Cluster::InstanceController::HookController::ChainProxy Module::Cluster::InstanceController::HookController::ChainProxy} or a {::Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy}. Both have the same interface, so you don't need to worry about the difference.
 
-* class_include_also_includes
-* class_include_also_extends
-* class_include_also_includes_and_extends
-* class_extend_also_includes
-* class_extend_also_extends
-* class_extend_also_includes_and_extends
-* class_include_prepends_includes
-* class_include_prepends_extends
-* class_include_prepends_includes_and_extends
-* class_extend_prepends_includes
-* class_extend_prepends_extends
-* class_extend_prepends_includes_and_extends
-* class_include_or_extend_also_includes
-* class_include_or_extend_also_extends
-* class_include_or_extend_also_includes_and_extends
-* class_include_or_extend_prepends_includes
-* class_include_or_extend_prepends_extends
-* class_include_or_extend_prepends_includes_and_extends
+## Hook Actions ##
 
-Instance cluster methods:
+From the reference returned by a hook context the following declarations can be made:
 
-* instance_extend_also_extends
-* instance_extend_prepends_extends
+* include
+* extend
+* include\_and\_extend
+* extend\_and\_include
+* action
 
-Module or instance cluster methods:
+## Hook Action Contexts ##
 
-* module_include_or_extend_or_instance_extend_also_includes_or_extends
-* module_include_or_extend_or_instance_extend_also_extends
-* module_include_or_instance_extend_also_includes_or_extends
-* module_include_or_instance_extend_also_extends
-* module_or_instance_extend_also_extends
-* module_include_or_extend_or_instance_extend_prepends_includes_or_extends
-* module_include_or_instance_extend_prepends_includes_or_extends
-* module_include_or_extend_or_instance_extend_prepends_extends
-* module_include_or_instance_extend_prepends_extends
-* module_or_instance_extend_prepends_extends
+As we have shown, declarations to cause cascading behavior can also be made here:
 
-Class or module cluster methods:
+* cascade
 
-* module_or_class_include_also_includes
-* module_or_class_include_also_extends
-* module_or_class_include_also_includes_and_extends
-* module_or_class_extend_also_includes
-* module_or_class_extend_also_extends
-* module_or_class_extend_also_includes_and_extends
-* module_or_class_include_prepends_includes
-* module_or_class_include_prepends_extends
-* module_or_class_include_prepends_includes_and_extends
-* module_or_class_extend_prepends_includes
-* module_or_class_extend_prepends_extends
-* module_or_class_extend_prepends_includes_and_extends
-* module_or_class_include_or_extend_also_includes
-* module_or_class_include_or_extend_also_extends
-* module_or_class_include_or_extend_also_includes_and_extends
-* module_or_class_include_or_extend_prepends_includes
-* module_or_class_include_or_extend_prepends_extends
-* module_or_class_include_or_extend_prepends_includes_and_extends
+Also, contexts can be set so that hook order can be easily manipulated. This will cause hook events to be inserted in the stack other than at the end:
 
-Class or module or instance cluster methods:
+* before\_include
+* after\_include
+* before\_extend
+* after\_extend
 
-* module_include_or_extend_or_instance_extend_also_includes_or_extends
-* module_include_or_extend_or_instance_extend_also_extends
-* module_include_or_instance_extend_also_includes_or_extends
-* module_include_or_instance_extend_also_extends
-* module_or_instance_extend_also_extends
-* module_include_or_extend_or_instance_extend_prepends_includes_or_extends
-* module_include_or_instance_extend_prepends_includes_or_extends
-* module_include_or_extend_or_instance_extend_prepends_extends
-* module_include_or_instance_extend_prepends_extends
-* module_or_instance_extend_prepends_extends
-
-Class or instance cluster methods:
-
-* class_include_or_extend_or_instance_extend_also_includes_or_extends
-* class_include_or_extend_or_instance_extend_also_extends
-* class_include_or_instance_extend_also_includes_or_extends
-* class_include_or_instance_extend_also_extends
-* class_or_instance_extend_also_extends
-* class_include_or_extend_or_instance_extend_prepends_includes_or_extends
-* class_include_or_instance_extend_prepends_includes_or_extends
-* class_include_or_extend_or_instance_extend_prepends_extends
-* class_include_or_instance_extend_prepends_extends
-* class_or_instance_extend_prepends_extends
-
-Cascade methods (cascades to modules and classes):
-
-* include_cascades_includes
-* include_cascades_extends
-* include_cascades_includes_and_extends
-* extend_cascades_includes
-* extend_cascades_extends
-* extend_cascades_includes_and_extends
-* include_cascades_prepend_includes
-* include_cascades_prepend_extends
-* include_cascades_prepend_includes_and_extends
-* extend_cascades_prepend_includes
-* extend_cascades_prepend_extends
-* extend_cascades_prepend_includes_and_extends
-* include_or_extend_cascades_includes
-* include_or_extend_cascades_extends
-* include_or_extend_cascades_includes_and_extends
-* include_or_extend_cascades_prepend_includes
-* include_or_extend_cascades_prepend_extends
-* include_or_extend_cascades_prepend_includes_and_extends
-
-Cascade to class methods (does not cascade to modules):
-
-* include_cascades_includes_to_class
-* include_cascades_extends_to_class
-* include_cascades_includes_and_extends_to_class
-* extend_cascades_includes_to_class
-* extend_cascades_extends_to_class
-* extend_cascades_includes_and_extends_to_class
-* include_cascades_to_class_prepend_includes
-* include_cascades_to_class_prepend_extends
-* include_cascades_to_class_prepend_includes_and_extends
-* extend_cascades_to_class_prepend_includes
-* extend_cascades_to_class_prepend_extends
-* extend_cascades_to_class_prepend_includes_and_extends
-* include_or_extend_cascades_includes_to_class
-* include_or_extend_cascades_extends_to_class
-* include_or_extend_cascades_includes_and_extends_to_class
-* include_or_extend_cascades_to_class_prepend_includes
-* include_or_extend_cascades_to_class_prepend_extends
-* include_or_extend_cascades_to_class_prepend_includes_and_extends
-
-Cascade to module methods (does not cascade to classes):
-
-* include_cascades_includes_to_module
-* include_cascades_extends_to_module
-* include_cascades_includes_and_extends_to_module
-* extend_cascades_includes_to_module
-* extend_cascades_extends_to_module
-* extend_cascades_includes_and_extends_to_module
-* include_cascades_to_module_prepend_includes
-* include_cascades_to_module_prepend_extends
-* include_cascades_to_module_prepend_includes_and_extends
-* extend_cascades_to_module_prepend_includes
-* extend_cascades_to_module_prepend_extends
-* extend_cascades_to_module_prepend_includes_and_extends
-* include_or_extend_cascades_includes_to_module
-* include_or_extend_cascades_extends_to_module
-* include_or_extend_cascades_includes_and_extends_to_module
-* include_or_extend_cascades_to_module_prepend_includes
-* include_or_extend_cascades_to_module_prepend_extends
-* include_or_extend_cascades_to_module_prepend_includes_and_extends
-
-Module block methods:
-
-* module_include
-* module_extend
-* module_include_or_extend
-* prepend_module_include
-* prepend_module_extend
-* prepend_module_include_or_extend
-
-* cascading_module_include
-* cascading_module_extend
-* cascading_module_include_or_extend
-* cascading_prepend_module_include
-* cascading_prepend_module_extend
-* cascading_prepend_module_include_or_extend
-
-Class block methods:
-
-* class_include
-* class_extend
-* class_include_or_extend
-* prepend_class_include
-* prepend_class_extend
-* prepend_class_include_or_extend
-
-* cascading_class_include
-* cascading_class_extend
-* cascading_class_include_or_extend
-* cascading_prepend_class_include
-* cascading_prepend_class_extend
-* cascading_prepend_class_include_or_extend
-
-Instance block methods:
-
-* instance_extend
-* prepend_instance_extend
-
-Class or module block methods:
-
-* class_or_module_include
-* class_or_module_extend
-* class_or_module_include_or_extend
-* prepend_class_or_module_include
-* prepend_class_or_module_extend
-* prepend_class_or_module_include_or_extend
-
-* cascading_class_or_module_include
-* cascading_class_or_module_extend
-* cascading_class_or_module_include_or_extend
-* cascading_prepend_class_or_module_include
-* cascading_prepend_class_or_module_extend
-* cascading_prepend_class_or_module_include_or_extend
-
-Module or instance block methods:
-
-* module_or_instance_extend
-* module_include_or_instance_extend
-* module_include_or_extend_or_instance_extend
-* prepend_module_or_instance_extend
-* prepend_module_include_or_instance_extend
-* prepend_module_include_or_extend_or_instance_extend
-
-Class or instance block methods:
-
-* class_or_instance_extend
-* class_include_or_instance_extend
-* class_include_or_extend_or_instance_extend
-* prepend_class_or_instance_extend
-* prepend_class_include_or_instance_extend
-* prepend_class_include_or_extend_or_instance_extend
-
-Class or module or instance block methods:
-
-* class_or_module_or_instance_extend
-* class_or_module_include_or_instance_extend
-* class_or_module_include_or_extend_or_instance_extend
-* prepend_class_or_module_or_instance_extend
-* prepend_class_or_module_include_or_instance_extend
-* prepend_class_or_module_include_or_extend_or_instance_extend
-
-Suspend methods:
-
-*  suspend_any_hooks
-*  suspend_any_include_hooks
-*  suspend_any_extend_hooks
-*  suspend_include_hooks
-*  suspend_extend_hooks
-*  suspend_prepend_include_hooks
-*  suspend_prepend_extend_hooks
-
-*  hooks_suspended?
-*  all_hooks_suspended?
-*  all_include_hooks_suspended?
-*  all_extend_hooks_suspended?
-*  include_hooks_suspended?
-*  extend_hooks_suspended?
-*  prepend_include_hooks_suspended?
-*  prepend_extend_hooks_suspended?
-
-*  resume_any_hooks
-*  resume_any_include_hooks
-*  resume_any_extend_hooks
-*  resume_include_hooks
-*  resume_extend_hooks
-*  resume_prepend_include_hooks
-*  resume_prepend_extend_hooks
-
-Suspend for block methods:
-
-*  without_any_hooks
-*  without_any_include_hooks
-*  without_any_extend_hooks
-*  without_include_hooks
-*  without_extend_hooks
-*  without_prepend_include_hooks
-*  without_prepend_extend_hooks
+All of these possibilities returns a reference where hook actions can be defined, exactly the same as above. The only difference is that they will occur in the chained context, which is the context described by the chained declarations. Any time that declarations begin again from the cluster, chained declarations will reset.
 
 # License #
 
   (The MIT License)
 
-  Copyright (c) 2011 Asher
+  Copyright (c) 2012 Ridiculous Power, Asher
 
   Permission is hereby granted, free of charge, to any person obtaining
   a copy of this software and associated documentation files (the

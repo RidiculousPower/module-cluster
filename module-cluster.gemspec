@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.version                   = '2.0.0'
 
   spec.summary                   = "Provides an interface for event hooks at any point during module include/extend or class subclassing."
-  spec.description               = "Provides hooks via #included, #extended, #append_features, #extend_object, #subclass. Define behavior at hooks via simple interface."
+  spec.description               = "Provides hooks via :included, :extended, :append_features, :extend_object, :subclass. Define behavior at hooks via simple interface."
 
   spec.authors                   = [ 'Asher' ]
   spec.email                     = 'asher@ridiculouspower.com'
