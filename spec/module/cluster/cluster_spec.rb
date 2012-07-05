@@ -151,16 +151,16 @@ describe ::Module::Cluster::Cluster do
       block_instance = ::Proc.new do
         block_ran = true
       end
-      proxy = cluster_instance.subclass( :class, :module ).cascade_to( :class, & block_instance )
+      proxy = cluster_instance.subclass( & block_instance )
       
       proxy.parent_hook_controller.name.should == :subclass
-      proxy.contexts.should == [ :class, :module ]
+      proxy.contexts.should == [ ]
       hook_controller = proxy.parent_hook_controller
       hook_controller.stack[ 0 ].module.should == nil
       hook_controller.stack[ 0 ].owner.should == Instance
       hook_controller.stack[ 0 ].action.should == nil
-      hook_controller.stack[ 0 ].context.should == [ :class, :module ]
-      hook_controller.stack[ 0 ].cascades.should == [ :class ]
+      hook_controller.stack[ 0 ].context.should == [ ]
+      hook_controller.stack[ 0 ].cascades.should == [ ]
       hook_controller.stack[ 0 ].block.should == block_instance
       
     end

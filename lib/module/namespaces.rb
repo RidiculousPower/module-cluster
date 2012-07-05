@@ -6,6 +6,8 @@ module ::Module::Cluster
     class HookController
     end
   end
-  class Exception
+  ###
+  # Container for module-cluster exceptions.
+  module Exception
   end
 end

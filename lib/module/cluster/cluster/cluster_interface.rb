@@ -25,19 +25,6 @@ module ::Module::Cluster::Cluster::ClusterInterface
     
   end
 
-  ##############
-  #  instance  #
-  ##############
-
-  ###
-  # Instance for which cluster is operative.
-  #
-  # @!attribute [reader] Instance.
-  #
-  # @return [Object] Instance.
-  #
-  attr_reader :instance
-  
   ##########
   #  name  #
   ##########
@@ -55,6 +42,11 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #  enabled?   #
   ###############
   
+  ###
+  # Query whether cluster is enabled.
+  #
+  # @return [true,false] Whether cluster is enabled.
+  #
   def enabled?
     
     return @enabled
@@ -66,6 +58,11 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #  suspended?  #
   ################
   
+  ###
+  # Query whether cluster is disabled.
+  #
+  # @return [true,false] Whether cluster is disabled.
+  #
   def disabled?
     
     return ! @enabled
@@ -79,9 +76,16 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #  suspend  #
   #############
   
+  ###
+  # Disable cluster.
+  #
+  # @return [Object] Self.
+  #
   def disable
     
     @enabled = false
+    
+    return self
     
   end
 
@@ -91,9 +95,16 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #  enable  #
   ############
   
+  ###
+  # Re-enable cluster.
+  #
+  # @return [Object] Self.
+  #
   def enable
     
     @enabled = true
+    
+    return self
     
   end
 
@@ -102,9 +113,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   ####################
   
   ###
-  # Create include event hook.
+  # Create before-include event hook.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::IncludeEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class.
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] 
   #
   def before_include( *contexts, & block )
     
@@ -127,9 +142,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   ###################
   
   ###
-  # Create include event hook.
+  # Create after-include event hook.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::IncludeEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class.
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] 
   #
   def after_include( *contexts, & block )
 
@@ -150,9 +169,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   ###################
   
   ###
-  # Create extend event hook.
+  # Create before-extend event hook.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::ExtendEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] 
   #
   def before_extend( *contexts, & block )
     
@@ -175,9 +198,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   ##################
   
   ###
-  # Create extend event hook.
+  # Create after-extend event hook.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::ExtendEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] 
   #
   def after_extend( *contexts, & block )
 
@@ -201,16 +228,20 @@ module ::Module::Cluster::Cluster::ClusterInterface
   
   ###
   # Create subclass event hook.
-  # 
-  # @return [ModuleCluster::Cluster::EventProxy::SubclassEventProxy] 
+  #
+  # @overload subclass
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] 
   #
   def subclass( *contexts, & block )
-
+    
+    # contexts parameter included for compatibility with multiple-hook-controller proxy
+    
     hook_controller = @instance_controller.subclass_controller
     
     chain_proxy_instance = hook_controller.chain_proxy
 
-    chain_proxy_instance.cluster_name( @name ).context( *contexts )
+    chain_proxy_instance.cluster_name( @name )
     
     if block_given?
       chain_proxy_instance.action( & block )
@@ -226,9 +257,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   ##############################
   
   ###
-  # Create include and extend event hook.
+  # Create before-include and before-extend event hooks.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::IncludeOrExtendEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
+  #
+  # @return [Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy] 
   #
   def before_include_or_extend( *contexts, & block )
     
@@ -254,9 +289,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #############################
   
   ###
-  # Create include and extend event hook.
+  # Create after-include and after-extend event hooks.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::IncludeOrExtendEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
+  #
+  # @return [Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy] 
   #
   def after_include_or_extend( *contexts, & block )
     
@@ -282,9 +321,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   ################################
   
   ###
-  # Create include and subclass event hook.
+  # Create before-include and subclass event hooks.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::IncludeOrSubclassEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class.
+  #
+  # @return [Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy] 
   #
   def before_include_or_subclass( *contexts, & block )
 
@@ -310,9 +353,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   ###############################
   
   ###
-  # Create include and subclass event hook.
+  # Create after-include and subclass event hooks.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::IncludeOrSubclassEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class.
+  #
+  # @return [Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy] 
   #
   def after_include_or_subclass( *contexts, & block )
 
@@ -338,9 +385,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   ###############################
   
   ###
-  # Create extend and subclass event hook.
+  # Create before-extend and subclass event hooks.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::ExtendOrSubclassEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
+  #
+  # @return [Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy] 
   #
   def before_extend_or_subclass( *contexts, & block )
 
@@ -366,9 +417,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   ##############################
   
   ###
-  # Create extend and subclass event hook.
+  # Create after-extend and subclass event hooks.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::ExtendOrSubclassEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
+  #
+  # @return [Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy] 
   #
   def after_extend_or_subclass( *contexts, & block )
 
@@ -398,9 +453,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   ##########################################
   
   ###
-  # Create include and extend and subclass event hook.
+  # Create before-include and before-extend and subclass event hooks.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::IncludeOrExtendOrSubclassEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
+  #
+  # @return [Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy] 
   #
   def before_include_or_extend_or_subclass( *contexts, & block )
 
@@ -434,9 +493,13 @@ module ::Module::Cluster::Cluster::ClusterInterface
   #########################################
   
   ###
-  # Create include and extend and subclass event hook.
+  # Create after-include and after-extend and subclass event hooks.
   #
-  # @return [ModuleCluster::Cluster::EventProxy::IncludeOrExtendOrSubclassEventProxy] 
+  # @overload before_include( context, ... )
+  #
+  #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
+  #
+  # @return [Module::Cluster::InstanceController::MultipleHookControllerProxy::ChainProxy] 
   #
   def after_include_or_extend_or_subclass( *contexts, & block )
 
@@ -460,4 +523,28 @@ module ::Module::Cluster::Cluster::ClusterInterface
   alias_method :after_subclass_or_include_or_extend, :after_include_or_extend_or_subclass
   alias_method :after_subclass_or_extend_or_include, :after_include_or_extend_or_subclass
 
+  ##################################################################################################
+  #   private ######################################################################################
+  ##################################################################################################
+
+  ###
+  # These methods are not actually in private space but are internal methods for inter-object
+  # communications. They aren't intended for public interfacing.
+  #
+
+  ##############
+  #  instance  #
+  ##############
+
+  ###
+  # @private
+  #
+  # Instance for which cluster is operative.
+  #
+  # @!attribute [reader] Instance.
+  #
+  # @return [Object] Instance.
+  #
+  attr_reader :instance
+  
 end

@@ -9,6 +9,11 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  initialize  #
   ################
   
+  ###
+  # @private
+  #
+  # @param parent_hook_controller Hook Controller for which this Chain Proxy is operative.
+  #
   def initialize( parent_hook_controller )
     
     @parent_hook_controller = parent_hook_controller
@@ -24,6 +29,19 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  include  #
   #############
 
+  ###
+  # Declare that modules should be included at event hook in the context specified this chained declaration.
+  #
+  # @overload include( module, .., & block )
+  #
+  #   @param module Module to include at event hook in the context specified this chained declaration.
+  #
+  #   @yield [hooked_instance] Block for event hook action.
+  #   @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #     Equivalent to parameter for #included and #extended.
+  # 
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def include( *modules, & block )
     
     @parent_hook_controller.include_at_index( @index, @cluster_name, @contexts, @cascades_to, true, *modules, & block )
@@ -36,6 +54,19 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  extend  #
   ############
 
+  ###
+  # Declare that modules should be extended at event hook in the context specified this chained declaration.
+  #
+  # @overload extend( module, .., & block )
+  #
+  #   @param module Module to extend at event hook in the context specified this chained declaration.
+  #
+  #   @yield [hooked_instance] Block for event hook action.
+  #   @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #     Equivalent to parameter for #included and #extended.
+  # 
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def extend( *modules, & block )
 
     @index = @parent_hook_controller.extend_at_index( @index, 
@@ -54,6 +85,20 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  include_and_extend  #
   ########################
 
+  ###
+  # Declare that modules should be included and extended at event hook in the context 
+  #   specified this chained declaration. See also #extend_and_include.
+  #
+  # @overload include_and_extend( module, .., & block )
+  #
+  #   @param module Module to include and extend at event hook in the context specified this chained declaration.
+  #
+  #   @yield [hooked_instance] Block for event hook action.
+  #   @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #     Equivalent to parameter for #included and #extended.
+  # 
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def include_and_extend( *modules, & block )
     
     @index = @parent_hook_controller.include_and_extend_at_index( @index, 
@@ -72,6 +117,20 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  extend_and_include  #
   ########################
 
+  ###
+  # Declare that modules should be extended and included at event hook in the context 
+  #   specified this chained declaration. Order is reversed from #include_and_extend.
+  #
+  # @overload extend_and_include( module, .., & block )
+  #
+  #   @param module Module to extend and include at event hook in the context specified this chained declaration.
+  #
+  #   @yield [hooked_instance] Block for event hook action.
+  #   @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #     Equivalent to parameter for #included and #extended.
+  # 
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def extend_and_include( *modules, & block )
     
     @index = @parent_hook_controller.extend_and_include_at_index( @index, 
@@ -90,6 +149,16 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  action  #
   ############
   
+  ###
+  # Declare that action should be performed at event hook in the context 
+  #   specified this chained declaration.
+  #
+  # @yield [hooked_instance] Block for event hook action.
+  # @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #   Equivalent to parameter for #included and #extended.
+  # 
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def action( & block )
     
     @index = @parent_hook_controller.action_at_index( @index, @cluster_name, @contexts, @cascades_to, true, & block )
@@ -103,6 +172,19 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  cascade_to  #
   ################
   
+  ###
+  # Declare contexts to which declarations made from this declaration chain should cascade.
+  #
+  # @overload cascade( context, .., & block )
+  #
+  #   @param context nil, :any, :class, :module, :subclass Contexts that should have event hooks cascaded into them.
+  #
+  #   @yield [hooked_instance] Block for event hook action.
+  #   @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #     Equivalent to parameter for #included and #extended.
+  # 
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def cascade( *cascade_contexts, & block )
 
     case cascade_contexts.count
@@ -140,6 +222,20 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  before_extend  #
   ###################
   
+  ###
+  # Declare that chained actions should be inserted into the event stack prior to the location 
+  #   in the same event stack where provided module(s) are specified to be extended.
+  #
+  # @overload before_extend( module, .., & block )
+  #
+  #   @param module Module that insert should be prior to.
+  #
+  #   @yield [hooked_instance] Block for event hook action.
+  #   @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #     Equivalent to parameter for #included and #extended.
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def before_extend( *modules )
     
     @index = parent_hook_controller.lowest_index( :extend, *modules )
@@ -152,6 +248,20 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  before_include  #
   ####################
   
+  ###
+  # Declare that chained actions should be inserted into the event stack prior to the location 
+  #   in the same event stack where provided module(s) are specified to be included.
+  #
+  # @overload before_include( module, .., & block )
+  #
+  #   @param module Module that insert should be prior to.
+  #
+  #   @yield [hooked_instance] Block for event hook action.
+  #   @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #     Equivalent to parameter for #included and #extended.
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def before_include( *modules )
     
     @index = parent_hook_controller.lowest_index( :include, *modules )
@@ -165,6 +275,20 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  before_extend_or_include  #
   ##############################
   
+  ###
+  # Declare that chained actions should be inserted into the event stack prior to the location 
+  #   in the same event stack where provided module(s) are specified to be included or extended.
+  #
+  # @overload before_include_or_extend( module, .., & block )
+  #
+  #   @param module Module that insert should be prior to.
+  #
+  #   @yield [hooked_instance] Block for event hook action.
+  #   @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #     Equivalent to parameter for #included and #extended.
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def before_include_or_extend( *modules )
 
     @index = parent_hook_controller.lowest_index( :include_or_extend, *modules )
@@ -179,6 +303,20 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  after_include  #
   ###################
   
+  ###
+  # Declare that chained actions should be inserted into the event stack after the location 
+  #   in the same event stack where provided module(s) are specified to be included.
+  #
+  # @overload before_include( module, .., & block )
+  #
+  #   @param module Module that insert should be after.
+  #
+  #   @yield [hooked_instance] Block for event hook action.
+  #   @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #     Equivalent to parameter for #included and #extended.
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def after_include( *modules )
 
     @index = parent_hook_controller.highest_index( :include, *modules ) + 1
@@ -191,6 +329,20 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  after_extend  #
   ##################
   
+  ###
+  # Declare that chained actions should be inserted into the event stack after the location 
+  #   in the same event stack where provided module(s) are specified to be extended.
+  #
+  # @overload before_extend( module, .., & block )
+  #
+  #   @param module Module that insert should be after.
+  #
+  #   @yield [hooked_instance] Block for event hook action.
+  #   @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #     Equivalent to parameter for #included and #extended.
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def after_extend( *modules )
 
     @index = parent_hook_controller.highest_index( :extend, *modules ) + 1
@@ -204,6 +356,20 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #  after_extend_or_include  #
   #############################
   
+  ###
+  # Declare that chained actions should be inserted into the event stack after the location 
+  #   in the same event stack where provided module(s) are specified to be included or extended.
+  #
+  # @overload before_include_or_extend( module, .., & block )
+  #
+  #   @param module Module that insert should be after.
+  #
+  #   @yield [hooked_instance] Block for event hook action.
+  #   @yieldparam hooked_instance Instance for which event hook is occurring. 
+  #     Equivalent to parameter for #included and #extended.
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
+  #
   def after_include_or_extend( *modules )
     
     @index = parent_hook_controller.highest_index( :include_or_extend, *modules ) + 1
@@ -220,6 +386,12 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   
   ###
   # Set context for matching instance to determine whether to perform chained actions in stack.
+  #
+  # @overload context( context, .. )
+  #
+  #   @param context nil, :any, :class, :module, :subclass Contexts that should have event hooks cascaded into them.
+  #
+  # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Self.
   #
   def context( *contexts )
     
@@ -258,6 +430,8 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #
   # Reset internal state data so that proxy can be re-used for chaining in a new context.
   #
+  # @return [Module::Cluster::InstanceController::ChainProxy] Self.
+  #
   def reset_state
     
     @cluster_name = nil
@@ -279,6 +453,8 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #
   # Set cluster name for which chained actions will be inserted in stack.
   #
+  # @return [Module::Cluster::InstanceController::ChainProxy] Self.
+  #
   def cluster_name( cluster_name )
     
     @cluster_name = cluster_name
@@ -295,6 +471,8 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   # @private
   #
   # Set index where chained actions will be inserted in stack.
+  #
+  # @return [Module::Cluster::InstanceController::ChainProxy] Self.
   #
   def index( index )
     
@@ -313,6 +491,8 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   #
   # Contexts (nil, :module, :class, :subclass, :instance) for which this instance is operative as a chain proxy.
   #
+  # @return [Array<Symbol,nil>] Contexts for which this Chain Proxy instance is operative.
+  #
   attr_reader :contexts
   
   #################
@@ -323,6 +503,8 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   # @private
   #
   # Contexts (nil, :module, :class, :subclass, :instance) for which this instance cascades.
+  #
+  # @return [Array<Symbol,nil>] Contexts for which this Chain Proxy instance cascades.
   #
   attr_reader :cascades_to
   
