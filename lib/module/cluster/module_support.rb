@@ -13,9 +13,9 @@ module ::Module::Cluster::ModuleSupport
   #
   def append_features( hooked_instance )
     
-    super if defined?( super )
-    
     ::Module::Cluster.hook_cluster_events( self, hooked_instance, :before_include )
+
+    super if defined?( super )
     
   end
 
@@ -43,9 +43,9 @@ module ::Module::Cluster::ModuleSupport
   #
   def extend_object( hooked_instance )
 
-    super if defined?( super )
-    
     ::Module::Cluster.hook_cluster_events( self, hooked_instance, :before_extend )
+    
+    super if defined?( super )
     
   end
 

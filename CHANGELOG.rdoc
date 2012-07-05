@@ -73,3 +73,7 @@ Added support for cascading block methods.
 
 Total interface rewrite.
 Renamed From ModuleCluster to Module::Cluster.
+
+== 7/04/2011
+
+g
