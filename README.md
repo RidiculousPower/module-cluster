@@ -20,9 +20,7 @@ Extend the module that you want to enable:
 
 ```ruby
 module SomeModule
-
   extend Module::Cluster
-
 end
 ```
 
