@@ -8,7 +8,7 @@ Provides an interface for event hooks at any point during module include/extend 
 
 # Description #
 
-Provides hooks via :included, :extended, :append_features, :extend_object, :subclass. Define behavior at hooks via simple interface.
+Provides hooks via :included, :extended, :append_features, :extend_object, :inherited. Define behavior at hooks via simple interface.
 
 # Install #
 

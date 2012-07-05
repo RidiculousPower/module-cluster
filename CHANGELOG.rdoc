@@ -76,4 +76,4 @@ Renamed From ModuleCluster to Module::Cluster.
 
 == 7/04/2011
 
-g
+Oops! Reversed the order for before* methods. Fixed.

@@ -183,7 +183,7 @@ module ::Module::Cluster
   # @return [ModuleCluster::Cluster::InstanceController::HookController] Hook Controller instance.
   #
   def self.hook_cluster_events( instance, hooked_instance, event_context )
-    
+
     requires_module_cluster_enable = false
     
     # Subclass hooks always cascade to the first subclass.

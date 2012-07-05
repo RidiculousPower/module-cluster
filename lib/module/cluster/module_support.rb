@@ -12,7 +12,7 @@ module ::Module::Cluster::ModuleSupport
   # Ensures {::Module::Cluster Module::Cluster} before_include hooks occur at time of include.
   #
   def append_features( hooked_instance )
-    
+
     ::Module::Cluster.hook_cluster_events( self, hooked_instance, :before_include )
 
     super if defined?( super )
