@@ -670,7 +670,7 @@ module ::Module::Cluster::InstanceController::HookController::HookControllerInte
     new_frame = self.class::FrameStruct.new( @instance, cluster_name, contexts, cascade_to, block )
     
     @stack.insert( index, new_frame )
-    
+
     unless index < 0
       index += 1
     end

@@ -27,6 +27,68 @@ describe ::Module::Cluster do
   #  include hooks  #
   ###################
 
+  # before - block only
+  it 'can create a before-include hook to run a block' do
+    module ::Module::Cluster::BeforeIncludeBlockHookMock
+      
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.instance_eval do
+        extend ::Module::Cluster
+        cluster( :cluster_name ).before_include do |instance|
+          block_ran = true
+        end
+      end
+      
+      module AnotherModule
+        include ClusterModuleMock
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+      
+      module OtherModule
+        include AnotherModule
+      end
+      
+      block_ran.should == false
+      
+    end
+  end
+
+  # after - block only
+  it 'can create an after-include hook to run a block' do
+    module ::Module::Cluster::BeforeIncludeBlockHookMock
+      
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.instance_eval do
+        extend ::Module::Cluster
+        cluster( :cluster_name ).after_include do |instance|
+          block_ran = true
+        end
+      end
+      
+      module AnotherModule
+        include ClusterModuleMock
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+      
+      module OtherModule
+        include AnotherModule
+      end
+
+      block_ran.should == false
+      
+    end
+  end
+
   # before - without block
 
   it 'can create before-include hooks' do
@@ -178,6 +240,68 @@ describe ::Module::Cluster do
   ##################
   #  extend hooks  #
   ##################
+
+  # before - block only
+  it 'can create a before-extend hook to run a block' do
+    module ::Module::Cluster::BeforeIncludeBlockHookMock
+      
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.instance_eval do
+        extend ::Module::Cluster
+        cluster( :cluster_name ).before_extend do |instance|
+          block_ran = true
+        end
+      end
+      
+      module AnotherModule
+        extend ClusterModuleMock
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+      
+      module OtherModule
+        extend AnotherModule
+      end
+      
+      block_ran.should == false
+      
+    end
+  end
+
+  # after - block only
+  it 'can create a after-extend hook to run a block' do
+    module ::Module::Cluster::BeforeIncludeBlockHookMock
+      
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.instance_eval do
+        extend ::Module::Cluster
+        cluster( :cluster_name ).after_extend do |instance|
+          block_ran = true
+        end
+      end
+      
+      module AnotherModule
+        extend ClusterModuleMock
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+      
+      module OtherModule
+        extend AnotherModule
+      end
+
+      block_ran.should == false
+      
+    end
+  end
 
   # before - without block
 

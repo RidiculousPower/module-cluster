@@ -264,11 +264,11 @@ module ::Module::Cluster
 
         end
         
-        if cascade_context
-          
+        if cascade_context and ! cascade_context.empty?
+
           # already handled
         
-        elsif match_context = this_frame.context
+        elsif match_context = this_frame.context and ! match_context.empty?
 
           # if we have a context we test against instance to see if we match, then we perform action
           case hooked_instance

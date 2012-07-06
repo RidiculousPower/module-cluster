@@ -77,3 +77,7 @@ Renamed From ModuleCluster to Module::Cluster.
 == 7/04/2011
 
 Oops! Reversed the order for before* methods. Fixed.
+
+== 7/06/2011
+
+Fixed top-level block-only hooks.

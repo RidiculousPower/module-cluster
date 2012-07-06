@@ -32,7 +32,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   ###
   # Declare that modules should be included at event hook in the context specified this chained declaration.
   #
-  # @overload include( module, .., & block )
+  # @overload include( module, ..., & block )
   #
   #   @param module Module to include at event hook in the context specified this chained declaration.
   #
@@ -57,7 +57,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   ###
   # Declare that modules should be extended at event hook in the context specified this chained declaration.
   #
-  # @overload extend( module, .., & block )
+  # @overload extend( module, ..., & block )
   #
   #   @param module Module to extend at event hook in the context specified this chained declaration.
   #
@@ -89,7 +89,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   # Declare that modules should be included and extended at event hook in the context 
   #   specified this chained declaration. See also #extend_and_include.
   #
-  # @overload include_and_extend( module, .., & block )
+  # @overload include_and_extend( module, ..., & block )
   #
   #   @param module Module to include and extend at event hook in the context specified this chained declaration.
   #
@@ -121,7 +121,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   # Declare that modules should be extended and included at event hook in the context 
   #   specified this chained declaration. Order is reversed from #include_and_extend.
   #
-  # @overload extend_and_include( module, .., & block )
+  # @overload extend_and_include( module, ..., & block )
   #
   #   @param module Module to extend and include at event hook in the context specified this chained declaration.
   #
@@ -175,7 +175,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   ###
   # Declare contexts to which declarations made from this declaration chain should cascade.
   #
-  # @overload cascade( context, .., & block )
+  # @overload cascade( context, ..., & block )
   #
   #   @param context nil, :any, :class, :module, :subclass Contexts that should have event hooks cascaded into them.
   #
@@ -226,7 +226,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   # Declare that chained actions should be inserted into the event stack prior to the location 
   #   in the same event stack where provided module(s) are specified to be extended.
   #
-  # @overload before_extend( module, .., & block )
+  # @overload before_extend( module, ..., & block )
   #
   #   @param module Module that insert should be prior to.
   #
@@ -252,7 +252,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   # Declare that chained actions should be inserted into the event stack prior to the location 
   #   in the same event stack where provided module(s) are specified to be included.
   #
-  # @overload before_include( module, .., & block )
+  # @overload before_include( module, ..., & block )
   #
   #   @param module Module that insert should be prior to.
   #
@@ -279,7 +279,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   # Declare that chained actions should be inserted into the event stack prior to the location 
   #   in the same event stack where provided module(s) are specified to be included or extended.
   #
-  # @overload before_include_or_extend( module, .., & block )
+  # @overload before_include_or_extend( module, ..., & block )
   #
   #   @param module Module that insert should be prior to.
   #
@@ -307,7 +307,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   # Declare that chained actions should be inserted into the event stack after the location 
   #   in the same event stack where provided module(s) are specified to be included.
   #
-  # @overload before_include( module, .., & block )
+  # @overload before_include( module, ..., & block )
   #
   #   @param module Module that insert should be after.
   #
@@ -333,7 +333,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   # Declare that chained actions should be inserted into the event stack after the location 
   #   in the same event stack where provided module(s) are specified to be extended.
   #
-  # @overload before_extend( module, .., & block )
+  # @overload before_extend( module, ..., & block )
   #
   #   @param module Module that insert should be after.
   #
@@ -360,7 +360,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   # Declare that chained actions should be inserted into the event stack after the location 
   #   in the same event stack where provided module(s) are specified to be included or extended.
   #
-  # @overload before_include_or_extend( module, .., & block )
+  # @overload before_include_or_extend( module, ..., & block )
   #
   #   @param module Module that insert should be after.
   #
@@ -387,7 +387,7 @@ class ::Module::Cluster::InstanceController::HookController::ChainProxy
   ###
   # Set context for matching instance to determine whether to perform chained actions in stack.
   #
-  # @overload context( context, .. )
+  # @overload context( context, ... )
   #
   #   @param context nil, :any, :class, :module, :subclass Contexts that should have event hooks cascaded into them.
   #
