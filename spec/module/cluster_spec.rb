@@ -60,7 +60,7 @@ describe ::Module::Cluster do
 
   # after - block only
   it 'can create an after-include hook to run a block' do
-    module ::Module::Cluster::BeforeIncludeBlockHookMock
+    module ::Module::Cluster::AfterIncludeBlockHookMock
       
       block_ran = false
       
@@ -243,7 +243,7 @@ describe ::Module::Cluster do
 
   # before - block only
   it 'can create a before-extend hook to run a block' do
-    module ::Module::Cluster::BeforeIncludeBlockHookMock
+    module ::Module::Cluster::BeforeExtendBlockHookMock
       
       block_ran = false
       
@@ -274,7 +274,7 @@ describe ::Module::Cluster do
 
   # after - block only
   it 'can create a after-extend hook to run a block' do
-    module ::Module::Cluster::BeforeIncludeBlockHookMock
+    module ::Module::Cluster::AfterExtendBlockHookMock
       
       block_ran = false
       
@@ -467,13 +467,20 @@ describe ::Module::Cluster do
         extend ::Module::Cluster
         cluster( :cluster_name ).subclass.extend( A )
         def self.inherited( instance )
-          instance.is_a?( A ).should == false
           super if defined?( super )
           instance.is_a?( A ).should == true
         end
       end
       
       class AnotherClass < ClusterClassMock
+        is_a?( A ).should == true
+      end
+
+      class AnotherClassB < AnotherClass
+        is_a?( A ).should == true
+      end
+
+      class AnotherClassC < AnotherClassB
         is_a?( A ).should == true
       end
 
@@ -497,15 +504,28 @@ describe ::Module::Cluster do
           block_ran = true
           instance.is_a?( A ).should == true
         end
-        cluster( :cluster_name ).subclass.extend( A, & block )
+        cluster( :cluster_name ).subclass.cascade.extend( A, & block )
         def self.inherited( instance )
-          instance.is_a?( A ).should == false
           super if defined?( super )
           instance.is_a?( A ).should == true
         end
       end
       
       class AnotherClass < ClusterClassMock
+        is_a?( A ).should == true
+      end
+      
+      block_ran.should == true
+
+      block_ran = false
+
+      class AnotherClassB < AnotherClass
+        is_a?( A ).should == true
+      end
+      
+      block_ran.should == true
+
+      class AnotherClassC < AnotherClassB
         is_a?( A ).should == true
       end
       

@@ -313,10 +313,10 @@ module ::Module::Cluster
                 hooked_instance.extend( this_module )
             end
           end
-      
+
           # if we have a block it runs last
           if this_block = this_frame.block
-            this_block.call( hooked_instance )
+            this_frame.owner.module_exec( hooked_instance, & this_block )
           end
 
         end
