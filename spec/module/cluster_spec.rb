@@ -524,6 +524,8 @@ describe ::Module::Cluster do
       end
       
       block_ran.should == true
+      
+      block_ran = false
 
       class AnotherClassC < AnotherClassB
         is_a?( A ).should == true
@@ -630,6 +632,1199 @@ describe ::Module::Cluster do
 
       block_ran.should == true
 
+    end
+  end
+
+  ##############################
+  #  before_include_or_extend  #
+  ##############################
+  
+  it 'can simultaneously create hooks for both before-include and before-extend - with block only' do
+    module ::Module::Cluster::BeforeIncludeExtendHookBlockOnlyMock
+    
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          block_ran = true
+        end
+        cluster( :cluster_name ).before_include_or_extend( & block )
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+      end
+
+      block_ran.should == true
+
+    end
+  end
+  
+  it 'can simultaneously create hooks for both before-include and before-extend - without block' do
+    module ::Module::Cluster::BeforeIncludeExtendHookMock
+
+      module A
+      end
+
+      module ClusterModuleMock
+        extend ::Module::Cluster
+        cluster( :cluster_name ).before_include_or_extend.extend( A )
+        def self.included( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+    end
+  end
+
+  it 'can simultaneously create hooks for both before-include and before-extend - with block' do
+    module ::Module::Cluster::BeforeIncludeExtendHookBlockMock
+    
+      module A
+      end
+
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          instance.is_a?( A ).should == true
+          block_ran = true
+        end
+        cluster( :cluster_name ).before_include_or_extend.extend( A, & block )
+        def self.included( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+
+    end
+  end
+  
+  #############################
+  #  after_include_or_extend  #
+  #############################
+
+  it 'can simultaneously create hooks for both after-include and after-extend - with block only' do
+    module ::Module::Cluster::AfterIncludeExtendHookBlockOnlyMock
+    
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          block_ran = true
+        end
+        cluster( :cluster_name ).after_include_or_extend( & block )
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for both after-include and after-extend - without block' do
+    module ::Module::Cluster::AfterIncludeExtendHookMock
+    
+      module A
+      end
+
+      module ClusterModuleMock
+        extend ::Module::Cluster
+        cluster( :cluster_name ).after_include_or_extend.extend( A )
+        def self.included( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+      end
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for both after-include and after-extend - with block' do
+    module ::Module::Cluster::AfterIncludeExtendHookBlockMock
+    
+      module A
+      end
+
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          instance.is_a?( A ).should == true
+          block_ran = true
+        end
+        cluster( :cluster_name ).after_include_or_extend.extend( A, & block )
+        def self.included( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  ################################
+  #  before_include_or_subclass  #
+  ################################
+
+  it 'can simultaneously create hooks for both before-include and subclass - with block only' do
+    module ::Module::Cluster::BeforeIncludeSubclassHookBlockOnlyMock
+    
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          block_ran = true
+        end
+        cluster( :cluster_name ).before_include_or_subclass( & block )
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+      end
+
+      block_ran.should == false
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for both before-include and subclass - without block' do
+    module ::Module::Cluster::BeforeIncludeSubclassHookMock
+      
+      module A
+      end
+
+      module ClusterModuleMock
+        extend ::Module::Cluster
+        cluster( :cluster_name ).before_include_or_subclass.extend( A )
+        def self.included( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == false
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+        def self.inherited( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+      end
+      
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == false
+        def self.inherited( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+      
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+      
+    end
+  end
+
+  it 'can simultaneously create hooks for both before-include and subclass - with block' do
+    module ::Module::Cluster::BeforeIncludeSubclassHookBlockMock
+    
+      module A
+      end
+
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          instance.is_a?( A ).should == true
+          block_ran = true
+        end
+        cluster( :cluster_name ).before_include_or_subclass.extend( A, & block )
+        def self.included( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == false
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  ###############################
+  #  after_include_or_subclass  #
+  ###############################
+
+  it 'can simultaneously create hooks for both after-include and subclass - with block' do
+    module ::Module::Cluster::AfterIncludeSubclassHookBlockOnlyMock
+    
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          block_ran = true
+        end
+        cluster( :cluster_name ).after_include_or_subclass( & block )
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+      end
+
+      block_ran.should == false
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for both after-include and subclass - without block' do
+    module ::Module::Cluster::AfterIncludeSubclassHookMock
+    
+      module A
+      end
+
+      module ClusterModuleMock
+        extend ::Module::Cluster
+        cluster( :cluster_name ).after_include_or_subclass.extend( A )
+        def self.included( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == false
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+        def self.inherited( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+      
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == false
+        def self.inherited( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+      
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for both after-include and subclass - with block' do
+    module ::Module::Cluster::AfterIncludeSubclassHookBlockMock
+    
+      module A
+      end
+
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          instance.is_a?( A ).should == true
+          block_ran = true
+        end
+        cluster( :cluster_name ).after_include_or_subclass.extend( A, & block )
+        def self.included( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == false
+      end
+
+      block_ran.should == false
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  ###############################
+  #  before_extend_or_subclass  #
+  ###############################
+
+  it 'can simultaneously create hooks for both before-extend and subclass - with block only' do
+    module ::Module::Cluster::BeforeExtendSubclassHookBlockOnlyMock
+    
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          block_ran = true
+        end
+        cluster( :cluster_name ).before_extend_or_subclass( & block )
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+      end
+
+      block_ran.should == false
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for both before-extend and subclass - without block' do
+    module ::Module::Cluster::BeforeExtendSubclassHookMock
+    
+      module A
+      end
+
+      module ClusterModuleMock
+        extend ::Module::Cluster
+        cluster( :cluster_name ).before_extend_or_subclass.extend( A )
+        def self.included( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == false
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == true
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == false
+        def self.inherited( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+      
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+        def self.inherited( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+      end
+      
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for both before-extend and subclass - with block' do
+    module ::Module::Cluster::BeforeExtendSubclassHookBlockMock
+    
+      module A
+      end
+
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          instance.is_a?( A ).should == true
+          block_ran = true
+        end
+        cluster( :cluster_name ).before_extend_or_subclass.extend( A, & block )
+        def self.included( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == false
+      end
+
+      block_ran.should == false
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  ##############################
+  #  after_extend_or_subclass  #
+  ##############################
+
+  it 'can simultaneously create hooks for both after-extend and subclass - with block only' do
+    module ::Module::Cluster::AfterExtendSubclassHookBlockOnlyMock
+    
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          block_ran = true
+        end
+        cluster( :cluster_name ).after_extend_or_subclass( & block )
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+      end
+
+      block_ran.should == false
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtend
+        extend ClusterModuleMock
+      end
+      
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for both after-extend and subclass - without block' do
+    module ::Module::Cluster::AfterExtendSubclassHookMock
+    
+      module A
+      end
+
+      module ClusterModuleMock
+        extend ::Module::Cluster
+        cluster( :cluster_name ).after_extend_or_subclass.extend( A )
+        def self.included( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == false
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == false
+        def self.inherited( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+      
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+        def self.inherited( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+      end
+      
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for both after-extend and subclass - with block' do
+    module ::Module::Cluster::AfterExtendSubclassHookBlockMock
+    
+      module A
+      end
+
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          instance.is_a?( A ).should == true
+          block_ran = true
+        end
+        cluster( :cluster_name ).after_extend_or_subclass.extend( A, & block )
+        def self.included( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == false
+      end
+
+      block_ran.should == false
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  ##########################################
+  #  before_include_or_extend_or_subclass  #
+  ##########################################
+
+  it 'can simultaneously create hooks for before-extend, before-include, and subclass - with block only' do
+    module ::Module::Cluster::BeforeIncludeExtendSubclassHookBlockOnlyMock
+    
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          block_ran = true
+        end
+        cluster( :cluster_name ).before_include_or_extend_or_subclass( & block )
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtend
+        extend ClusterModuleMock
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for before-extend, before-include, and subclass - without block' do
+    module ::Module::Cluster::BeforeIncludeExtendSubclassHookMock
+    
+      module A
+      end
+
+      module ClusterModuleMock
+        extend ::Module::Cluster
+        cluster( :cluster_name ).before_include_or_extend_or_subclass.extend( A )
+        def self.included( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+        def self.inherited( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+      
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+        def self.inherited( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+      end
+      
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for before-extend, before-include, and subclass - with block' do
+    module ::Module::Cluster::BeforeIncludeExtendSubclassHookBlockMock
+    
+      module A
+      end
+
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          instance.is_a?( A ).should == true
+          block_ran = true
+        end
+        cluster( :cluster_name ).before_include_or_extend_or_subclass.extend( A, & block )
+        def self.included( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  #########################################
+  #  after_include_or_extend_or_subclass  #
+  #########################################
+
+  it 'can simultaneously create hooks for after-extend, after-include, and subclass - with block only' do
+    module ::Module::Cluster::AfterIncludeExtendSubclassHookBlockOnlyMock
+    
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          block_ran = true
+        end
+        cluster( :cluster_name ).after_include_or_extend_or_subclass( & block )
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtend
+        extend ClusterModuleMock
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+      end
+
+      block_ran.should == true
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for after-extend, after-include, and subclass - without block' do
+    module ::Module::Cluster::AfterIncludeExtendSubclassHookMock
+    
+      module A
+      end
+
+      module ClusterModuleMock
+        extend ::Module::Cluster
+        cluster( :cluster_name ).after_include_or_extend_or_subclass.extend( A )
+        def self.included( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+        def self.inherited( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+      
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+        def self.inherited( instance )
+          instance.is_a?( A ).should == true
+          super if defined?( super )
+        end
+      end
+      
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+    
+    end
+  end
+
+  it 'can simultaneously create hooks for after-extend, after-include, and subclass - with block' do
+    module ::Module::Cluster::AfterIncludeExtendSubclassHookBlockMock
+    
+      module A
+      end
+
+      block_ran = false
+      
+      ClusterModuleMock = ::Module.new
+      ClusterModuleMock.module_eval do
+        extend ::Module::Cluster
+        block = ::Proc.new do |instance|
+          instance.is_a?( A ).should == true
+          block_ran = true
+        end
+        cluster( :cluster_name ).after_include_or_extend_or_subclass.extend( A, & block )
+        def self.included( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+        def self.extended( instance )
+          instance.is_a?( A ).should == false
+          super if defined?( super )
+          instance.is_a?( A ).should == true
+        end
+      end
+
+      class BaseClassInclude
+        include ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassIncludeSub < BaseClassInclude
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+      
+      block_ran = false
+
+      class BaseClassExtend
+        extend ClusterModuleMock
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+    
+      block_ran = false
+    
+      class BaseClassExtendSub < BaseClassExtend
+        is_a?( A ).should == true
+      end
+
+      block_ran.should == true
+    
     end
   end
 

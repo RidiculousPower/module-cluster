@@ -115,7 +115,7 @@ module ::Module::Cluster::InstanceController::InstanceControllerInterface
   def before_extend_subclass_proxy
 
     return @before_extend_subclass_proxy ||= self.class::MultipleHookControllerProxy.new( :before_extend_subclass,
-                                                                                          before_include_controller,
+                                                                                          before_extend_controller,
                                                                                           subclass_controller )
 
   end

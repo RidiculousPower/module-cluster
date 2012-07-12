@@ -40,10 +40,10 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy
   # 
   # @return [Module::Cluster::InstanceController::HookController] self
   #
-  def include( *modules )
+  def include( *modules, & block )
     
     @hook_controllers.each do |this_hook_controller|
-      this_hook_controller.include( *modules )
+      this_hook_controller.include( *modules, & block )
     end
 
     return self
@@ -67,10 +67,10 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy
   # 
   # @return [Module::Cluster::InstanceController::HookController] self
   #
-  def extend( *modules )
+  def extend( *modules, & block )
 
     @hook_controllers.each do |this_hook_controller|
-      this_hook_controller.extend( *modules )
+      this_hook_controller.extend( *modules, & block )
     end
 
     return self
@@ -94,10 +94,10 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy
   # 
   # @return [Module::Cluster::InstanceController::HookController] self
   #
-  def include_and_extend( *modules )
+  def include_and_extend( *modules, & block )
     
     @hook_controllers.each do |this_hook_controller|
-      this_hook_controller.include_and_extend( *modules )
+      this_hook_controller.include_and_extend( *modules, & block )
     end
 
     return self
@@ -121,10 +121,10 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy
   # 
   # @return [Module::Cluster::InstanceController::HookController] self
   #
-  def extend_and_include( *modules )
+  def extend_and_include( *modules, & block )
     
     @hook_controllers.each do |this_hook_controller|
-      this_hook_controller.extend_and_include( *modules )
+      this_hook_controller.extend_and_include( *modules, & block )
     end
 
     return self
@@ -172,9 +172,9 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy
   #
   # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Chain Proxy for chained declarations.
   #
-  def before_extend( *modules )
+  def before_extend( *modules, & block )
     
-    return chain_proxy.before_extend( *modules )
+    return chain_proxy.before_extend( *modules, & block )
     
   end
 
@@ -196,9 +196,9 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy
   #
   # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Chain Proxy for chained declarations.
   #
-  def before_include( *modules )
+  def before_include( *modules, & block )
     
-    return chain_proxy.before_include( *modules )
+    return chain_proxy.before_include( *modules, & block )
     
   end
 
@@ -221,9 +221,9 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy
   #
   # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Chain Proxy for chained declarations.
   #
-  def before_include_or_extend( *modules )
+  def before_include_or_extend( *modules, & block )
 
-    return chain_proxy.before_include_or_extend( *modules )
+    return chain_proxy.before_include_or_extend( *modules, & block )
     
   end
   
@@ -247,9 +247,9 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy
   #
   # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Chain Proxy for chained declarations.
   #
-  def after_include( *modules )
+  def after_include( *modules, & block )
 
-    return chain_proxy.after_include( *modules )
+    return chain_proxy.after_include( *modules, & block )
     
   end
 
@@ -271,9 +271,9 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy
   #
   # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Chain Proxy for chained declarations.
   #
-  def after_extend( *modules )
+  def after_extend( *modules, & block )
 
-    return chain_proxy.after_extend( *modules )
+    return chain_proxy.after_extend( *modules, & block )
     
   end
 
@@ -296,9 +296,9 @@ class ::Module::Cluster::InstanceController::MultipleHookControllerProxy
   #
   # @return [Module::Cluster::InstanceController::HookController::ChainProxy] Chain Proxy for chained declarations.
   #
-  def after_include_or_extend( *modules )
+  def after_include_or_extend( *modules, & block )
     
-    return chain_proxy.after_include_or_extend( *modules )
+    return chain_proxy.after_include_or_extend( *modules, & block )
     
   end
 
