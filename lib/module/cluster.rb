@@ -46,6 +46,23 @@ module ::Module::Cluster
     return ::Module::Cluster.cluster( self, name )
     
   end
+  
+  ##################
+  #  has_cluster?  #
+  ##################
+  
+  ###
+  # Get cluster for name. Will create cluster if it does not already exist.
+  #
+  # @param name Name of cluster.
+  #
+  # @return [true,false] Whether cluster name exists for self.
+  #
+  def has_cluster?( name )
+    
+    return ::Module::Cluster.has_cluster?( self, name )
+    
+  end
 
   ##################################################################################################
   #   private ######################################################################################
@@ -79,6 +96,8 @@ module ::Module::Cluster
       @clusters[ instance ] = instance_hash = { }
     end
     
+    name = name.to_sym
+    
     unless cluster_instance = instance_hash[ name ]
       instance_hash[ name ] = cluster_instance = ::Module::Cluster::Cluster.new( instance, name )
     end
@@ -87,6 +106,35 @@ module ::Module::Cluster
     
   end
 
+  #######################
+  #  self.has_cluster?  #
+  #######################
+  
+  ###
+  # @private
+  #
+  # Return whether cluster exists for instance.
+  #
+  # @param instance 
+  #          Instance for which cluster is being queried.
+  #
+  # @param name 
+  #          Name of cluster for instance.
+  #
+  # @return [true,false] Whether cluster exists for instance.
+  #
+  def self.has_cluster?( instance, name )
+    
+    has_cluster = false
+    
+    if instance_hash = @clusters[ instance ]
+      has_cluster = instance_hash.has_key?( name.to_sym )
+    end
+    
+    return has_cluster
+    
+  end
+  
   ##############################
   #  self.instance_controller  #
   ##############################

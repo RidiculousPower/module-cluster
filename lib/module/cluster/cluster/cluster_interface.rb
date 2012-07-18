@@ -155,12 +155,14 @@ module ::Module::Cluster::Cluster::ClusterInterface
     hook_controller = @instance_controller.after_include_controller
     
     chain_proxy_instance = hook_controller.chain_proxy
+        
+    chain_proxy_instance.cluster_name( @name ).context( *contexts )
     
     if block_given?
-      hook_controller.action( & block )
+      chain_proxy_instance.action( & block )
     end
     
-    return hook_controller.chain_proxy.cluster_name( @name ).context( *contexts )
+    return chain_proxy_instance
 
   end
   
