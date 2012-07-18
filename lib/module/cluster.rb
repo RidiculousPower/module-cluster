@@ -316,7 +316,7 @@ module ::Module::Cluster
 
           # if we have a block it runs last
           if this_block = this_frame.block
-            this_frame.owner.module_exec( hooked_instance, & this_block )
+            instance.module_exec( hooked_instance, this_frame.owner, & this_block )
           end
 
         end
