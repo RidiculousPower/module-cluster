@@ -15,8 +15,8 @@ module ::Module::Cluster::ClassSupport
 
     super if defined?( super )
     
-    ::Module::Cluster.hook_cluster_events( self, subclass_instance, :subclass )
+    ::Module::Cluster.evaluate_cluster_stack( self, subclass_instance, :subclass )
     
   end
-
+  
 end
