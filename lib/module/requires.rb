@@ -9,6 +9,7 @@ files = [
   'controller',
 
   'cluster',
+  'cluster/frame_definer',
 
   'cluster/frame',
   

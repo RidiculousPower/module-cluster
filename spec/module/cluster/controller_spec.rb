@@ -3,11 +3,7 @@ require_relative '../../../lib/module/cluster.rb'
 
 describe ::Module::Cluster::Controller do
   
-  let( :mock_controller ) do
-    ::Module.new do
-      extend ::Module::Cluster::Controller
-    end
-  end
+  let( :mock_controller ) { ::Module.new.extend( ::Module::Cluster::Controller ) }
 
   let( :module_instance ) { ::Module.new }
   let( :module_instance_controller ) { mock_controller.instance_controller( module_instance ) }
@@ -171,11 +167,11 @@ describe ::Module::Cluster::Controller do
   context 'frame parsing' do
     
     let( :frame ) { ::Module::Cluster::Cluster::Frame.new( module_instance, :cluster_name, cascade_contexts, instance_contexts, modules, include_or_extend, block_action ) }
+    let( :cascade_contexts ) { nil }
+    let( :instance_contexts ) { nil }
     let( :modules ) { nil }
     let( :include_or_extend ) { nil }
     let( :block_action ) { nil }
-    let( :cascade_contexts ) { nil }
-    let( :instance_contexts ) { nil }
     let( :event_context ) { :before_include }
     let( :some_module ) { ::Module.new }
     

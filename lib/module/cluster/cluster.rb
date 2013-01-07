@@ -23,22 +23,8 @@ class ::Module::Cluster::Cluster
     
     @enabled = true
     
-    @hook_contexts = { }
+    @frame_definer = ::Module::Cluster::Cluster::FrameDefiner.new( self )
     
-  end
-
-  ###########
-  #  clear  #
-  ###########
-  
-  ###
-  # Reset state-related info.
-  #
-  def clear
-    
-    @hook_contexts.clear    if @hook_contexts
-    @cascade_contexts.clear if @cascade_contexts
-
   end
 
   ###############
@@ -152,16 +138,36 @@ class ::Module::Cluster::Cluster
 
   def context( *contexts )
 
-    @instance_contexts ||= { }
-    
-    @instance_contexts.clear
-    
-    add_instance_context( *contexts )
+    @frame_definer.context( *contexts )
     
     return self
     
   end
 
+  #############
+  #  cascade  #
+  #############
+  
+  def cascade( & block )
+    
+    @frame_definer.cascade( & block )
+
+    return self
+    
+  end
+
+  ################
+  #  cascade_to  #
+  ################
+  
+  def cascade_to( *cascade_contexts, & block )
+    
+    @frame_definer.cascade_to( *cascade_contexts, & block )
+
+    return self
+    
+  end
+  
   ####################
   #  before_include  #
   ####################
@@ -173,17 +179,11 @@ class ::Module::Cluster::Cluster
   #
   #   @param context Optional context for which hook should be active: :any, :module, :class.
   #
-  # @return [Module::Cluster::InstanceController::HookController::ChainedDefiner] 
+  # @return [Module::Cluster::InstanceController::HookController::FrameDefiner] 
   #
   def before_include( *contexts, & block )
     
-    add_hook_context( :before_include )
-
-    context( *contexts )
-        
-    action( & block ) if block_given?
-    
-    return self
+    return @frame_definer.before_include( *contexts, & block )
     
   end
 
@@ -198,17 +198,11 @@ class ::Module::Cluster::Cluster
   #
   #   @param context Optional context for which hook should be active: :any, :module, :class.
   #
-  # @return [Module::Cluster::InstanceController::HookController::ChainedDefiner] 
+  # @return [Module::Cluster::InstanceController::HookController::FrameDefiner] 
   #
   def after_include( *contexts, & block )
 
-    add_hook_context( :after_include )
-
-    context( *contexts )
-        
-    action( & block ) if block_given?
-    
-    return self
+    return @frame_definer.after_include( *contexts, & block )
 
   end
   
@@ -223,17 +217,11 @@ class ::Module::Cluster::Cluster
   #
   #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
   #
-  # @return [Module::Cluster::InstanceController::HookController::ChainedDefiner] 
+  # @return [Module::Cluster::InstanceController::HookController::FrameDefiner] 
   #
   def before_extend( *contexts, & block )
     
-    add_hook_context( :before_extend )
-
-    context( *contexts )
-        
-    action( & block ) if block_given?
-    
-    return self
+    return @frame_definer.before_extend( *contexts, & block )
     
   end
   
@@ -248,17 +236,11 @@ class ::Module::Cluster::Cluster
   #
   #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
   #
-  # @return [Module::Cluster::InstanceController::HookController::ChainedDefiner] 
+  # @return [Module::Cluster::InstanceController::HookController::FrameDefiner] 
   #
   def after_extend( *contexts, & block )
 
-    add_hook_context( :after_extend )
-
-    context( *contexts )
-        
-    action( & block ) if block_given?
-    
-    return self
+    return @frame_definer.after_extend( *contexts, & block )
 
   end
   
@@ -271,94 +253,12 @@ class ::Module::Cluster::Cluster
   #
   # @overload subclass
   #
-  # @return [Module::Cluster::InstanceController::HookController::ChainedDefiner] 
+  # @return [Module::Cluster::InstanceController::HookController::FrameDefiner] 
   #
   def subclass( & block )
     
-    add_hook_context( :subclass )
-    
-    action( & block ) if block_given?
-    
-    return self
+    return @frame_definer.subclass( & block )
 
-  end
-  
-  #############
-  #  cascade  #
-  #############
-  
-  def cascade( & block )
-    
-    @cascade_contexts.clear if @cascade_contexts
-    add_cascade_context( :any )
-    action( & block ) if block_given?
-    
-    return self
-    
-  end
-
-  ################
-  #  cascade_to  #
-  ################
-  
-  def cascade_to( *cascade_contexts, & block )
-    
-    @cascade_contexts.clear if @cascade_contexts
-    add_cascade_context( *cascade_contexts )
-    action( & block ) if block_given?
-    
-    return self
-    
-  end
-  
-  ######################
-  #  add_hook_context  #
-  ######################
-  
-  def add_hook_context( context )
-
-    case context
-      when :before_include, :before_extend, :after_include, :after_extend
-        case @instance
-          when ::Class
-            unless @instance < ::Module
-              raise ::RuntimeError, 'Include hooks cannot be created for classes.'
-            end
-        end
-    end
-    
-    @hook_contexts[ context ] = true
-    
-    return self
-    
-  end
-  
-  ##########################
-  #  add_instance_context  #
-  ##########################
-  
-  def add_instance_context( *contexts )
-
-    @instance_contexts ||= { }
-    
-    contexts.each do |this_context|
-      @instance_contexts[ this_context ] = true
-    end
-    
-  end
-
-  #########################
-  #  add_cascade_context  #
-  #########################
-  
-  def add_cascade_context( *contexts )
-    
-    @cascade_contexts ||= { }
-    
-    contexts.each do |this_context|
-      @cascade_contexts[ this_context ] = true
-    end
-    
   end
   
 end
