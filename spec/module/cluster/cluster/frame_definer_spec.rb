@@ -44,7 +44,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   #  new_stack_frame  #
   #####################
   
-  context 'can create a new stack frame with the current context definition' do
+  context 'creates a new stack frame with the current context definition' do
     
     context 'when no context' do
       
@@ -68,7 +68,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   #  context  #
   #############
 
-  it 'can declare an instance context to apply to hook frames defined next' do
+  it 'declares an instance context to apply to hook frames defined next' do
     
   end
   
@@ -136,7 +136,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   #  cascade  #
   #############
   
-  it 'can declare cascading for all instances to apply to hook frames defined next' do
+  it 'declares cascading for all instances to apply to hook frames defined next' do
     
   end
 
@@ -144,7 +144,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   #  cascade_to  #
   ################
   
-  it 'can declare a cascade context to apply to hook frames defined next' do
+  it 'declares a cascade context to apply to hook frames defined next' do
     
   end
 
@@ -152,7 +152,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   #  before  #
   ############
 
-  it 'can declare that hook frames defined next will be inserted prior to hook frames ' do
+  it 'declares that hook frames defined next will be inserted prior to hook frames defined by modules' do
     
   end
 
@@ -160,7 +160,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   #  after  #
   ###########
 
-  it '' do
+  it 'declares that hook frames defined next will be inserted after hook frames defined by modules' do
     
   end
 
@@ -168,40 +168,60 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   #  include  #
   #############
   
-  it '' do
+  context 'include' do
     
+    it 'creates a frame causing include to be called with the provided modules and with other current context settings' do
+    
+    end
+
   end
   
   ############
   #  extend  #
   ############
 
-  it '' do
+  context 'extend' do
     
+    it 'creates a frame causing extend to be called with the provided modules and with other current context settings' do
+    
+    end
+
   end
 
   ########################
   #  include_and_extend  #
   ########################
 
-  it '' do
+  context 'include_and_extend' do
     
+    it 'creates a frame causing include and then extend to be called with the provided modules and with other current context settings' do
+    
+    end
+
   end
 
   ########################
   #  extend_and_include  #
   ########################
 
-  it '' do
+  context 'extend_and_include' do
     
+    it 'creates a frame causing extend and then include to be called with the provided modules and with other current context settings' do
+    
+    end
+
   end
   
   ############
   #  action  #
   ############
   
-  it '' do
+  context 'action' do
     
+    it 'creates a frame causing a block to be called and with other current context settings' do
+    
+    end
+        
   end
-    
+
 end
