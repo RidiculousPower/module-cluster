@@ -14,8 +14,7 @@ class ::Module::Cluster::InstanceController
   ################
   
   ###
-  #
-  # @param instance [Object] 
+  # @param [Module,Class] instance
   #
   #        Instance for which Instance Controller is to operate.
   #
@@ -33,7 +32,7 @@ class ::Module::Cluster::InstanceController
   ###
   # Get reference to object instance for which Instance Controller (self) is operative.
   #
-  # @!attribute [reader] [Object] 
+  # @!attribute [reader] [Module,Class] 
   #
   #             Instance for which this Instance Controller operates.
   #
@@ -46,11 +45,11 @@ class ::Module::Cluster::InstanceController
   ###
   # Return cluster for instance or create if necessary
   #
-  # @param instance [Object]
+  # @param [Module,Class] instance
   #
   #        Instance for which cluster is being created.
   #
-  # @param name [Symbol,String]
+  # @param [Symbol,String] name
   # 
   #        Name of cluster for instance.
   #
@@ -75,7 +74,7 @@ class ::Module::Cluster::InstanceController
   ###
   # Query whether cluster exists for instance.
   #
-  # @param instance 
+  # @param [Module,Class] instance 
   #
   #        Instance for which cluster is being queried.
   #
@@ -97,6 +96,17 @@ class ::Module::Cluster::InstanceController
   #  stack  #
   ###########
   
+  ###
+  # Get stack for event context.
+  #
+  # @param event_context [:before_include,:after_include,:before_extend,:after_extend,:subclass]
+  #
+  #        Context for which cascade is occurring.
+  #
+  # @return [Module::Cluster::InstanceController::Stack]
+  #
+  #         Stack that holds event hook frames.
+  #
   def stack( event_context )
     
     stack = nil
@@ -123,11 +133,11 @@ class ::Module::Cluster::InstanceController
   ####################
   
   ###
-  # Get subclass hook controller.
+  # Get subclass event hook stack.
   #
-  # @return [Module::Cluster::InstanceController::HookController] 
+  # @return [Module::Cluster::InstanceController::Stack]
   #
-  #         Subclass hook controller.
+  #         Stack that holds subclass event hook frames.
   #
   def subclass_stack
 
@@ -140,11 +150,11 @@ class ::Module::Cluster::InstanceController
   ##########################
   
   ###
-  # Get before-include hook controller.
+  # Get before-include event hook stack.
   #
-  # @return [Module::Cluster::InstanceController::HookController] 
+  # @return [Module::Cluster::InstanceController::Stack]
   #
-  #         Before-include hook controller.
+  #         Stack that holds before-include event hook frames.
   #
   def before_include_stack
 
@@ -157,11 +167,11 @@ class ::Module::Cluster::InstanceController
   #########################
 
   ###
-  # Get before-extend hook controller.
+  # Get before-extend event hook stack.
   #
-  # @return [Module::Cluster::InstanceController::HookController] 
+  # @return [Module::Cluster::InstanceController::Stack]
   #
-  #         Before-extend hook controller.
+  #         Stack that holds before-extend event hook frames.
   #
   def before_extend_stack
 
@@ -174,11 +184,11 @@ class ::Module::Cluster::InstanceController
   #########################
   
   ###
-  # Get after-include hook controller.
+  # Get after-include event hook stack.
   #
-  # @return [Module::Cluster::InstanceController::HookController] 
+  # @return [Module::Cluster::InstanceController::Stack]
   #
-  #         After-include hook controller.
+  #         Stack that holds after-include event hook frames.
   #
   def after_include_stack
 
@@ -191,11 +201,11 @@ class ::Module::Cluster::InstanceController
   ########################
 
   ###
-  # Get after-extend hook controller.
+  # Get after-extend event hook stack.
   #
-  # @return [Module::Cluster::InstanceController::HookController] 
+  # @return [Module::Cluster::InstanceController::Stack]
   #
-  #         After-extend hook controller.
+  #         Stack that holds after-extend event hook frames.
   #
   def after_extend_stack
 

@@ -1,6 +1,9 @@
 
 ###
-# Provides #append_features, #included, #extend_object, #extended support for {::Module::Cluster Module::Cluster}.
+# @private
+#
+# Provides :before_include, :after_include, :before_extend, :after_extend support by way of 
+#   #append_features, #included, #extend_object, #extended.
 #
 module ::Module::Cluster::ModuleSupport
 
@@ -9,7 +12,11 @@ module ::Module::Cluster::ModuleSupport
   #####################
 
   ###
-  # Ensures {::Module::Cluster Module::Cluster} before_include hooks occur at time of include.
+  # Ensures :before_include hooks occur at time of include.
+  #
+  # @param [Module,Class] hooked_instance
+  #
+  #        Instance to which features will be appended.
   #
   def append_features( hooked_instance )
 
@@ -24,7 +31,11 @@ module ::Module::Cluster::ModuleSupport
   ##############
 
   ###
-  # Ensures {::Module::Cluster Module::Cluster} after_include hooks occur at time of include.
+  # Ensures :after_include hooks occur at time of include.
+  #
+  # @param [Module,Class] hooked_instance
+  #
+  #        Instance where features will be included.
   #
   def included( hooked_instance )
 
@@ -39,7 +50,11 @@ module ::Module::Cluster::ModuleSupport
   ###################
   
   ###
-  # Ensures {::Module::Cluster Module::Cluster} before_extend hooks occur at time of extend.
+  # Ensures :before_extend hooks occur at time of extend.
+  #
+  # @param [Module,Class] hooked_instance
+  #
+  #        Instance where features will be extended.
   #
   def extend_object( hooked_instance )
 
@@ -54,7 +69,11 @@ module ::Module::Cluster::ModuleSupport
   ##############
   
   ###
-  # Ensures {::Module::Cluster Module::Cluster} after_extend hooks occur at time of extend.
+  # Ensures :after_extend hooks occur at time of extend.
+  #
+  # @param [Module,Class] hooked_instance
+  #
+  #        Instance where features will be extended.
   #
   def extended( hooked_instance )
 

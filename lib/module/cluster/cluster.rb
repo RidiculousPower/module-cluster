@@ -10,8 +10,9 @@ class ::Module::Cluster::Cluster
   ################
   
   ###
+  # @param [Module,Class] instance 
   #
-  # @param instance Instance cluster is for.
+  #        Instance cluster is for.
   # 
   # @param name Name of cluster.
   #
@@ -32,7 +33,7 @@ class ::Module::Cluster::Cluster
   ###############
   
   ###
-  # Instance that defined cluster.
+  # Instance that owns cluster.
   #
   # @!attribute [r] [Object]
   #
@@ -43,7 +44,7 @@ class ::Module::Cluster::Cluster
   ##########################
   
   ###
-  # Instance controller for instance that defined cluster.
+  # Instance controller for instance that owns cluster.
   #
   # @!attribute [r] [Object]
   #
@@ -56,9 +57,7 @@ class ::Module::Cluster::Cluster
   ###
   # Name of cluster.
   #
-  # @!attribute [reader] Cluster name.
-  #
-  # @return [String] Name.
+  # @!attribute [reader] [String]
   #
   attr_reader :name
 
@@ -69,7 +68,9 @@ class ::Module::Cluster::Cluster
   ###
   # Query whether cluster is enabled.
   #
-  # @return [true,false] Whether cluster is enabled.
+  # @return [true,false] 
+  #
+  #         Whether cluster is enabled.
   #
   def enabled?
     
@@ -85,7 +86,9 @@ class ::Module::Cluster::Cluster
   ###
   # Query whether cluster is disabled.
   #
-  # @return [true,false] Whether cluster is disabled.
+  # @return [true,false] 
+  #
+  #         Whether cluster is disabled.
   #
   def disabled?
     
@@ -103,7 +106,7 @@ class ::Module::Cluster::Cluster
   ###
   # Disable cluster.
   #
-  # @return [Object] Self.
+  # @return [Module::Cluster::Cluster] Self.
   #
   def disable
     
@@ -122,7 +125,7 @@ class ::Module::Cluster::Cluster
   ###
   # Re-enable cluster.
   #
-  # @return [Object] Self.
+  # @return [Module::Cluster::Cluster] Self.
   #
   def enable
     
@@ -136,6 +139,19 @@ class ::Module::Cluster::Cluster
   #  context  #
   #############
 
+  ###
+  # Define execution context for event frames defined after this call.
+  #
+  #   :any is the implicit execution context and does not need to be set explicitly.
+  #
+  # @overload context( execution_context, ... )
+  #
+  #   @param [:any,:class,:module,:instance] execution_context
+  #
+  #          Context for which event frames defined after this call will be executed.
+  #
+  # @return [Module::Cluster::Cluster] Self.
+  #
   def context( *contexts )
 
     @frame_definer.context( *contexts )
@@ -148,6 +164,21 @@ class ::Module::Cluster::Cluster
   #  cascade  #
   #############
   
+  ###
+  # Define cascade context for event frames defined after this call as :any.
+  #
+  #   This is the same as calling #cascade_to( :any ).
+  #
+  # @yield [hooked_instance] 
+  #
+  #        Block action to execute at time hook frame executes.
+  #
+  # @yieldparam [Object] hooked_instance
+  #
+  #             Instance for which hooked event is being executed.
+  #
+  # @return [Module::Cluster::Cluster] Self.
+  #
   def cascade( & block )
     
     @frame_definer.cascade( & block )
@@ -160,6 +191,25 @@ class ::Module::Cluster::Cluster
   #  cascade_to  #
   ################
   
+  ###
+  # Define cascade context for event frames defined after this call.
+  #
+  # @overload cascade_to( cascade_context, ..., & block )
+  #
+  #   @param [:any,:module,:class,:subclass]
+  #
+  #          Context for which frames defined after this call should cascade.
+  #
+  #   @yield [hooked_instance] 
+  #   
+  #          Block action to execute at time hook frame executes.
+  #   
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
+  #
+  # @return [Module::Cluster::Cluster] Self.
+  #
   def cascade_to( *cascade_contexts, & block )
     
     @frame_definer.cascade_to( *cascade_contexts, & block )
@@ -177,9 +227,19 @@ class ::Module::Cluster::Cluster
   #
   # @overload before_include( context, ... )
   #
-  #   @param context Optional context for which hook should be active: :any, :module, :class.
+  #   @param context
   #
-  # @return [Module::Cluster::InstanceController::HookController::FrameDefiner] 
+  #          Optional context for which hook should be active: :any, :module, :class.
+  #
+  #   @yield [hooked_instance] 
+  #   
+  #          Block action to execute at time hook frame executes.
+  #   
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
+  #
+  # @return [Module::Cluster::Cluster::FrameDefiner] 
   #
   def before_include( *contexts, & block )
     
@@ -198,7 +258,15 @@ class ::Module::Cluster::Cluster
   #
   #   @param context Optional context for which hook should be active: :any, :module, :class.
   #
-  # @return [Module::Cluster::InstanceController::HookController::FrameDefiner] 
+  #   @yield [hooked_instance] 
+  #   
+  #          Block action to execute at time hook frame executes.
+  #   
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
+  #
+  # @return [Module::Cluster::Cluster::FrameDefiner] 
   #
   def after_include( *contexts, & block )
 
@@ -217,7 +285,15 @@ class ::Module::Cluster::Cluster
   #
   #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
   #
-  # @return [Module::Cluster::InstanceController::HookController::FrameDefiner] 
+  #   @yield [hooked_instance] 
+  #   
+  #          Block action to execute at time hook frame executes.
+  #   
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
+  #
+  # @return [Module::Cluster::Cluster::FrameDefiner] 
   #
   def before_extend( *contexts, & block )
     
@@ -236,7 +312,15 @@ class ::Module::Cluster::Cluster
   #
   #   @param context Optional context for which hook should be active: :any, :module, :class, :instance.
   #
-  # @return [Module::Cluster::InstanceController::HookController::FrameDefiner] 
+  #   @yield [hooked_instance] 
+  #   
+  #          Block action to execute at time hook frame executes.
+  #   
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
+  #
+  # @return [Module::Cluster::Cluster::FrameDefiner] 
   #
   def after_extend( *contexts, & block )
 
@@ -251,13 +335,78 @@ class ::Module::Cluster::Cluster
   ###
   # Create subclass event hook.
   #
-  # @overload subclass
+  #   @yield [hooked_instance] 
+  #   
+  #          Block action to execute at time hook frame executes.
+  #   
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
   #
-  # @return [Module::Cluster::InstanceController::HookController::FrameDefiner] 
+  # @return [Module::Cluster::Cluster::FrameDefiner] 
   #
   def subclass( & block )
     
     return @frame_definer.subclass( & block )
+
+  end
+  
+  ##############################
+  #  before_include_or_extend  #
+  ##############################
+  
+  ###
+  # Create before-include and before-extend event hooks.
+  #
+  # @overload before_include_or_extend( context, ... )
+  #
+  #   @param context
+  #
+  #          Optional context for which hook should be active: :any, :module, :class.
+  #
+  #   @yield [hooked_instance] 
+  #   
+  #          Block action to execute at time hook frame executes.
+  #   
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
+  #
+  # @return [Module::Cluster::Cluster::FrameDefiner] 
+  #
+  def before_include_or_extend( *contexts, & block )
+
+    return @frame_definer.before_include_or_extend( *contexts, & block )
+
+  end
+  
+
+  #############################
+  #  after_include_or_extend  #
+  #############################
+
+  ###
+  # Create after-include and after-extend event hooks.
+  #
+  # @overload after_include_or_extend( context, ... )
+  #
+  #   @param context
+  #
+  #          Optional context for which hook should be active: :any, :module, :class.
+  #
+  #   @yield [hooked_instance] 
+  #   
+  #          Block action to execute at time hook frame executes.
+  #   
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
+  #
+  # @return [Module::Cluster::Cluster::FrameDefiner] 
+  #
+  def after_include_or_extend( *contexts, & block )
+
+    return @frame_definer.after_include_or_extend( *contexts, & block )
 
   end
   

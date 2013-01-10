@@ -1,6 +1,8 @@
 
 require_relative '../../../lib/module/cluster.rb'
 
+require_relative '../../helpers/support.rb'
+
 describe ::Module::Cluster::Controller do
   
   let( :mock_controller ) { ::Module.new.extend( ::Module::Cluster::Controller ) }
@@ -34,12 +36,16 @@ describe ::Module::Cluster::Controller do
     ###################
   
     context '::extended' do
-      def initialized_instance_tracking?
-        mock_controller.instance_variable_defined?( :@instances )
+            
+      RSpec::Matchers.define :have_initialized_instance_tracking do
+        match { |controller| controller.instance_variable_defined?( :@instances ) }
+        failure_message_for_should { "extending with controller failed to initialize instances" }
       end
+      
       it 'will automatically initialize an instances hash' do
-         initialized_instance_tracking?.should == true
+         mock_controller.should have_initialized_instance_tracking
       end
+
     end
   
     #########################
@@ -47,13 +53,19 @@ describe ::Module::Cluster::Controller do
     #########################
   
     context '#instance_controller' do
-      def initialized_reference_to_instance_controller?
-        controller_for_module.is_a?( ::Module::Cluster::InstanceController ).should == true
-        mock_controller.instance_controller( module_instance ).should == controller_for_module
+
+      RSpec::Matchers.define :have_initialized_reference_to_instance_controller do
+        match do |controller|
+          controller.is_a?( ::Module::Cluster::InstanceController ).should == true
+          mock_controller.instance_controller( controller.instance ).should == controller
+        end
+        failure_message_for_should { "controller failed to initialize" }
       end
+      
       it 'creates and tracks instances controllers for instances' do
-        initialized_reference_to_instance_controller?.should == true
+        controller_for_module.should have_initialized_reference_to_instance_controller
       end
+      
     end
   
   end
@@ -65,19 +77,7 @@ describe ::Module::Cluster::Controller do
     ################################
   
     context '#enable_with_module_cluster' do
-    
-      RSpec::Matchers.define :have_class_support do
-        match do |actual|
-          actual.is_a?( ::Module::Cluster::ClassSupport ) 
-        end
-        failure_message_for_should { "expected instance to be extended with #{::Module::Cluster::ClassSupport}" }
-      end
-
-      RSpec::Matchers.define :have_module_support do
-        match { |actual| actual.is_a?( ::Module::Cluster::ModuleSupport ) }
-        failure_message_for_should { "expected instance to be extended with #{::Module::Cluster::ModuleSupport}" }
-      end
-    
+        
       before :each do
         mock_controller.enable_with_module_cluster( instance )
       end
@@ -234,9 +234,9 @@ describe ::Module::Cluster::Controller do
   
   context '========  Evaluating Frames  ========' do
     
-    let( :frame ) { ::Module::Cluster::Cluster::Frame.new( module_instance, :cluster_name, cascade_contexts, instance_contexts, modules, include_or_extend, block_action ) }
+    let( :frame ) { ::Module::Cluster::Cluster::Frame.new( module_instance, :cluster_name, cascade_contexts, execution_contexts, modules, include_or_extend, block_action ) }
     let( :cascade_contexts ) { nil }
-    let( :instance_contexts ) { nil }
+    let( :execution_contexts ) { nil }
     let( :modules ) { nil }
     let( :include_or_extend ) { nil }
     let( :block_action ) { nil }
@@ -249,7 +249,7 @@ describe ::Module::Cluster::Controller do
   
     context '#frame_should_cascade?' do
 
-      let( :instance_contexts ) { nil }
+      let( :execution_contexts ) { nil }
 
       RSpec::Matchers.define :have_cascaded do
         match do |instance|
@@ -658,7 +658,7 @@ describe ::Module::Cluster::Controller do
       end
       
       context 'when instance context is nil' do
-        let( :instance_contexts ) { nil }
+        let( :execution_contexts ) { nil }
         it 'class instance should execute' do
           class_instance.should have_executed
         end
@@ -674,7 +674,7 @@ describe ::Module::Cluster::Controller do
       end
 
       context 'when instance context is empty' do
-        let( :instance_contexts ) { [ ] }
+        let( :execution_contexts ) { [ ] }
         it 'class instance should execute' do
           class_instance.should have_executed
         end
@@ -690,7 +690,7 @@ describe ::Module::Cluster::Controller do
       end
 
       context 'when instance context is :any' do
-        let( :instance_contexts ) { [ :any ] }
+        let( :execution_contexts ) { [ :any ] }
         it 'class instance should execute' do
           class_instance.should have_executed
         end
@@ -706,7 +706,7 @@ describe ::Module::Cluster::Controller do
       end
 
       context 'when instance context is :class' do
-        let( :instance_contexts ) { [ :class ] }
+        let( :execution_contexts ) { [ :class ] }
         it 'class instance should execute' do
           class_instance.should have_executed
         end
@@ -722,7 +722,7 @@ describe ::Module::Cluster::Controller do
       end
 
       context 'when instance context is :module' do
-        let( :instance_contexts ) { [ :module ] }
+        let( :execution_contexts ) { [ :module ] }
         it 'class instance should execute' do
           class_instance.should_not have_executed
         end
@@ -738,7 +738,7 @@ describe ::Module::Cluster::Controller do
       end
 
       context 'when instance context is subclass and event is not subclass' do
-        let( :instance_contexts ) { [ :subclass ] }
+        let( :execution_contexts ) { [ :subclass ] }
         it 'class instance should execute' do
           class_instance.should_not have_executed
         end
@@ -754,7 +754,7 @@ describe ::Module::Cluster::Controller do
       end
 
       context 'when instance context is subclass and event is subclass' do
-        let( :instance_contexts ) { [ :subclass ] }
+        let( :execution_contexts ) { [ :subclass ] }
         let( :event_context ) { :subclass }
         it 'class instance should execute' do
           class_instance.should have_executed
@@ -771,7 +771,7 @@ describe ::Module::Cluster::Controller do
       end
 
       context 'when instance context is instance' do
-        let( :instance_contexts ) { [ :instance ] }
+        let( :execution_contexts ) { [ :instance ] }
         it 'class instance should execute' do
           class_instance.should_not have_executed
         end
@@ -817,7 +817,7 @@ describe ::Module::Cluster::Controller do
       
       RSpec::Matchers.define :have_evaluated_and_executed_cascade do |inheriting_instance|
         match do |instance|
-          mock_controller.evaluate_frame_cascade( frame, inheriting_instance, instance, event_context ).should == should_cascade
+          mock_controller.evaluate_frame_cascade( frame, inheriting_instance, event_context ).should == should_cascade
           controller_for_inheriting_instance = mock_controller.instance_controller( inheriting_instance )
           if should_cascade
             controller_for_inheriting_instance.stack( event_context ).should == [ frame ]
@@ -926,7 +926,7 @@ describe ::Module::Cluster::Controller do
       let( :include_or_extend ) { :extend }
 
       context 'frame should not execute' do
-        let( :instance_contexts ) { [ :instance ] }
+        let( :execution_contexts ) { [ :instance ] }
         let( :should_execute ) { false }
         it 'will not execute and return false' do
           module_instance.should have_evaluated_frame_hook( instance_of_class_inheriting_from_module )
@@ -971,12 +971,12 @@ describe ::Module::Cluster::Controller do
       let( :include_or_extend ) { :extend }
     
       let( :cascade_frame ) { ::Module::Cluster::Cluster::Frame.new( module_instance, :cascade_cluster, [ :any ], [ :instance ], cascade_modules, include_or_extend, block_action ) }
-      let( :execute_frame ) { ::Module::Cluster::Cluster::Frame.new( module_instance, :execute_cluster, cascade_contexts, instance_contexts, execute_modules, include_or_extend, block_action ) }
-      let( :cascade_and_execute_frame ) { ::Module::Cluster::Cluster::Frame.new( module_instance, :cascade_and_execute_cluster, [ :any ], instance_contexts, cascade_and_execute_modules, include_or_extend, block_action ) }
+      let( :execute_frame ) { ::Module::Cluster::Cluster::Frame.new( module_instance, :execute_cluster, cascade_contexts, execution_contexts, execute_modules, include_or_extend, block_action ) }
+      let( :cascade_and_execute_frame ) { ::Module::Cluster::Cluster::Frame.new( module_instance, :cascade_and_execute_cluster, [ :any ], execution_contexts, cascade_and_execute_modules, include_or_extend, block_action ) }
       let( :disabled_frame ) do
         controller_for_module = mock_controller.instance_controller( module_instance )
         controller_for_module.cluster( :disabled_cluster ).disable
-        ::Module::Cluster::Cluster::Frame.new( module_instance, :disabled_cluster, cascade_contexts, instance_contexts, disabled_modules, include_or_extend, block_action )
+        ::Module::Cluster::Cluster::Frame.new( module_instance, :disabled_cluster, cascade_contexts, execution_contexts, disabled_modules, include_or_extend, block_action )
       end
       
       let( :enabled_module_instance ) do

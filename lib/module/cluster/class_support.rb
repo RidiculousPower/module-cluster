@@ -1,6 +1,8 @@
 
 ###
-# Provides #inherited support for {::Module::Cluster Module::Cluster}.
+# @private
+#
+# Provides :subclass support by way of #inherited.
 #
 module ::Module::Cluster::ClassSupport
   
@@ -9,7 +11,11 @@ module ::Module::Cluster::ClassSupport
   ###############
   
   ###
-  # Ensures {::Module::Cluster Module::Cluster} subclass hooks occur at time of subclassing.
+  # Ensures :subclass hooks occur at time of subclassing.
+  #
+  # @param [Module,Class] hooked_instance
+  #
+  #        Instance inheriting features.
   #
   def inherited( subclass_instance )
 

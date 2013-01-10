@@ -1,5 +1,7 @@
 
 ###
+# @private
+#
 # Struct used to store event frames for processing at time of event (include/extend/subclass).
 #
 # @member cluster_owner [Module,Class]
@@ -10,11 +12,11 @@
 #
 #         Name of cluster to which frame belongs.
 #
-# @member cascade_context [Array<:any,:module,:class,:subclass>]
+# @member cascade_contexts [Array<:any,:module,:class,:subclass>]
 #
 #         Context for which action should be inherited.
 #
-# @member instance_contexts [Array<:any,:module,:class,:subclass,:instance>]
+# @member execution_contexts [Array<:any,:module,:class,:subclass,:instance>]
 #
 #         Context for which action should occur.
 #
@@ -33,7 +35,7 @@
 ::Module::Cluster::Cluster::Frame = ::Struct.new( :cluster_owner,
                                                   :cluster_name, 
                                                   :cascade_contexts,
-                                                  :instance_contexts, 
+                                                  :execution_contexts, 
                                                   :modules, 
                                                   :include_or_extend,
                                                   :block_action )

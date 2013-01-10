@@ -5,6 +5,22 @@ class ::Module::Cluster::InstanceController::Stack < ::Array
   #  index_with_module  #
   #######################
   
+  ###
+  # Get index of frame with module instance matching include/extend descriptor.
+  #
+  # @param [Module] module_instance
+  #
+  #        Match frame with module instance.
+  #
+  # @param [nil,:include,:extend,:include_or_extend,
+  #         :extend_or_include,:include_and_extend,:extend_and_include] include_or_extend
+  # 
+  #        Descriptor for matching frame :include_or_extend.
+  #
+  # @return [Integer]
+  #
+  #         Index of frame with module matching descriptor.
+  #
   def index_with_module( module_instance, include_or_extend = nil )
     
     return index do |this_frame|
@@ -19,6 +35,22 @@ class ::Module::Cluster::InstanceController::Stack < ::Array
   #  rindex_with_module  #
   ########################
 
+  ###
+  # Get rindex of frame with module instance matching include/extend descriptor.
+  #
+  # @param [Module] module_instance
+  #
+  #        Match frame with module instance.
+  #
+  # @param [nil,:include,:extend,:include_or_extend,
+  #         :extend_or_include,:include_and_extend,:extend_and_include] include_or_extend
+  # 
+  #        Descriptor for matching frame :include_or_extend.
+  #
+  # @return [Integer]
+  #
+  #         Index of rightmost frame with module matching descriptor.
+  #
   def rindex_with_module( module_instance, include_or_extend = nil )
 
     return rindex do |this_frame|
@@ -33,6 +65,21 @@ class ::Module::Cluster::InstanceController::Stack < ::Array
   #  index_before  #
   ##################
 
+  ###
+  # Get index before any frame with module instances matching include/extend descriptors.
+  #
+  # @overload index_before( before_descriptor, ... )
+  #
+  #   @param [Module,
+  #          Hash{Module=>:include,:extend,:include_or_extend,:extend_or_include,
+  #                       :include_and_extend,:extend_and_include}] before_descriptor
+  #
+  #          Descriptors that index should precede.
+  #
+  # @return [Integer]
+  #
+  #         Index before any frame with module matching descriptor.
+  #
   def index_before( *before_descriptors )
     
     before_index = nil
@@ -61,6 +108,21 @@ class ::Module::Cluster::InstanceController::Stack < ::Array
   #  index_after  #
   #################
 
+  ###
+  # Get index after any frame with module instances matching include/extend descriptors.
+  #
+  # @overload index_after( after_descriptor, ... )
+  #
+  #   @param [Module,
+  #          Hash{Module=>:include,:extend,:include_or_extend,:extend_or_include,
+  #                       :include_and_extend,:extend_and_include}] after_descriptor
+  #
+  #          Descriptors that index should precede.
+  #
+  # @return [Integer]
+  #
+  #         Index before any frame with module matching descriptor.
+  #
   def index_after( *after_descriptors )
 
     after_index = nil
@@ -89,10 +151,29 @@ class ::Module::Cluster::InstanceController::Stack < ::Array
   ###################
   #  insert_before  #
   ###################
-
-  def insert_before( before_modules, *frames )
+  
+  ###
+  # Insert frames before any frame with module instances matching include/extend descriptors.
+  #
+  # @overload insert_before( before_descriptors, frame, ... )
+  #
+  #   @param [Array<Module,
+  #                 Hash{Module=>:include,:extend,:include_or_extend,:extend_or_include,
+  #                              :include_and_extend,:extend_and_include}>] before_descriptors
+  #
+  #          Descriptors that frames should precede.
+  #
+  #   @param [Module::Cluster::Cluster::Frame] frame
+  #
+  #          Frame to insert before descriptors.
+  #
+  # @return [Integer]
+  #
+  #         Index where insert occurred.
+  #
+  def insert_before( before_descriptors, *frames )
     
-    before_index = index_before( before_modules )
+    before_index = index_before( before_descriptors )
     
     insert( before_index, *frames )
     
@@ -104,9 +185,28 @@ class ::Module::Cluster::InstanceController::Stack < ::Array
   #  insert_after  #
   ##################
 
-  def insert_after( after_modules, *frames )
+  ###
+  # Insert frames after any frame with module instances matching include/extend descriptors.
+  #
+  # @overload insert_after( after_descriptors, frame, ... )
+  #
+  #   @param [Array<Module,
+  #                 Hash{Module=>:include,:extend,:include_or_extend,:extend_or_include,
+  #                              :include_and_extend,:extend_and_include}>] after_descriptors
+  #
+  #          Descriptors that should precede frames.
+  #
+  #   @param [Module::Cluster::Cluster::Frame] frame
+  #
+  #          Frame to insert before descriptors.
+  #
+  # @return [Integer]
+  #
+  #         Index where insert occurred.
+  #
+  def insert_after( after_descriptors, *frames )
     
-    after_index = index_after( after_modules )
+    after_index = index_after( after_descriptors )
     
     insert( after_index, *frames )
     
@@ -118,19 +218,45 @@ class ::Module::Cluster::InstanceController::Stack < ::Array
   #  insert_before_and_after  #
   #############################
   
-  def insert_before_and_after( before_modules, after_modules, *frames )
+  ###
+  # Insert frames before any frame with module instances matching include/extend descriptors
+  #   and after any frame with module instances matching other include/extend descriptors.
+  #
+  # @overload insert_before_and_after( before_descriptors, frame, ... )
+  #
+  #   @param [Array<Module,
+  #                 Hash{Module=>:include,:extend,:include_or_extend,:extend_or_include,
+  #                              :include_and_extend,:extend_and_include}>] before_descriptors
+  #
+  #          Descriptors that frames should precede.
+  #
+  #   @param [Array<Module,
+  #                 Hash{Module=>:include,:extend,:include_or_extend,:extend_or_include,
+  #                              :include_and_extend,:extend_and_include}>] after_descriptors
+  #
+  #          Descriptors that should precede frames.
+  #
+  #   @param [Module::Cluster::Cluster::Frame] frame
+  #
+  #          Frame to insert before descriptors.
+  #
+  # @return [Integer]
+  #
+  #         Index where insert occurred.
+  #
+  def insert_before_and_after( before_descriptors, after_descriptors, *frames )
     
     insert_index = nil
 
-    before_index = index_before( before_modules ) unless before_modules.nil? or before_modules.empty?
-    after_index = index_after( after_modules ) unless after_modules.nil? or after_modules.empty?
+    before_index = index_before( before_descriptors ) unless before_descriptors.nil? or before_descriptors.empty?
+    after_index = index_after( after_descriptors )    unless after_descriptors.nil?  or after_descriptors.empty?
     
     if before_index and after_index
       # make sure that before_index is > after_index
       unless before_index > after_index
         raise ::ArgumentError, 'Requested order was impossible (before: ' << 
-                before_modules.collect( & :to_s ).join( ',' ) << 
-                ', after: ' << after_modules.collect( & :to_s ).join( ',' ) << ').'
+                before_descriptors.collect( & :to_s ).join( ',' ) << 
+                ', after: ' << after_descriptors.collect( & :to_s ).join( ',' ) << ').'
       end
       insert( insert_index = before_index, *frames )
     elsif before_index
@@ -154,6 +280,22 @@ class ::Module::Cluster::InstanceController::Stack < ::Array
   #  match_include_extend?  #
   ###########################
 
+  ###
+  # Match frame include_or_extend action with provided descriptor.
+  #
+  # @param [:include,:extend,:include_and_extend,:extend_and_include] frame_include_or_extend
+  #
+  #        Action from frame :include_or_extend.
+  #
+  # @param [nil,:include,:extend,:include_or_extend,
+  #         :extend_or_include,:include_and_extend,:extend_and_include] against_include_or_extend
+  #
+  #        Descriptor for matching frame :include_or_extend.
+  #
+  # @return [true,false]
+  #
+  #         Whether action matched descriptor.
+  #
   def match_include_extend?( frame_include_or_extend, against_include_or_extend )
 
     matched = false

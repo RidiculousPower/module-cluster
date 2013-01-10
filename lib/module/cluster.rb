@@ -17,28 +17,17 @@ module ::Module::Cluster
   ###################
   
   ###
-  # Ensures that instance controller exists for extended instance 
-  #   and enables class or module support as appropriate.
+  # @private
   #
-  # @param instance [Module,Class]
+  # Enables class or module support as appropriate for extended instance.
   #
-  #        Module or Class instance just enabled with Module::Cluster.
+  # @param [Module,Class] instance
+  #
+  #        Module or Class instance just extended with Module::Cluster.
   #
   def self.extended( instance )
     
-    case instance
-      when ::Class
-        instance.extend( ::Module::Cluster::ClassSupport )
-        # if we have a subclass of ::Module we are a class that creates instances as modules
-        if instance < ::Module and not instance < ::Class
-          instance.module_eval do
-            include( ::Module::Cluster )
-            include( ::Module::Cluster::ModuleSupport )
-          end
-        end
-      when ::Module
-        instance.extend( ::Module::Cluster::ModuleSupport )
-    end
+    enable_with_module_cluster( instance )
     
   end
 
@@ -49,7 +38,13 @@ module ::Module::Cluster
   ###
   # Get cluster for name. Will create cluster if it does not already exist.
   #
-  # @param name Name of cluster.
+  # @param [Symbol,String] name 
+  #
+  #        Name of cluster.
+  #
+  # @return [Module::Cluster::Cluster]
+  #
+  #         Cluster instance.
   #
   def cluster( name )
 
@@ -64,9 +59,13 @@ module ::Module::Cluster
   ###
   # Get cluster for name. Will create cluster if it does not already exist.
   #
-  # @param name Name of cluster.
+  # @param [Symbol,String] name 
   #
-  # @return [true,false] Whether cluster name exists for self.
+  #        Name of cluster.
+  #
+  # @return [true,false] 
+  #
+  #         Whether cluster name exists for self.
   #
   def has_cluster?( name )
     

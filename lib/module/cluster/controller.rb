@@ -2,8 +2,8 @@
 ###
 # @private
 #
-# Singleton methods for Module::Cluster, used internally to control 
-#   cluster event definitions and hook execution.
+# Singleton methods for Module::Cluster, used internally to control cluster event definitions 
+#   and hook execution.
 #
 module ::Module::Cluster::Controller
 
@@ -76,6 +76,8 @@ module ::Module::Cluster::Controller
   #
   #        Instance inheriting clusters.
   # 
+  # @return [Module::Cluster::Controller] Self.
+  #
   def enable_with_module_cluster( hooked_instance )
     
     case hooked_instance
@@ -84,6 +86,7 @@ module ::Module::Cluster::Controller
         # if our class is a subclass of Module then its instances need ModuleSupport
         if hooked_instance < ::Module and not hooked_instance < ::Class
           hooked_instance.module_eval do
+            include( ::Module::Cluster )
             include( ::Module::Cluster::ModuleSupport )
           end
         end
@@ -110,6 +113,8 @@ module ::Module::Cluster::Controller
   #
   #        Instance where frames already exist.
   # 
+  # @return [Module::Cluster::Controller] Self.
+  #
   def cascade_include_extend_stacks( to_instance, from_instance )
     
     if from_instance_controller = @instances[ from_instance ]
@@ -145,17 +150,15 @@ module ::Module::Cluster::Controller
   ###
   # Cascade cluster hooks for instance into hooked instance (causing hooked instance to inherit the hooks).
   #
-  # @param instance [Module,Class]
+  # @param to_instance [Module,Class]
   #
-  #        Instance for which cluster is defined.
+  #        Instance that will inherit frames.
   #
-  # @param hooked_instance [Module,Class,Object]
+  # @param from_instance [Module,Class,Object]
   #
-  #        Instance inheriting clusters.
+  #        Instance where frames already exist.
   #
-  # @return [true,false]
-  #
-  #         Whether hooked instance should be enabled with module cluster.
+  # @return [Module::Cluster::Controller] Self.
   #
   def cascade_subclass_stack( to_instance, from_instance )
 
@@ -179,21 +182,19 @@ module ::Module::Cluster::Controller
   # Iterate provided stack of cluster frames, cascading and/or executing frames
   #   as appropriate.
   #
-  # @param clustered_instance 
-  #
-  #        Module cluster enabled instance for which hooks are being activated.
-  #
   # @param hooked_instance 
   #
   #        Inheriting instance for which events are being processed.
+  #
+  # @param clustered_instance 
+  #
+  #        Module cluster enabled instance for which hooks are being activated.
   #
   # @param event_context [:before_include,:after_include,:before_extend,:after_extend,:subclass]
   #
   #        Context for which cascade is occurring.
   #
-  # @param stack [Array<Module::Cluster::Cluster::Frame>]
-  #
-  #        Stack of frames describing hooks to be evaluated.
+  # @return [Module::Cluster::Controller] Self.
   #
   def evaluate_cluster_stack( hooked_instance, clustered_instance, event_context )
     
@@ -202,7 +203,7 @@ module ::Module::Cluster::Controller
     instance_controller = instance_controller( clustered_instance )
     instance_controller.stack( event_context ).each do |this_frame|
       next if instance_controller.cluster( this_frame.cluster_name ).disabled?
-      cascades = evaluate_frame_cascade( this_frame, hooked_instance, clustered_instance, event_context )
+      cascades = evaluate_frame_cascade( this_frame, hooked_instance, event_context )
       should_enable ||= cascades
       evaluate_frame_hook( this_frame, hooked_instance, clustered_instance, event_context )      
     end
@@ -219,7 +220,26 @@ module ::Module::Cluster::Controller
   #  evaluate_frame_cascade  #
   ############################
 
-  def evaluate_frame_cascade( frame, hooked_instance, clustered_instance, event_context )
+  ###
+  # Evaluate whether frame should cascade into hooked instance and perform cascades if appropriate.
+  #
+  # @param frame
+  #
+  #        Frame being evaluated.
+  #
+  # @param hooked_instance 
+  #
+  #        Inheriting instance for which events are being processed.
+  #
+  # @param event_context [:before_include,:after_include,:before_extend,:after_extend,:subclass]
+  #
+  #        Context for which cascade is being evaluated.
+  #
+  # @return [true,false]
+  #
+  #         Whether frame cascades.
+  #
+  def evaluate_frame_cascade( frame, hooked_instance, event_context )
     
     cascades = false
     
@@ -236,6 +256,25 @@ module ::Module::Cluster::Controller
   #  frame_should_cascade?  #
   ###########################
   
+  ###
+  # Evaluate whether frame should cascade into hooked instance.
+  #
+  # @param frame
+  #
+  #        Frame being evaluated.
+  #
+  # @param hooked_instance 
+  #
+  #        Inheriting instance for which events are being processed.
+  #
+  # @param event_context [:before_include,:after_include,:before_extend,:after_extend,:subclass]
+  #
+  #        Context for which cascade is being evaluated.
+  #
+  # @return [true,false]
+  #
+  #         Whether frame should cascade.
+  #
   def frame_should_cascade?( frame, hooked_instance, event_context )
     
     should_cascade = false
@@ -272,6 +311,23 @@ module ::Module::Cluster::Controller
   #  execute_frame_cascade  #
   ###########################
   
+  ###
+  # Cascade frame into hooked instance.
+  #
+  # @param frame
+  #
+  #        Frame being evaluated.
+  #
+  # @param hooked_instance 
+  #
+  #        Inheriting instance for which events are being processed.
+  #
+  # @param event_context [:before_include,:after_include,:before_extend,:after_extend,:subclass]
+  #
+  #        Context for which cascade is being evaluated.
+  #
+  # @return [Module::Cluster::Controller] Self.
+  #
   def execute_frame_cascade( frame, hooked_instance, event_context )
     
     instance_controller( hooked_instance ).stack( event_context ).push( frame )
@@ -284,6 +340,29 @@ module ::Module::Cluster::Controller
   #  evaluate_frame_hook  #
   #########################
 
+  ###
+  # Evaluate whether frame should execute for hooked instance and execute if appropriate.
+  #
+  # @param frame
+  #
+  #        Frame being evaluated.
+  #
+  # @param hooked_instance 
+  #
+  #        Inheriting instance for which events are being processed.
+  #
+  # @param clustered_instance 
+  #
+  #        Module cluster enabled instance for which hooks are being activated.
+  #
+  # @param event_context [:before_include,:after_include,:before_extend,:after_extend,:subclass]
+  #
+  #        Context for which cascade is being evaluated.
+  #
+  # @return [true,false]
+  #
+  #         Whether frame executes.
+  #
   def evaluate_frame_hook( frame, hooked_instance, clustered_instance, event_context )
     
     executes = false
@@ -301,27 +380,46 @@ module ::Module::Cluster::Controller
   #  frame_should_execute?  #
   ###########################
   
+  ###
+  # Evaluate whether frame should execute for hooked instance.
+  #
+  # @param frame
+  #
+  #        Frame being evaluated.
+  #
+  # @param hooked_instance 
+  #
+  #        Inheriting instance for which events are being processed.
+  #
+  # @param event_context [:before_include,:after_include,:before_extend,:after_extend,:subclass]
+  #
+  #        Context for which cascade is being evaluated.
+  #
+  # @return [true,false]
+  #
+  #         Whether frame should execute.
+  #
   def frame_should_execute?( frame, hooked_instance, event_context )
     
     should_execute = false
     
-    instance_contexts = frame.instance_contexts
+    execution_contexts = frame.execution_contexts
     
-    unless should_execute = instance_contexts.nil? || 
-           instance_contexts.include?( :any )      ||
-           instance_contexts.empty?
+    unless should_execute = execution_contexts.nil? || 
+           execution_contexts.include?( :any )      ||
+           execution_contexts.empty?
 
       case hooked_instance
         when ::Class
           if event_context == :subclass
-            should_execute = instance_contexts.include?( :subclass )
+            should_execute = execution_contexts.include?( :subclass )
           else
-            should_execute = instance_contexts.include?( :class )
+            should_execute = execution_contexts.include?( :class )
           end
         when ::Module
-          should_execute = instance_contexts.include?( :module )
+          should_execute = execution_contexts.include?( :module )
         else
-          should_execute = instance_contexts.include?( :instance )
+          should_execute = execution_contexts.include?( :instance )
       end
       
     end
@@ -334,6 +432,23 @@ module ::Module::Cluster::Controller
   #  execute_frame_hook  # 
   ########################
   
+  ###
+  # Execute frame for hooked instance.
+  #
+  # @param frame
+  #
+  #        Frame being executed.
+  #
+  # @param hooked_instance 
+  #
+  #        Inheriting instance for which events are being processed.
+  #
+  # @param clustered_instance 
+  #
+  #        Module cluster enabled instance for which hooks are being activated.
+  #
+  # @return [Module::Cluster::Controller] Self.
+  #
   def execute_frame_hook( frame, hooked_instance, clustered_instance )
     
     # if we have a module to include/extend
