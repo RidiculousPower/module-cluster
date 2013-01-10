@@ -106,7 +106,7 @@ class ::Module::Cluster::Cluster
   ###
   # Disable cluster.
   #
-  # @return [Module::Cluster::Cluster] Self.
+  # @return [::Module::Cluster::Cluster] Self.
   #
   def disable
     
@@ -125,7 +125,7 @@ class ::Module::Cluster::Cluster
   ###
   # Re-enable cluster.
   #
-  # @return [Module::Cluster::Cluster] Self.
+  # @return [::Module::Cluster::Cluster] Self.
   #
   def enable
     
@@ -150,7 +150,7 @@ class ::Module::Cluster::Cluster
   #
   #          Context for which event frames defined after this call will be executed.
   #
-  # @return [Module::Cluster::Cluster] Self.
+  # @return [::Module::Cluster::Cluster] Self.
   #
   def context( *contexts )
 
@@ -177,7 +177,7 @@ class ::Module::Cluster::Cluster
   #
   #             Instance for which hooked event is being executed.
   #
-  # @return [Module::Cluster::Cluster] Self.
+  # @return [::Module::Cluster::Cluster] Self.
   #
   def cascade( & block )
     
@@ -208,7 +208,7 @@ class ::Module::Cluster::Cluster
   #   
   #               Instance for which hooked event is being executed.
   #
-  # @return [Module::Cluster::Cluster] Self.
+  # @return [::Module::Cluster::Cluster] Self.
   #
   def cascade_to( *cascade_contexts, & block )
     
@@ -239,7 +239,7 @@ class ::Module::Cluster::Cluster
   #   
   #               Instance for which hooked event is being executed.
   #
-  # @return [Module::Cluster::Cluster::FrameDefiner] 
+  # @return [::Module::Cluster::Cluster::FrameDefiner] 
   #
   def before_include( *contexts, & block )
     
@@ -266,7 +266,7 @@ class ::Module::Cluster::Cluster
   #   
   #               Instance for which hooked event is being executed.
   #
-  # @return [Module::Cluster::Cluster::FrameDefiner] 
+  # @return [::Module::Cluster::Cluster::FrameDefiner] 
   #
   def after_include( *contexts, & block )
 
@@ -293,7 +293,7 @@ class ::Module::Cluster::Cluster
   #   
   #               Instance for which hooked event is being executed.
   #
-  # @return [Module::Cluster::Cluster::FrameDefiner] 
+  # @return [::Module::Cluster::Cluster::FrameDefiner] 
   #
   def before_extend( *contexts, & block )
     
@@ -320,7 +320,7 @@ class ::Module::Cluster::Cluster
   #   
   #               Instance for which hooked event is being executed.
   #
-  # @return [Module::Cluster::Cluster::FrameDefiner] 
+  # @return [::Module::Cluster::Cluster::FrameDefiner] 
   #
   def after_extend( *contexts, & block )
 
@@ -343,7 +343,7 @@ class ::Module::Cluster::Cluster
   #   
   #               Instance for which hooked event is being executed.
   #
-  # @return [Module::Cluster::Cluster::FrameDefiner] 
+  # @return [::Module::Cluster::Cluster::FrameDefiner] 
   #
   def subclass( & block )
     
@@ -372,7 +372,7 @@ class ::Module::Cluster::Cluster
   #   
   #               Instance for which hooked event is being executed.
   #
-  # @return [Module::Cluster::Cluster::FrameDefiner] 
+  # @return [::Module::Cluster::Cluster::FrameDefiner] 
   #
   def before_include_or_extend( *contexts, & block )
 
@@ -402,7 +402,7 @@ class ::Module::Cluster::Cluster
   #   
   #               Instance for which hooked event is being executed.
   #
-  # @return [Module::Cluster::Cluster::FrameDefiner] 
+  # @return [::Module::Cluster::Cluster::FrameDefiner] 
   #
   def after_include_or_extend( *contexts, & block )
 

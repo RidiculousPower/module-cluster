@@ -1,4 +1,7 @@
 
+###
+# A Stack is a specialized array for handling inserts of frames before/after other frames.
+#
 class ::Module::Cluster::InstanceController::Stack < ::Array
   
   #######################
@@ -163,7 +166,7 @@ class ::Module::Cluster::InstanceController::Stack < ::Array
   #
   #          Descriptors that frames should precede.
   #
-  #   @param [Module::Cluster::Cluster::Frame] frame
+  #   @param [::Module::Cluster::Cluster::Frame] frame
   #
   #          Frame to insert before descriptors.
   #
@@ -196,7 +199,7 @@ class ::Module::Cluster::InstanceController::Stack < ::Array
   #
   #          Descriptors that should precede frames.
   #
-  #   @param [Module::Cluster::Cluster::Frame] frame
+  #   @param [::Module::Cluster::Cluster::Frame] frame
   #
   #          Frame to insert before descriptors.
   #
@@ -236,7 +239,7 @@ class ::Module::Cluster::InstanceController::Stack < ::Array
   #
   #          Descriptors that should precede frames.
   #
-  #   @param [Module::Cluster::Cluster::Frame] frame
+  #   @param [::Module::Cluster::Cluster::Frame] frame
   #
   #          Frame to insert before descriptors.
   #

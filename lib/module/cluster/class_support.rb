@@ -13,15 +13,15 @@ module ::Module::Cluster::ClassSupport
   ###
   # Ensures :subclass hooks occur at time of subclassing.
   #
-  # @param [Module,Class] hooked_instance
+  # @param [Module,Class] hooked_subclass_instance
   #
   #        Instance inheriting features.
   #
-  def inherited( subclass_instance )
+  def inherited( hooked_subclass_instance )
 
     super if defined?( super )
     
-    ::Module::Cluster.evaluate_cluster_stack( self, subclass_instance, :subclass )
+    ::Module::Cluster.evaluate_cluster_stack( self, hooked_subclass_instance, :subclass )
     
   end
   

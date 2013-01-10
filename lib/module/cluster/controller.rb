@@ -76,7 +76,7 @@ module ::Module::Cluster::Controller
   #
   #        Instance inheriting clusters.
   # 
-  # @return [Module::Cluster::Controller] Self.
+  # @return [::Module::Cluster::Controller] Self.
   #
   def enable_with_module_cluster( hooked_instance )
     
@@ -113,7 +113,7 @@ module ::Module::Cluster::Controller
   #
   #        Instance where frames already exist.
   # 
-  # @return [Module::Cluster::Controller] Self.
+  # @return [::Module::Cluster::Controller] Self.
   #
   def cascade_include_extend_stacks( to_instance, from_instance )
     
@@ -158,7 +158,7 @@ module ::Module::Cluster::Controller
   #
   #        Instance where frames already exist.
   #
-  # @return [Module::Cluster::Controller] Self.
+  # @return [::Module::Cluster::Controller] Self.
   #
   def cascade_subclass_stack( to_instance, from_instance )
 
@@ -194,7 +194,7 @@ module ::Module::Cluster::Controller
   #
   #        Context for which cascade is occurring.
   #
-  # @return [Module::Cluster::Controller] Self.
+  # @return [::Module::Cluster::Controller] Self.
   #
   def evaluate_cluster_stack( hooked_instance, clustered_instance, event_context )
     
@@ -326,7 +326,7 @@ module ::Module::Cluster::Controller
   #
   #        Context for which cascade is being evaluated.
   #
-  # @return [Module::Cluster::Controller] Self.
+  # @return [::Module::Cluster::Controller] Self.
   #
   def execute_frame_cascade( frame, hooked_instance, event_context )
     
@@ -447,7 +447,7 @@ module ::Module::Cluster::Controller
   #
   #        Module cluster enabled instance for which hooks are being activated.
   #
-  # @return [Module::Cluster::Controller] Self.
+  # @return [::Module::Cluster::Controller] Self.
   #
   def execute_frame_hook( frame, hooked_instance, clustered_instance )
     

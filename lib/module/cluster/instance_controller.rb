@@ -45,10 +45,6 @@ class ::Module::Cluster::InstanceController
   ###
   # Return cluster for instance or create if necessary
   #
-  # @param [Module,Class] instance
-  #
-  #        Instance for which cluster is being created.
-  #
   # @param [Symbol,String] name
   # 
   #        Name of cluster for instance.
@@ -73,10 +69,6 @@ class ::Module::Cluster::InstanceController
   
   ###
   # Query whether cluster exists for instance.
-  #
-  # @param [Module,Class] instance 
-  #
-  #        Instance for which cluster is being queried.
   #
   # @param name 
   #
@@ -103,7 +95,7 @@ class ::Module::Cluster::InstanceController
   #
   #        Context for which cascade is occurring.
   #
-  # @return [Module::Cluster::InstanceController::Stack]
+  # @return [::Module::Cluster::InstanceController::Stack]
   #
   #         Stack that holds event hook frames.
   #
@@ -135,7 +127,7 @@ class ::Module::Cluster::InstanceController
   ###
   # Get subclass event hook stack.
   #
-  # @return [Module::Cluster::InstanceController::Stack]
+  # @return [::Module::Cluster::InstanceController::Stack]
   #
   #         Stack that holds subclass event hook frames.
   #
@@ -152,7 +144,7 @@ class ::Module::Cluster::InstanceController
   ###
   # Get before-include event hook stack.
   #
-  # @return [Module::Cluster::InstanceController::Stack]
+  # @return [::Module::Cluster::InstanceController::Stack]
   #
   #         Stack that holds before-include event hook frames.
   #
@@ -169,7 +161,7 @@ class ::Module::Cluster::InstanceController
   ###
   # Get before-extend event hook stack.
   #
-  # @return [Module::Cluster::InstanceController::Stack]
+  # @return [::Module::Cluster::InstanceController::Stack]
   #
   #         Stack that holds before-extend event hook frames.
   #
@@ -186,7 +178,7 @@ class ::Module::Cluster::InstanceController
   ###
   # Get after-include event hook stack.
   #
-  # @return [Module::Cluster::InstanceController::Stack]
+  # @return [::Module::Cluster::InstanceController::Stack]
   #
   #         Stack that holds after-include event hook frames.
   #
@@ -203,7 +195,7 @@ class ::Module::Cluster::InstanceController
   ###
   # Get after-extend event hook stack.
   #
-  # @return [Module::Cluster::InstanceController::Stack]
+  # @return [::Module::Cluster::InstanceController::Stack]
   #
   #         Stack that holds after-extend event hook frames.
   #

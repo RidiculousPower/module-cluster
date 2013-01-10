@@ -4,38 +4,39 @@
 #
 # Struct used to store event frames for processing at time of event (include/extend/subclass).
 #
-# @member cluster_owner [Module,Class]
+# @!attribute [rw] [Module,Class] cluster_owner
 #
 #         Instance to which frame's cluster belongs.
 #
-# @member cluster_name [Symbol]
+# @!attribute [rw] [Symbol] cluster_name
 #
 #         Name of cluster to which frame belongs.
 #
-# @member cascade_contexts [Array<:any,:module,:class,:subclass>]
+# @!attribute [rw] [Array<:any,:module,:class,:subclass>] cascade_contexts
 #
 #         Context for which action should be inherited.
 #
-# @member execution_contexts [Array<:any,:module,:class,:subclass,:instance>]
+# @!attribute [rw] [Array<:any,:module,:class,:subclass,:instance>] execution_contexts
 #
 #         Context for which action should occur.
 #
-# @member modules [Array<Module>]
+# @!attribute [rw] [Array<Module>] modules
 #
 #         Modules to include/extend.
 #
-# @member include_or_extend [:include,:extend,:include_and_extend,:extend_and_include]
+# @!attribute [rw] [:include,:extend,:include_and_extend,:extend_and_include] include_or_extend
 #
 #         Action to perform for modules (include and/or extend).
 #
-# @member block_action [Proc]
+# @!attribute [rw] [Proc] block_action
 #
 #         Block action to run.
 #
-::Module::Cluster::Cluster::Frame = ::Struct.new( :cluster_owner,
-                                                  :cluster_name, 
-                                                  :cascade_contexts,
-                                                  :execution_contexts, 
-                                                  :modules, 
-                                                  :include_or_extend,
-                                                  :block_action )
+class ::Module::Cluster::Cluster::Frame < ::Struct.new( :cluster_owner,
+                                                        :cluster_name, 
+                                                        :cascade_contexts,
+                                                        :execution_contexts, 
+                                                        :modules, 
+                                                        :include_or_extend,
+                                                        :block_action )
+end

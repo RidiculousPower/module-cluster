@@ -42,7 +42,7 @@ module ::Module::Cluster
   #
   #        Name of cluster.
   #
-  # @return [Module::Cluster::Cluster]
+  # @return [::Module::Cluster::Cluster]
   #
   #         Cluster instance.
   #

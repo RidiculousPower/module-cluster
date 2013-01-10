@@ -142,7 +142,7 @@ Create a cluster to group together hooks. From the cluster declarations specify 
 * :before\_include\_or\_extend\_or\_subclass
 * :after\_include\_or\_extend\_or\_subclass
 
-Any of these declarations will return a reference to a {::Module::Cluster::InstanceController::HookController::FrameDefiner Module::Cluster::InstanceController::HookController::FrameDefiner} or a {::Module::Cluster::InstanceController::MultipleHookControllerProxy::FrameDefiner Module::Cluster::InstanceController::MultipleHookControllerProxy::FrameDefiner}. Both have the same interface, so you don't need to worry about the difference.
+Any of these declarations will return a reference to a {::Module::Cluster::Cluster::FrameDefiner Module::Cluster::Cluster::FrameDefiner}.
 
 ## Hook Actions ##
 
