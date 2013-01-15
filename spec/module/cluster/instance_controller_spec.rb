@@ -1,10 +1,12 @@
 
 require_relative '../../../lib/module/cluster.rb'
 
+require_relative '../../support/named_class_and_module.rb'
+
 describe ::Module::Cluster::InstanceController do
 
-  let( :instance ) { ::Module.new }
-  let( :instance_controller ) { ::Module::Cluster::InstanceController.new( instance ) }
+  let( :cluster_instance ) { ::Module.new.name( :Instance ) }
+  let( :instance_controller ) { ::Module::Cluster::InstanceController.new( cluster_instance ) }
   let( :cluster_name ) { :cluster_name }
   let( :cluster ) { instance_controller.cluster( cluster_name ) }
 
@@ -15,8 +17,9 @@ describe ::Module::Cluster::InstanceController do
     ##############
   
     context '#instance' do
+      let( :instance ) { cluster.instance }
       it 'has an instance' do
-        cluster.instance.should == instance
+        instance.should == cluster_instance
       end
     end
   
@@ -35,9 +38,9 @@ describe ::Module::Cluster::InstanceController do
     ##################
   
     context '#has_cluster?' do
-      let( :instance_controller_with_cluster ) { cluster ; instance_controller }
+      let( :has_cluster? ) { cluster ; instance_controller.has_cluster?( cluster_name ) }
       it 'can report if it has a cluster' do
-        instance_controller_with_cluster.has_cluster?( :cluster_name ).should == true
+        has_cluster?.should == true
       end
     end
   
@@ -55,8 +58,9 @@ describe ::Module::Cluster::InstanceController do
     ####################
   
     context '#subclass_stack' do
+      let( :subclass_stack ) { instance_controller.subclass_stack }
       it 'has a subclass stack' do
-        instance_controller.subclass_stack.should be_a_stack
+        subclass_stack.should be_a_stack
       end
     end
   
@@ -65,8 +69,9 @@ describe ::Module::Cluster::InstanceController do
     ##########################
   
     context '#before_include_stack' do
+      let( :before_include_stack ) { instance_controller.before_include_stack }
       it 'has a before-include stack' do
-        instance_controller.before_include_stack.should be_a_stack
+        before_include_stack.should be_a_stack
       end
     end
 
@@ -75,8 +80,9 @@ describe ::Module::Cluster::InstanceController do
     #########################
 
     context '#before_extend_stack' do
+      let( :before_extend_stack ) { instance_controller.before_extend_stack }
       it 'has a before-extend stack' do
-        instance_controller.before_extend_stack.should be_a_stack
+        before_extend_stack.should be_a_stack
       end
     end
 
@@ -85,8 +91,9 @@ describe ::Module::Cluster::InstanceController do
     #########################
   
     context '#after_include_stack' do
+      let( :after_include_stack ) { instance_controller.after_include_stack }
       it 'has an after-include stack' do
-        instance_controller.after_include_stack.should be_a_stack
+        after_include_stack.should be_a_stack
       end
     end
 
@@ -95,8 +102,9 @@ describe ::Module::Cluster::InstanceController do
     ########################
 
     context '#after_extend_stack' do
+      let( :after_extend_stack ) { instance_controller.after_extend_stack }
       it 'has an after-extend stack' do
-        instance_controller.after_extend_stack.should be_a_stack
+        after_extend_stack.should be_a_stack
       end
     end
   
@@ -105,25 +113,44 @@ describe ::Module::Cluster::InstanceController do
     ###########
   
     context '#stack' do
-      it 'can return a stack for an event context: :subclass' do
-        instance_controller.stack( :subclass ).should == instance_controller.subclass_stack
+
+      let( :stack ) { instance_controller.stack( event_context ) }
+
+      context ':subclass' do
+        let( :event_context ) { :subclass }
+        it 'can return a stack for an event context: :subclass' do
+          stack.should == instance_controller.subclass_stack
+        end
       end
 
-      it 'can return a stack for an event context: :before_include' do
-        instance_controller.stack( :before_include ).should == instance_controller.before_include_stack
+      context ':before_include' do
+        let( :event_context ) { :before_include }
+        it 'can return a stack for an event context: :before_include' do
+          stack.should == instance_controller.before_include_stack
+        end
       end
 
-      it 'can return a stack for an event context: :before_extend' do
-        instance_controller.stack( :before_extend ).should == instance_controller.before_extend_stack
+      context ':before_extend' do
+        let( :event_context ) { :before_extend }
+        it 'can return a stack for an event context: :before_extend' do
+          stack.should == instance_controller.before_extend_stack
+        end
       end
 
-      it 'can return a stack for an event context: :after_include' do
-        instance_controller.stack( :after_include ).should == instance_controller.after_include_stack
+      context ':after_include' do
+        let( :event_context ) { :after_include }
+        it 'can return a stack for an event context: :after_include' do
+          stack.should == instance_controller.after_include_stack
+        end
       end
-  
-      it 'can return a stack for an event context: :after_extend' do
-        instance_controller.stack( :after_extend ).should == instance_controller.after_extend_stack
+
+      context ':after_extend' do
+        let( :event_context ) { :after_extend }
+        it 'can return a stack for an event context: :after_extend' do
+          stack.should == instance_controller.after_extend_stack
+        end
       end
+
     end
 
     #########################
@@ -131,10 +158,12 @@ describe ::Module::Cluster::InstanceController do
     #########################
   
     context '#has_subclass_stack?' do
-      it 'can report if it has a subclass stack' do
-        instance_controller.has_subclass_stack?.should == false
+      let( :has_subclass_stack? ) do
         instance_controller.subclass_stack
-        instance_controller.has_subclass_stack?.should == true
+        instance_controller.has_subclass_stack?
+      end
+      it 'can report if it has a subclass stack' do
+        has_subclass_stack?.should == true
       end
     end
   
@@ -143,10 +172,12 @@ describe ::Module::Cluster::InstanceController do
     ###############################
   
     context '#has_before_include_stack?' do
-      it 'can report if it has a before-include stack' do
-        instance_controller.has_before_include_stack?.should == false
+      let( :has_before_include_stack? ) do
         instance_controller.before_include_stack
-        instance_controller.has_before_include_stack?.should == true
+        instance_controller.has_before_include_stack?
+      end
+      it 'can report if it has a before-include stack' do
+        has_before_include_stack?.should == true
       end
     end
 
@@ -155,10 +186,12 @@ describe ::Module::Cluster::InstanceController do
     ##############################
 
     context '#has_before_extend_stack?' do
-      it 'can report if it has a before-extend stack' do
-        instance_controller.has_before_extend_stack?.should == false
+      let( :has_before_extend_stack? ) do
         instance_controller.before_extend_stack
-        instance_controller.has_before_extend_stack?.should == true
+        instance_controller.has_before_extend_stack?
+      end
+      it 'can report if it has a before-extend stack' do
+        has_before_extend_stack?.should == true
       end
     end
 
@@ -167,10 +200,12 @@ describe ::Module::Cluster::InstanceController do
     ##############################
   
     context '#has_after_include_stack?' do
+      let( :has_after_include_stack? ) do
+        instance_controller.after_include_stack 
+        instance_controller.has_after_include_stack?
+      end
       it 'can report if it has an after-include stack' do
-        instance_controller.has_after_include_stack?.should == false
-        instance_controller.after_include_stack
-        instance_controller.has_after_include_stack?.should == true
+        has_after_include_stack?.should == true
       end
     end
 
@@ -179,10 +214,12 @@ describe ::Module::Cluster::InstanceController do
     #############################
 
     context '#has_after_extend_stack?' do
-      it 'can report if it has an after-extend stack' do
-        instance_controller.has_after_extend_stack?.should == false
+      let( :has_after_extend_stack? ) do
         instance_controller.after_extend_stack
-        instance_controller.has_after_extend_stack?.should == true
+        instance_controller.has_after_extend_stack?
+      end
+      it 'can report if it has an after-extend stack' do
+        has_after_extend_stack?.should == true
       end
     end
   

@@ -1,18 +1,29 @@
 
 require_relative '../../../../lib/module/cluster.rb'
 
+require_relative '../../../support/named_class_and_module.rb'
+require_relative '../../../support/block_state.rb'
+
+require_relative '../../../helpers/created.rb'
+require_relative '../../../helpers/context.rb'
+
 describe ::Module::Cluster::Cluster::FrameDefiner do
 
   before :all do
-    MockCluster = ::Class.new do
-      define_method( :instance ) do
-        @module_instance ||= ::Module.new
+    MockModuleCluster = ::Class.new do
+      def instance
+        @module_instance ||= ::Module.new.name( :Instance )
       end
-      define_method( :instance_controller ) do
+      def instance_controller
         @instance_controller ||= ::Module::Cluster.instance_controller( @module_instance )
       end
-      define_method( :name ) do
+      def name
         @name ||= :cluster_name
+      end
+    end
+    MockClassCluster = ::Class.new( MockModuleCluster ) do
+      def instance
+        @class_instance ||= ::Class.new.name( :ClassInstance )
       end
     end
   end
@@ -21,19 +32,19 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   let( :controller_for_module ) { mock_cluster.instance_controller }
   
   let( :cluster_name ) { mock_cluster.name }
-  let( :frame ) { ::Module::Cluster::Cluster::Frame.new( module_instance, cluster_name, cascade_contexts, execution_contexts, modules, include_or_extend, block_action ) }
+  let( :frame ) { ::Module::Cluster::Cluster::Frame.new( module_instance, cluster_name, execution_contexts, cascade_contexts, modules, include_or_extend, block_action ) }
   let( :modules ) { nil }
   let( :include_or_extend ) { nil }
   let( :block_action ) { nil }
   
-  let( :mock_cluster ) { ::MockCluster.new }
+  let( :mock_cluster ) { ::MockModuleCluster.new }
   let( :frame_definer ) { ::Module::Cluster::Cluster::FrameDefiner.new( mock_cluster ) }
 
-  let( :module_a ) { ::Module.new }
-  let( :module_b ) { ::Module.new }
-  let( :module_c ) { ::Module.new }
-  let( :module_d ) { ::Module.new }
-
+  let( :module_a ) { ::Module.new.name( :ModuleA ) }
+  let( :module_b ) { ::Module.new.name( :ModuleB ) }
+  let( :module_c ) { ::Module.new.name( :ModuleC ) }
+  let( :module_d ) { ::Module.new.name( :ModuleD ) }
+  
   ######################################################################################################################
   #   private ##########################################################################################################
   ######################################################################################################################
@@ -45,24 +56,15 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     ######################
   
     context '#add_hook_context' do
-    
-      RSpec::Matchers.define :have_added_hook_context do
-        match do |frame_definer|
-          which_hook_context = hook_context
-          frame_definer.instance_eval do
-            add_hook_context( which_hook_context )
-            @hook_contexts.has_key?( which_hook_context )
-          end
-        end
-        failure_message_for_should { "failed to add hook context" }
-      end
-      
       let( :hook_context ) { :before_include }
-    
-      it 'can add a hook context to apply to hook frames defined next' do
-        frame_definer.should have_added_hook_context
+      let( :add_hook_context ) do
+        _hook_context = hook_context
+        frame_definer.instance_eval { add_hook_context( _hook_context ) }
+        frame_definer
       end
-
+      it 'can add a hook context to apply to hook frames defined next' do
+        add_hook_context.should have_added_hook_context( hook_context )
+      end
     end
   
     ###########################
@@ -70,23 +72,15 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     ###########################
   
     context '#add_execution_context' do
-    
-      RSpec::Matchers.define :have_added_execution_context do |execution_context|
-        match do |frame_definer|
-          frame_definer.instance_eval do
-            add_execution_context( execution_context )
-            @execution_contexts.has_key?( execution_context )
-          end
-        end
-        failure_message_for_should { "failed to add instance context" }
-      end
-      
       let( :execution_context ) { :module }
-    
-      it 'can add an instance context to apply to hook frames defined next' do
-        frame_definer.should have_added_execution_context( execution_context )
+      let( :add_execution_context ) do
+        _execution_context = execution_context
+        frame_definer.instance_eval { add_execution_context( _execution_context ) }
+        frame_definer
       end
-    
+      it 'can add an instance context to apply to hook frames defined next' do
+        add_execution_context.should have_added_execution_context( execution_context )
+      end
     end
 
     #########################
@@ -94,23 +88,15 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     #########################
   
     context '#add_cascade_context' do
-    
-      RSpec::Matchers.define :have_added_cascade_context do |cascade_context|
-        match do |frame_definer|
-          frame_definer.instance_eval do
-            add_cascade_context( cascade_context )
-            @cascade_contexts.has_key?( cascade_context )
-          end
-        end
-        failure_message_for_should { "failed to add cascade context" }
-      end
-      
       let( :cascade_context ) { :module }
-    
-      it 'can add a cascade context to apply to hook frames defined next' do
-        frame_definer.should have_added_cascade_context( cascade_context )
+      let( :add_cascade_context ) do
+        _cascade_context = cascade_context
+        frame_definer.instance_eval { add_cascade_context( _cascade_context ) }
+        frame_definer
       end
-    
+      it 'can add a cascade context to apply to hook frames defined next' do
+        add_cascade_context.should have_added_cascade_context( cascade_context )
+      end
     end
   
     #####################
@@ -118,72 +104,27 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     #####################
   
     context '#new_stack_frame' do
+      let( :hook_contexts ) { [ :before_include, :before_extend, :after_include, :after_extend ] }
     
-      RSpec::Matchers.define :have_created_new_stack_frame do |hook_contexts, include_or_extend, modules, block_action|
-        match_error = nil
-        match do |frame_definer|
-          matches = true
-          frame_definer.instance_eval do
-            add_hook_context( *hook_contexts )
-          end
-          new_frame = frame_definer.instance_eval do
-            new_stack_frame( include_or_extend, modules, block_action )
-          end
-          unless matches = new_frame.cluster_owner == module_instance
-            match_error = 'cluster owner did not match'
-          end
-          unless matches = new_frame.cluster_name == cluster_name
-            match_error = 'cluster name did not match'
-          end
-          if cascade_contexts and ! cascade_contexts.empty?
-            unless matches = new_frame.cascade_contexts == cascade_contexts
-              match_error = 'cascade contexts did not match'
-            end
-            unless matches = ! new_frame.cascade_contexts.equal?( cascade_contexts )
-              match_error = 'cascade contexts were identical'
-            end
-          end
-          if execution_contexts and ! execution_contexts.empty?
-            unless matches = new_frame.execution_contexts == execution_contexts
-              match_error = 'execution contexts did not match'
-            end
-            unless matches = ! new_frame.execution_contexts.equal?( execution_contexts )
-              match_error = 'execution contexts were identical'
-            end
-          end
-          if modules and ! modules.empty?
-            unless matches = new_frame.modules == modules
-              match_error = 'modules did not match'
-            end
-          end
-          if block_action
-            unless matches = new_frame.block_action == block_action
-              match_error = 'block action did not match'
-            end
-          end
-          unless matches = new_frame.include_or_extend == include_or_extend
-            match_error = 'include or extend did not match'
-          end
-          # instance controller's stack(s) should have new frame
-          hook_contexts.each do |this_hook_context|
-            unless matches = frame_definer.cluster.instance_controller.stack( this_hook_context ).include?( new_frame )
-              match_error = 'frames were not added to stack defined in hook context (:' << this_hook_context.to_s + ')'
-              break
-            end
-          end
-          matches
+      let( :new_stack_frame_args ) { [ include_or_extend, modules, block_action ] }
+      let( :new_stack_verify_args ) { [ frame_definer, hook_contexts, include_or_extend, modules, block_action ] }
+      
+      let( :new_stack_frame ) do
+        new_stack_frame = nil
+        _hook_contexts = hook_contexts
+        _new_stack_frame_args = new_stack_frame_args
+        frame_definer.instance_eval do
+          _hook_contexts.each { |this_hook_context| add_hook_context( this_hook_context ) }
+          new_stack_frame = new_stack_frame( *_new_stack_frame_args )
         end
-        failure_message_for_should { match_error }
+        new_stack_frame
       end
-
-      # hook context always exists otherwise the frame doesn't occur anywhere
-      let( :hook_contexts ) { [ :before_include ] }
-    
+      
       context 'when no context' do
         let( :cascade_contexts ) { nil }
         let( :execution_contexts ) { nil }
         it 'creates a frame with nil context' do
-          frame_definer.should have_created_new_stack_frame( hook_contexts, include_or_extend, modules, block_action )
+          new_stack_frame.should have_created_new_stack_frame( *new_stack_verify_args )
         end
       end
 
@@ -191,7 +132,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
         let( :cascade_contexts ) { [ ] }
         let( :execution_contexts ) { [ ] }
         it 'creates a frame with nil context' do
-          frame_definer.should have_created_new_stack_frame( hook_contexts, include_or_extend, modules, block_action )
+          new_stack_frame.should have_created_new_stack_frame( *new_stack_verify_args )
         end
       end
     
@@ -199,7 +140,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
         let( :cascade_contexts ) { [ :class ] }
         let( :execution_contexts ) { [ :module ] }
         it 'creates a frame with context arrays duplicated' do
-          frame_definer.should have_created_new_stack_frame( hook_contexts, include_or_extend, modules, block_action )
+          new_stack_frame.should have_created_new_stack_frame( *new_stack_verify_args )
         end
       
       end
@@ -219,8 +160,9 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     #############
 
     context '#cluster' do
+      let( :cluster ) { frame_definer.cluster }
       it 'is for a cluster' do
-        frame_definer.cluster.should == mock_cluster
+        cluster.should == mock_cluster
       end
     end
   
@@ -229,23 +171,14 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     #############
 
     context '#context' do
-      
-      RSpec::Matchers.define :have_declared_execution_context do |execution_contexts|
-        match do |frame_definer|
-          frame_definer.context( *execution_contexts )
-          frame_definer.instance_eval do
-            @execution_contexts.keys.should == execution_contexts
-          end
-        end
-        failure_message_for_should { "failed to add hook context" }
-      end
-      
       let( :execution_contexts ) { [ :class ] }
-      
-      it 'declares an instance context to apply to hook frames defined next' do
-        frame_definer.should have_declared_execution_context( execution_contexts )
+      let( :context ) do
+        frame_definer.context( *execution_contexts )
+        frame_definer
       end
-    
+      it 'declares an instance context to apply to hook frames defined next' do
+        context.should have_added_execution_context( *execution_contexts )
+      end
     end
   
     ###########
@@ -253,49 +186,24 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     ###########
   
     context '#clear' do
-  
-      RSpec::Matchers.define :have_cleared_contexts do
-        fail_string = nil
-        match do |frame_definer|
-          frame_definer.instance_eval do
-            matched = true
-            unless matched = clear == @cluster
-              fail_string = 'did not receive cluster in return'
-            end
-            unless matched = @hook_contexts.empty?
-              fail_string = 'failed to clear hook contexts'
-            end
-            if @execution_contexts
-              unless matched = @execution_contexts.empty?
-                fail_string = 'failed to clear execution contexts'
-              end
-            end
-            if @cascade_contexts
-              unless matched = @cascade_contexts.empty?
-                fail_string = 'failed to clear execution contexts'
-              end
-            end
-            matched
-          end
-        end
-        failure_message_for_should { fail_string }
-      end
-  
+
+      let( :clear ) { frame_definer.clear }
+
       context 'when no context' do
         it 'should remain as is' do
-          frame_definer.should have_cleared_contexts
+          clear.should have_cleared_contexts
         end
       end
 
       context 'when empty contexts' do
         it 'should remain as is' do
-          frame_definer.should have_cleared_contexts
+          clear.should have_cleared_contexts
         end
       end
     
       context 'when context contents' do
         it 'should clear context state' do
-          frame_definer.should have_cleared_contexts
+          clear.should have_cleared_contexts
         end
       end
     
@@ -303,29 +211,11 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
 
     context '=========  Hook Contexts  ========' do
 
-      RSpec::Matchers.define :have_declared_hook_context do |action, hook_contexts|
-        fail_string = nil
-        match do |frame_definer|
-          frame_definer.__send__( action )
-          frame_definer.instance_eval do
-            matched = true
-            hook_contexts.each do |this_hook_context|
-              unless matched = @hook_contexts.include?( this_hook_context )
-                if @hook_contexts.empty?
-                  fail_string = 'hook contexts were empty and therefore '
-                else
-                  fail_string = 'hook contexts (:' << @hook_contexts.keys.join( ', :' )
-                end
-                fail_string << 'did not include requested context (:' << this_hook_context.to_s + ')'
-                break
-              end
-            end
-            matched
-          end
-        end
-        failure_message_for_should { fail_string }
+      let( :hook_declaration ) do
+        frame_definer.__send__( action )
+        frame_definer
       end
-    
+      
       ####################
       #  before_include  #
       ####################
@@ -333,8 +223,9 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
       context '#before_include' do
         let( :action ) { :before_include }
         let( :hook_contexts ) { [ :before_include ] }
+        let( :before_include ) { hook_declaration }
         it 'can add :before_include to hook context to apply to hook frames defined next' do
-          frame_definer.should have_declared_hook_context( action, hook_contexts )
+          before_include.should have_added_hook_context( *hook_contexts )
         end
 
       end
@@ -346,8 +237,9 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
       context '#after_include' do
         let( :action ) { :after_include }
         let( :hook_contexts ) { [ :after_include ] }
+        let( :after_include ) { hook_declaration }
         it 'can add :after_include to hook context to apply to hook frames defined next' do
-          frame_definer.should have_declared_hook_context( action, hook_contexts )
+          after_include.should have_added_hook_context( *hook_contexts )
         end
       end
   
@@ -358,8 +250,9 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
       context '#before_extend' do
         let( :action ) { :before_extend }
         let( :hook_contexts ) { [ :before_extend ] }
+        let( :before_extend ) { hook_declaration }
         it 'can add :before_extend to hook context to apply to hook frames defined next' do
-          frame_definer.should have_declared_hook_context( action, hook_contexts )
+          before_extend.should have_added_hook_context( *hook_contexts )
         end
       end
   
@@ -370,8 +263,9 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
       context '#after_extend' do
         let( :action ) { :after_extend }
         let( :hook_contexts ) { [ :after_extend ] }
+        let( :after_extend ) { hook_declaration }
         it 'can add :after_extend to hook context to apply to hook frames defined next' do
-          frame_definer.should have_declared_hook_context( action, hook_contexts )
+          after_extend.should have_added_hook_context( *hook_contexts )
         end
       end
   
@@ -382,8 +276,10 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
       context '#subclass' do
         let( :action ) { :subclass }
         let( :hook_contexts ) { [ :subclass ] }
+        let( :mock_cluster ) { ::MockClassCluster.new }
+        let( :subclass ) { hook_declaration }
         it 'can add :subclass to hook context to apply to hook frames defined next' do
-          frame_definer.should have_declared_hook_context( action, hook_contexts )
+          subclass.should have_added_hook_context( *hook_contexts )
         end
       end
     
@@ -394,8 +290,9 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
       context '#before_include_or_extend' do
         let( :action ) { :before_include_or_extend }
         let( :hook_contexts ) { [ :before_include, :before_extend ] }
+        let( :before_include_or_extend ) { hook_declaration }
         it 'can add :after_extend to hook context to apply to hook frames defined next' do
-          frame_definer.should have_declared_hook_context( action, hook_contexts )
+          before_include_or_extend.should have_added_hook_context( *hook_contexts )
         end
       end
 
@@ -406,8 +303,9 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
       context '#after_include_or_extend' do
         let( :action ) { :after_include_or_extend }
         let( :hook_contexts ) { [ :after_include, :after_extend ] }
+        let( :after_include_or_extend ) { hook_declaration }
         it 'can add :after_extend to hook context to apply to hook frames defined next' do
-          frame_definer.should have_declared_hook_context( action, hook_contexts )
+          after_include_or_extend.should have_added_hook_context( *hook_contexts )
         end
       end
     
@@ -415,33 +313,18 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     
     context '=========  Cascade Contexts  ========' do
 
-      RSpec::Matchers.define :have_declared_cascade_context do |cascade_context|
-        fail_string = nil
-        match do |frame_definer|
-          frame_definer.instance_eval do
-            matched = true
-            unless matched = @cascade_contexts.include?( cascade_context )
-              if @cascade_contexts.empty?
-                fail_string = 'cascade contexts were empty and therefore '
-              else
-                fail_string = 'cascade contexts (:' << @cascade_contexts.keys.join( ', :' ) << ') '
-              end
-              fail_string << 'did not include requested context (:' << cascade_context.to_s + ')'
-            end
-            matched
-          end
-        end
-        failure_message_for_should { fail_string }
-      end
-
       #############
       #  cascade  #
       #############
   
       context '#cascade' do
-        let( :cascade_to ) { frame_definer.cascade ; :any } 
+        let( :cascade_contexts ) { [ :any ] } 
+        let( :cascade ) do
+          frame_definer.cascade
+          frame_definer
+        end
         it 'declares cascading for all instances to apply to hook frames defined next' do
-          frame_definer.should have_declared_cascade_context( cascade_to )
+          cascade.should have_added_cascade_context( *cascade_contexts )
         end
       end
 
@@ -450,9 +333,13 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
       ################
   
       context '#cascade_to' do
-        let( :cascade_to ) { frame_definer.cascade_to( :module ) ; :module } 
+        let( :cascade_contexts ) { [ :class, :module ] } 
+        let( :cascade_to ) do
+          frame_definer.cascade_to( *cascade_contexts )
+          frame_definer
+        end
         it 'declares a cascade context to apply to hook frames defined next' do
-          frame_definer.should have_declared_cascade_context( cascade_to )
+          cascade_to.should have_added_cascade_context( *cascade_contexts )
         end
       end
 
@@ -466,76 +353,59 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
 
       context '#before' do
         
-        RSpec::Matchers.define :have_declared_before_module_context do |include_or_extend, before_modules|
-          fail_string = nil
-          match do |frame_definer|
-            frame_definer.before( include_or_extend, *before_modules )
-            frame_definer.instance_eval do
-              matched = true
-              before_modules.each do |this_module|
-                unless matched = @before_modules[ this_module ] == include_or_extend
-                  if @before_modules.empty?
-                    fail_string = 'before modules were empty and therefore '
-                  else
-                    fail_string = 'before modules '
-                  end
-                  fail_string << 'did not include requested module (:' << this_module.to_s + ')'
-                  break
-                end
-              end
-              matched
-            end
-          end
-          failure_message_for_should { fail_string }
-        end
         
         let( :before_modules ) { [ module_a, module_b ] }
-
+        
+        let( :before ) do
+          frame_definer.before( include_or_extend, *before_modules )
+          frame_definer
+        end
+        
         context 'include_or_extend is nil' do
           it 'matches any frame with specified modules' do
-            frame_definer.should have_declared_before_module_context( include_or_extend, before_modules )
+            before.should have_added_before_module_context( include_or_extend, before_modules )
           end
         end
 
         context 'include_or_extend is :include' do
           let( :include_or_extend ) { :include }
           it 'matches any frame where specified modules are included' do
-            frame_definer.should have_declared_before_module_context( include_or_extend, before_modules )
+            before.should have_added_before_module_context( include_or_extend, before_modules )
           end
         end
 
         context 'include_or_extend is :extend' do
           let( :include_or_extend ) { :extend }
           it 'matches any frame where specified modules are extended' do
-            frame_definer.should have_declared_before_module_context( include_or_extend, before_modules )
+            before.should have_added_before_module_context( include_or_extend, before_modules )
           end
         end
 
         context 'include_or_extend is :include_or_extend' do
           let( :include_or_extend ) { :include_or_extend }
           it 'matches any frame with specified modules' do
-            frame_definer.should have_declared_before_module_context( include_or_extend, before_modules )
+            before.should have_added_before_module_context( include_or_extend, before_modules )
           end
         end
 
         context 'include_or_extend is :extend_or_include' do
           let( :include_or_extend ) { :extend_or_include }
           it 'matches any frame with specified modules' do
-            frame_definer.should have_declared_before_module_context( include_or_extend, before_modules )
+            before.should have_added_before_module_context( include_or_extend, before_modules )
           end
         end
 
         context 'include_or_extend is :include_and_extend' do
           let( :include_or_extend ) { :include_and_extend }
           it 'matches any frame where specified modules are included and extended' do
-            frame_definer.should have_declared_before_module_context( include_or_extend, before_modules )
+            before.should have_added_before_module_context( include_or_extend, before_modules )
           end
         end
 
         context 'include_or_extend is :extend_and_include' do
           let( :include_or_extend ) { :extend_and_include }
           it 'matches any frame where specified modules are extended and included' do
-            frame_definer.should have_declared_before_module_context( include_or_extend, before_modules )
+            before.should have_added_before_module_context( include_or_extend, before_modules )
           end
         end
               
@@ -547,76 +417,59 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
 
       context '#after' do
 
-        RSpec::Matchers.define :have_declared_after_module_context do |include_or_extend, after_modules|
-          fail_string = nil
-          match do |frame_definer|
-            frame_definer.after( include_or_extend, *after_modules )
-            frame_definer.instance_eval do
-              matched = true
-              after_modules.each do |this_module|
-                unless matched = @after_modules[ this_module ] == include_or_extend
-                  if @after_modules.empty?
-                    fail_string = 'before modules were empty and therefore '
-                  else
-                    fail_string = 'before modules '
-                  end
-                  fail_string << 'did not include requested module (:' << this_module.to_s + ')'
-                  break
-                end
-              end
-              matched
-            end
-          end
-          failure_message_for_should { fail_string }
-        end
         
         let( :after_modules ) { [ module_a, module_b ] }
 
+        let( :after ) do
+          frame_definer.after( include_or_extend, *after_modules )
+          frame_definer
+        end
+
         context 'include_or_extend is nil' do
           it 'matches any frame with specified modules' do
-            frame_definer.should have_declared_after_module_context( include_or_extend, after_modules )
+            after.should have_added_after_module_context( include_or_extend, after_modules )
           end
         end
 
         context 'include_or_extend is :include' do
           let( :include_or_extend ) { :include }
           it 'matches any frame where specified modules are included' do
-            frame_definer.should have_declared_after_module_context( include_or_extend, after_modules )
+            after.should have_added_after_module_context( include_or_extend, after_modules )
           end
         end
 
         context 'include_or_extend is :extend' do
           let( :include_or_extend ) { :extend }
           it 'matches any frame where specified modules are extended' do
-            frame_definer.should have_declared_after_module_context( include_or_extend, after_modules )
+            after.should have_added_after_module_context( include_or_extend, after_modules )
           end
         end
 
         context 'include_or_extend is :include_or_extend' do
           let( :include_or_extend ) { :include_or_extend }
           it 'matches any frame with specified modules' do
-            frame_definer.should have_declared_after_module_context( include_or_extend, after_modules )
+            after.should have_added_after_module_context( include_or_extend, after_modules )
           end
         end
 
         context 'include_or_extend is :extend_or_include' do
           let( :include_or_extend ) { :extend_or_include }
           it 'matches any frame with specified modules' do
-            frame_definer.should have_declared_after_module_context( include_or_extend, after_modules )
+            after.should have_added_after_module_context( include_or_extend, after_modules )
           end
         end
 
         context 'include_or_extend is :include_and_extend' do
           let( :include_or_extend ) { :include_and_extend }
           it 'matches any frame where specified modules are included and extended' do
-            frame_definer.should have_declared_after_module_context( include_or_extend, after_modules )
+            after.should have_added_after_module_context( include_or_extend, after_modules )
           end
         end
 
         context 'include_or_extend is :extend_and_include' do
           let( :include_or_extend ) { :extend_and_include }
           it 'matches any frame where specified modules are extended and included' do
-            frame_definer.should have_declared_after_module_context( include_or_extend, after_modules )
+            after.should have_added_after_module_context( include_or_extend, after_modules )
           end
         end
 
@@ -627,40 +480,35 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   end
   
   context '========  Hook Frame Declaration  ========' do
+    
+    let( :modules ) { [ module_a ] }
+    let( :block_state ) { BlockState.new }
+    let( :block_action ) { nil }
 
-    RSpec::Matchers.define :have_created_frame do |include_or_extend, & block|
-      fail_string = nil
-      match do |frame_definer|
-        matched = nil
-        frame_definer.__send__( stack_for_frame )
-        if include_or_extend
-          frame_definer.__send__( include_or_extend, module_a )
-        else
-          block_ran = false
-          frame_definer.action( & block )
-        end
-        new_frame = frame_definer.cluster.instance_controller.stack( stack_for_frame ).last
-        unless matched = new_frame.include_or_extend == include_or_extend
-          fail_string = 'include or extend action (:' << new_frame.include_or_extend.to_s << ') did not match (:' << include_or_extend.to_s << ')'
-        end
-        unless matched = new_frame.block_action == block
-          fail_string = 'block action (:' << new_frame.block_action.to_s << ') did not match (:' << block.to_s << ')'
-        end
-        matched
-      end
-      failure_message_for_should { fail_string }
-    end
+    let( :hook_contexts ) { [ :before_include, :before_extend, :after_include, :after_extend ] }
 
-    let( :stack_for_frame ) { :before_include }
+    let( :frame_args ) { [ hook_contexts, include_or_extend, modules, block_state ] }  
   
+    let( :frame_creation_method ) do
+      # we have to have the frame put on a stack somewhere
+      hook_contexts.each do |this_hook_context|
+        frame_definer.__send__( this_hook_context )
+      end
+      # then we create the frame by calling the method we're testing
+      frame_definer.__send__( include_or_extend, *modules ) if include_or_extend
+      frame_definer.action( & block_action ) if block_action
+      frame_definer
+    end
+    
     #############
     #  include  #
     #############
   
     context '#include' do
-      let( :should_include_or_extend ) { :include }
+      let( :include_or_extend ) { :include }
+      let( :include ) { frame_creation_method }
       it 'creates a frame with include_or_extend set to :include' do
-        frame_definer.should have_created_frame( should_include_or_extend )
+        include.should have_created_frame( *frame_args )
       end
     end
   
@@ -669,9 +517,10 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     ############
 
     context '#extend' do
-      let( :should_include_or_extend ) { :extend }
+      let( :include_or_extend ) { :extend }
+      let( :extend ) { frame_creation_method }
       it 'creates a frame with include_or_extend set to :extend' do
-        frame_definer.should have_created_frame( should_include_or_extend )
+        extend.should have_created_frame( *frame_args )
       end
     end
 
@@ -680,9 +529,10 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     ########################
 
     context '#include_and_extend' do
-      let( :should_include_or_extend ) { :include_and_extend }
+      let( :include_or_extend ) { :include_and_extend }
+      let( :include_and_extend ) { frame_creation_method }
       it 'creates a frame with include_or_extend set to :include_and_extend' do
-        frame_definer.should have_created_frame( should_include_or_extend )
+        include_and_extend.should have_created_frame( *frame_args )
       end
     end
 
@@ -691,9 +541,10 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     ########################
 
     context '#extend_and_include' do
-      let( :should_include_or_extend ) { :extend_and_include }
+      let( :include_or_extend ) { :extend_and_include }
+      let( :extend_and_include ) { frame_creation_method }
       it 'creates a frame with include_or_extend set to :extend_and_include' do
-        frame_definer.should have_created_frame( should_include_or_extend )
+        extend_and_include.should have_created_frame( *frame_args )
       end
     end
   
@@ -702,9 +553,11 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     ############
   
     context '#action' do
-      let( :should_include_or_extend ) { nil }
+      let( :include_or_extend ) { nil }
+      let( :action ) { frame_creation_method }
+      let( :block_action ) { _block_state = block_state ; block_state.block = ::Proc.new { _block_state.block_ran! } }
       it 'creates a frame with a block' do
-        frame_definer.should have_created_frame( should_include_or_extend ) { nil }
+        action.should have_created_frame( *frame_args )
       end
     end
 

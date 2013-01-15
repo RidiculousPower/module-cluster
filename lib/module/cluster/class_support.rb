@@ -21,7 +21,7 @@ module ::Module::Cluster::ClassSupport
 
     super if defined?( super )
     
-    ::Module::Cluster.evaluate_cluster_stack( self, hooked_subclass_instance, :subclass )
+    ::Module::Cluster.evaluate_cluster_stack( :subclass, hooked_subclass_instance, self )
     
   end
   

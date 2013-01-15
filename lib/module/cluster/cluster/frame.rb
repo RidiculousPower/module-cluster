@@ -12,13 +12,13 @@
 #
 #         Name of cluster to which frame belongs.
 #
+# @!attribute [rw] [Array<:any,:module,:class,:instance>] execution_contexts
+#
+#         Context for which action should occur.
+#
 # @!attribute [rw] [Array<:any,:module,:class,:subclass>] cascade_contexts
 #
 #         Context for which action should be inherited.
-#
-# @!attribute [rw] [Array<:any,:module,:class,:subclass,:instance>] execution_contexts
-#
-#         Context for which action should occur.
 #
 # @!attribute [rw] [Array<Module>] modules
 #
@@ -34,8 +34,8 @@
 #
 class ::Module::Cluster::Cluster::Frame < ::Struct.new( :cluster_owner,
                                                         :cluster_name, 
-                                                        :cascade_contexts,
                                                         :execution_contexts, 
+                                                        :cascade_contexts,
                                                         :modules, 
                                                         :include_or_extend,
                                                         :block_action )

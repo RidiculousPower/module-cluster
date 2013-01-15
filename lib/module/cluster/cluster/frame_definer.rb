@@ -619,11 +619,17 @@ class ::Module::Cluster::Cluster::FrameDefiner
 
     case context
       when :before_include, :before_extend, :after_include, :after_extend
-        case @instance
+        case @cluster.instance
           when ::Class
-            unless @instance < ::Module
-              raise ::RuntimeError, 'Include/Extend hooks cannot be created for classes.'
+            unless @cluster.instance < ::Module
+              raise ::RuntimeError, 'Include/Extend execution hooks cannot be created for classes.'
             end
+        end
+      when :subclass
+        case @cluster.instance
+          when ::Class
+          when ::Module
+            raise ::RuntimeError, 'Subclass execution hooks cannot be created for modules.'
         end
     end
     
@@ -684,6 +690,7 @@ class ::Module::Cluster::Cluster::FrameDefiner
       @cascade_contexts ||= { }
     
       contexts.each do |this_context|
+        next if this_context.nil?
         @cascade_contexts[ this_context ] = true
       end
     
@@ -724,8 +731,8 @@ class ::Module::Cluster::Cluster::FrameDefiner
 
     frame = ::Module::Cluster::Cluster::Frame.new( @cluster.instance,
                                                    @cluster.name,
-                                                   @cascade_contexts ? @cascade_contexts.dup : nil,
                                                    @execution_contexts ? @execution_contexts.dup : nil,
+                                                   @cascade_contexts ? @cascade_contexts.dup : nil,
                                                    modules,
                                                    include_or_extend,
                                                    block )

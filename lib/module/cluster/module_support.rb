@@ -20,7 +20,7 @@ module ::Module::Cluster::ModuleSupport
   #
   def append_features( hooked_instance )
 
-    ::Module::Cluster.evaluate_cluster_stack( self, hooked_instance, :before_include )
+    ::Module::Cluster.evaluate_cluster_stack( :before_include, hooked_instance, self )
 
     super if defined?( super )
     
@@ -41,7 +41,7 @@ module ::Module::Cluster::ModuleSupport
 
     super if defined?( super )
     
-    ::Module::Cluster.evaluate_cluster_stack( self, hooked_instance, :after_include )
+    ::Module::Cluster.evaluate_cluster_stack( :after_include, hooked_instance, self )
     
   end
 
@@ -58,7 +58,7 @@ module ::Module::Cluster::ModuleSupport
   #
   def extend_object( hooked_instance )
 
-    ::Module::Cluster.evaluate_cluster_stack( self, hooked_instance, :before_extend )
+    ::Module::Cluster.evaluate_cluster_stack( :before_extend, hooked_instance, self )
     
     super if defined?( super )
     
@@ -79,7 +79,7 @@ module ::Module::Cluster::ModuleSupport
 
     super if defined?( super )
     
-    ::Module::Cluster.evaluate_cluster_stack( self, hooked_instance, :after_extend )
+    ::Module::Cluster.evaluate_cluster_stack( :after_extend, hooked_instance, self )
     
   end
 

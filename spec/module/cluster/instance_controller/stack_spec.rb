@@ -1,19 +1,21 @@
 
 require_relative '../../../../lib/module/cluster.rb'
 
+require_relative '../../../support/named_class_and_module.rb'
+
 describe ::Module::Cluster::InstanceController::Stack do
 
   before :all do
     MockFrame = ::Struct.new( :modules, :include_or_extend )
   end
   
-  let( :module_a ) { ::Module.new }
-  let( :module_b ) { ::Module.new }
-  let( :module_c ) { ::Module.new }
-  let( :module_d ) { ::Module.new }
-  let( :module_e ) { ::Module.new }
-  let( :module_f ) { ::Module.new }
-  let( :module_g ) { ::Module.new }
+  let( :module_a ) { ::Module.new.name( :ModuleA ) }
+  let( :module_b ) { ::Module.new.name( :ModuleB ) }
+  let( :module_c ) { ::Module.new.name( :ModuleC ) }
+  let( :module_d ) { ::Module.new.name( :ModuleD ) }
+  let( :module_e ) { ::Module.new.name( :ModuleE ) }
+  let( :module_f ) { ::Module.new.name( :ModuleF ) }
+  let( :module_g ) { ::Module.new.name( :ModuleG ) }
   
   let( :include_frame ) { MockFrame.new( [ module_a, module_b ], :include ) }
   let( :extend_frame ) { MockFrame.new( [ module_a, module_c, module_d, module_e ], :extend ) }
@@ -321,6 +323,8 @@ describe ::Module::Cluster::InstanceController::Stack do
   end
 
   context '========  Insert  ========' do
+
+    let( :insert_module ) { ::Module.new.name( :InsertModule ) }
   
     ###################
     #  insert_before  #
@@ -329,7 +333,6 @@ describe ::Module::Cluster::InstanceController::Stack do
     context '#insert_before' do
     
       let( :insert_before_module ) { module_a }
-      let( :insert_module ) { ::Module.new }
       let( :insert_frame ) { MockFrame.new( [ insert_module ], :include ) }
     
       def inserted_before?
@@ -376,7 +379,6 @@ describe ::Module::Cluster::InstanceController::Stack do
     context '#insert_after' do
     
       let( :insert_after_module ) { module_a }
-      let( :insert_module ) { ::Module.new }
       let( :insert_frame ) { MockFrame.new( [ insert_module ], :include ) }
     
       def inserted_after?
@@ -422,7 +424,6 @@ describe ::Module::Cluster::InstanceController::Stack do
 
     context '#insert_before_and_after' do
     
-      let( :insert_module ) { ::Module.new }
       let( :insert_frame ) { MockFrame.new( [ insert_module ], :include ) }
       let( :insert_index ) { stack.insert_before_and_after( insert_before_modules, insert_after_modules, insert_frame ) }
       let( :verify_insert_index ) { insert_index - 1 }
