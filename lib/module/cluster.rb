@@ -27,7 +27,7 @@ module ::Module::Cluster
   #
   def self.extended( instance )
     
-    enable_with_module_cluster( instance )
+    enable_with_module_cluster( instance, self )
     
   end
 

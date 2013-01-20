@@ -14,7 +14,9 @@ files = [
   'cluster/frame',
   
   'class_support',
-  'module_support'
+  'module_support',
+  'initialize_support',
+  'instance_support'
     
 ]
 

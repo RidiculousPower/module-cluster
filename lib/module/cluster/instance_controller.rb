@@ -93,7 +93,7 @@ class ::Module::Cluster::InstanceController
   #
   # @param event_context [:before_include,:after_include,:before_extend,:after_extend,:subclass]
   #
-  #        Context for which cascade is occurring.
+  #        Stack name.
   #
   # @return [::Module::Cluster::InstanceController::Stack]
   #
@@ -114,9 +114,61 @@ class ::Module::Cluster::InstanceController
         stack = after_extend_stack
       when :subclass
         stack = subclass_stack
+      when :before_initialize
+        stack = before_initialize_stack
+      when :after_initialize
+        stack = after_initialize_stack
+      when :before_instance
+        stack = before_instance_stack
+      when :after_instance
+        stack = after_instance_stack
     end
     
     return stack
+    
+  end
+  
+  ################
+  #  has_stack?  #
+  ################
+  
+  ###
+  # Query whether stack exists for event context.
+  #
+  # @param event_context [:before_include,:after_include,:before_extend,:after_extend,:subclass]
+  #
+  #        Stack name.
+  #
+  # @return [true,false]
+  #
+  #         Whether stack exists.
+  #
+  def has_stack?( event_context )
+    
+    has_stack = nil
+    
+    case event_context
+      when :before_include
+        has_stack = has_before_include_stack?
+      when :after_include
+        has_stack = has_after_include_stack?
+      when :before_extend
+        has_stack = has_before_extend_stack?
+      when :after_extend
+        has_stack = has_after_extend_stack?
+      when :subclass
+        has_stack = has_subclass_stack?
+      when :before_initialize
+        has_stack = has_before_initialize_stack?
+      when :after_initialize
+        has_stack = has_after_initialize_stack?
+      when :before_instance
+        has_stack = has_before_instance_stack?
+      when :after_instance
+        has_stack = has_after_instance_stack?
+    end
+    
+    return has_stack
     
   end
   
@@ -205,6 +257,74 @@ class ::Module::Cluster::InstanceController
 
   end
 
+  #############################
+  #  before_initialize_stack  #
+  #############################
+
+  ###
+  # Get before-initialize event hook stack.
+  #
+  # @return [::Module::Cluster::InstanceController::Stack]
+  #
+  #         Stack that holds before-initialize event hook frames.
+  #
+  def before_initialize_stack
+
+    return @before_initialize_stack ||= ::Module::Cluster::InstanceController::Stack.new
+
+  end
+
+  ############################
+  #  after_initialize_stack  #
+  ############################
+
+  ###
+  # Get after-initialize event hook stack.
+  #
+  # @return [::Module::Cluster::InstanceController::Stack]
+  #
+  #         Stack that holds after-initialize event hook frames.
+  #
+  def after_initialize_stack
+
+    return @after_initialize_stack ||= ::Module::Cluster::InstanceController::Stack.new
+
+  end
+
+  ###########################
+  #  before_instance_stack  #
+  ###########################
+
+  ###
+  # Get before-instance event hook stack.
+  #
+  # @return [::Module::Cluster::InstanceController::Stack]
+  #
+  #         Stack that holds before-instance event hook frames.
+  #
+  def before_instance_stack
+
+    return @before_instance_stack ||= ::Module::Cluster::InstanceController::Stack.new
+
+  end
+
+  ##########################
+  #  after_instance_stack  #
+  ##########################
+
+  ###
+  # Get after-instance event hook stack.
+  #
+  # @return [::Module::Cluster::InstanceController::Stack]
+  #
+  #         Stack that holds after-instance event hook frames.
+  #
+  def after_instance_stack
+
+    return @after_instance_stack ||= ::Module::Cluster::InstanceController::Stack.new
+
+  end
+
   #########################
   #  has_subclass_stack?  #
   #########################
@@ -287,6 +407,74 @@ class ::Module::Cluster::InstanceController
   def has_after_extend_stack?
 
     return @after_extend_stack ? true : false
+
+  end
+
+  ##################################
+  #  has_before_initialize_stack?  #
+  ##################################
+
+  ###
+  # Query whether before-initialization hook stack exists.
+  #
+  # @return [true,false] 
+  #
+  #         Whether before-initialization hook stack exists.
+  #
+  def has_before_initialize_stack?
+
+    return @before_initialize_stack ? true : false
+
+  end
+
+  #################################
+  #  has_after_initialize_stack?  #
+  #################################
+
+  ###
+  # Query whether after-initialization hook stack exists.
+  #
+  # @return [true,false] 
+  #
+  #         Whether after-initialization hook stack exists.
+  #
+  def has_after_initialize_stack?
+
+    return @after_initialize_stack ? true : false
+
+  end
+
+  ################################
+  #  has_before_instance_stack?  #
+  ################################
+
+  ###
+  # Query whether before-instance hook stack exists.
+  #
+  # @return [true,false] 
+  #
+  #         Whether before-instance hook stack exists.
+  #
+  def has_before_instance_stack?
+
+    return @before_instance_stack ? true : false
+
+  end
+
+  ###############################
+  #  has_after_instance_stack?  #
+  ###############################
+
+  ###
+  # Query whether after-instance hook stack exists.
+  #
+  # @return [true,false] 
+  #
+  #         Whether after-instance hook stack exists.
+  #
+  def has_after_instance_stack?
+
+    return @after_instance_stack ? true : false
 
   end
     

@@ -2,6 +2,11 @@
 require_relative '../support/included_extended.rb'
 require_relative '../support/cascaded.rb'
 
+RSpec::Matchers.define :have_initialized_instance_tracking do
+  match { |controller| controller.instance_variable_defined?( :@instances ) }
+  failure_message_for_should { "extending with controller failed to initialize instances" }
+end
+
 RSpec::Matchers.define :have_determined_to_evaluate do |frame, event_context, clustered_instance|
   match do |hooked_instance|
     mock_controller.frame_should_evaluate?( frame, event_context, hooked_instance, clustered_instance )

@@ -9,8 +9,8 @@ module Cascaded
     inheriting_stack = controller.instance_controller( inheriting_instance ).stack( event_context )
 
     unless matched = inheriting_stack.any? { |this_frame| this_frame.block_action == block_state.block }
-      fail_string = 'block did not cascade to ' << inheriting_instance.to_s << 
-                    ' from ' << clustered_instance.to_s << '.'
+      fail_string = 'block did not cascade to ' << inheriting_instance.name.to_s << 
+                    ' from ' << clustered_instance.name.to_s << '.'
     end
     
     return matched, fail_string
@@ -32,8 +32,9 @@ module Cascaded
                                                                 this_frame.include_or_extend == :include_and_extend ||
                                                                 this_frame.include_or_extend == :extend_and_include ) }
           fail_string = 'include for ' << this_include_module.name.to_s << ' was not found on :' << 
-                        event_context.to_s << ' stack for inheriting instance ' << inheriting_instance.to_s << 
-                        ' from clustered instance ' << clustered_instance.to_s << '.'
+                        event_context.to_s << ' stack for inheriting instance ' << inheriting_instance.name.to_s << 
+                        ' from clustered instance ' << clustered_instance.name.to_s << '.'
+          break
         end
       end
     end
@@ -57,8 +58,9 @@ module Cascaded
                                                                 this_frame.include_or_extend == :include_and_extend ||
                                                                 this_frame.include_or_extend == :extend_and_include ) }
           fail_string = 'extend for ' << this_extend_module.name.to_s << ' was not found on :' << 
-                        event_context.to_s << ' stack for inheriting instance ' << inheriting_instance.to_s << 
-                        ' from clustered instance ' << clustered_instance.to_s << '.'
+                        event_context.to_s << ' stack for inheriting instance ' << inheriting_instance.name.to_s << 
+                        ' from clustered instance ' << clustered_instance.name.to_s << '.'
+          break
         end
       end
     end

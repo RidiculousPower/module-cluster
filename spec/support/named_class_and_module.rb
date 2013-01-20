@@ -3,27 +3,62 @@
 
 class ::Module
 
-  ##########
-  #  name  #
-  ##########
+  #############
+  #  include  #
+  #############
+  
+  alias_method( :original_include, :include )
+  
+  def include( *args )
 
-  def name( name = nil )
-
-    return_value = @name
-
-    if name
-      @name = name
-      return_value = self
-    end
+    original_include( *args )
     
-    return return_value
+    @included_modules ||= [ ]
+    
+    @included_modules.concat( args )
+
+    return self
+        
+  end
+
+  ############
+  #  extend  #
+  ############
+  
+  alias_method( :original_extend, :extend )
+  
+  def extend( *args )
+    
+    original_extend( *args )
+    
+    @extended_modules ||= [ ]
+    
+    @extended_modules.concat( args )
+    
+    return self
 
   end
 
-end
+  ######################
+  #  included_modules  #
+  ######################
+  
+  def included_modules
+    
+    return @included_modules ||= [ ]
+    
+  end
 
-class ::Class
+  ######################
+  #  extended_modules  #
+  ######################
 
+  def extended_modules
+    
+    return @extended_modules ||= [ ]
+    
+  end
+  
   ##########
   #  name  #
   ##########
@@ -44,6 +79,28 @@ class ::Class
 end
 
 class ::Object
+
+  ############
+  #  extend  #
+  ############
+  
+  def extend( *args )
+
+    super
+
+    @extended_modules ||= [ ]
+    
+    @extended_modules.concat( args )
+    
+    return self
+    
+  end
+
+  ######################
+  #  extended_modules  #
+  ######################
+
+  attr_reader :extended_modules
 
   ##########
   #  name  #

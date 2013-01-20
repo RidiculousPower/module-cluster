@@ -20,6 +20,22 @@ class ::Module::Cluster::Cluster::FrameDefiner
     
   end
 
+  #####################
+  #  initialize_copy  #
+  #####################
+  
+  def initialize_copy( copy )
+    
+    super
+    
+    hook_contexts = @hook_contexts.dup
+    execution_contexts = @execution_contexts.dup if @execution_contexts
+    cascade_contexts = @cascade_contexts.dup if @cascade_contexts
+    before_modules = @before_modules.dup if @before_modules
+    after_modules = @after_modules.dup if @after_modules
+    
+  end
+
   #############
   #  cluster  #
   #############
@@ -51,12 +67,11 @@ class ::Module::Cluster::Cluster::FrameDefiner
   # @return [::Module::Cluster::Cluster::FrameDefiner] Self.
   #
   def context( *contexts )
-  
-    @execution_contexts.clear if @execution_contexts
 
+    @execution_contexts.clear if @execution_contexts
     add_execution_context( *contexts )
     
-    return @cluster
+    return self
     
   end
   
@@ -169,7 +184,7 @@ class ::Module::Cluster::Cluster::FrameDefiner
     add_execution_context( *contexts )
     add_hook_context( :before_include )
     action( & block ) if block_given?
-
+    
     return self
     
   end
@@ -354,7 +369,79 @@ class ::Module::Cluster::Cluster::FrameDefiner
     add_hook_context( :after_include )
     add_hook_context( :after_extend )
     action( & block ) if block_given?
+    
+    return self
 
+  end
+
+  #######################
+  #  before_initialize  #
+  #######################
+  
+  def before_initialize
+    
+    case instance = @cluster.instance
+      when ::Class
+        instance.module_eval { include( ::Module::Cluster::InitializeSupport ) }
+    end
+    
+    add_hook_context( :before_initialize )
+    action( & block ) if block_given?
+    
+    return self
+    
+  end
+  
+  ######################
+  #  after_initialize  #
+  ######################
+  
+  def after_initialize
+
+    case instance = @cluster.instance
+      when ::Class
+        instance.module_eval { include( ::Module::Cluster::InitializeSupport ) }
+    end
+
+    add_hook_context( :after_initialize )
+    action( & block ) if block_given?
+    
+    return self
+
+  end
+  
+  #####################
+  #  before_instance  #
+  #####################
+  
+  def before_instance
+    
+    case instance = @cluster.instance
+      when ::Class
+        instance.module_eval { include( ::Module::Cluster::InstanceSupport ) }
+    end
+    
+    add_hook_context( :before_instance )
+    action( & block ) if block_given?
+    
+    return self
+    
+  end
+  
+  ####################
+  #  after_instance  #
+  ####################
+  
+  def after_instance
+
+    case instance = @cluster.instance
+      when ::Class
+        instance.module_eval { include( ::Module::Cluster::InstanceSupport ) }
+    end
+
+    add_hook_context( :after_instance )
+    action( & block ) if block_given?
+    
     return self
 
   end
@@ -395,16 +482,13 @@ class ::Module::Cluster::Cluster::FrameDefiner
   #
   def before( include_or_extend, *modules, & block )
     
-    unless modules.empty?
-      @before_modules ||= { }
-      @before_modules.clear
-      modules.each do |this_module|
-        @before_modules[ this_module ] = include_or_extend
-      end
+    @before_modules ||= { }
+    @before_modules.clear
+    modules.each do |this_module|
+      @before_modules[ this_module ] = include_or_extend
     end
-    
     action( & block ) if block_given?
-    
+        
     return self
     
   end
@@ -445,16 +529,13 @@ class ::Module::Cluster::Cluster::FrameDefiner
   #
   def after( include_or_extend, *modules, & block )
 
-    unless modules.empty?
-      @after_modules ||= { }
-      @after_modules.clear
-      modules.each do |this_module|
-        @after_modules[ this_module ] = include_or_extend
-      end
+    @after_modules ||= { }
+    @after_modules.clear
+    modules.each do |this_module|
+      @after_modules[ this_module ] = include_or_extend
     end
-    
     action( & block ) if block_given?
-    
+        
     return self
     
   end
@@ -484,7 +565,9 @@ class ::Module::Cluster::Cluster::FrameDefiner
   #
   def include( *modules, & block )
 
-    return new_stack_frame( :include, *modules, & block )
+    new_stack_frame( :include, *modules, & block )
+    
+    return self
     
   end
   
@@ -513,7 +596,9 @@ class ::Module::Cluster::Cluster::FrameDefiner
   #
   def extend( *modules, & block )
 
-    return new_stack_frame( :extend, *modules, & block )
+    new_stack_frame( :extend, *modules, & block )
+    
+    return self
     
   end
 
@@ -601,7 +686,7 @@ class ::Module::Cluster::Cluster::FrameDefiner
   ######################################################################################################################
       private ##########################################################################################################
   ######################################################################################################################
-  
+    
   ######################
   #  add_hook_context  #
   ######################
@@ -731,8 +816,8 @@ class ::Module::Cluster::Cluster::FrameDefiner
 
     frame = ::Module::Cluster::Cluster::Frame.new( @cluster.instance,
                                                    @cluster.name,
-                                                   @execution_contexts ? @execution_contexts.dup : nil,
-                                                   @cascade_contexts ? @cascade_contexts.dup : nil,
+                                                   @execution_contexts ? @execution_contexts.keys : nil,
+                                                   @cascade_contexts ? @cascade_contexts.keys : nil,
                                                    modules,
                                                    include_or_extend,
                                                    block )

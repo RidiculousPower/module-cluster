@@ -127,43 +127,6 @@ describe ::Module::Cluster::Cluster do
     let( :args ) { [ :A, :B, :C ] }
     let( :block ) { ::Proc.new { puts 'block' } }
     
-    #############
-    #  context  #
-    #############
-
-    context '#context' do
-      let( :method ) { :context }
-      let( :context ) { cluster_with_mock_definer }
-      it 'can create hook frames for a given instance context' do
-        context.should have_called_frame_definer( method, *args, & block )
-      end
-    end
-
-    #############
-    #  cascade  #
-    #############
-  
-    context '#cascade' do
-      let( :method ) { :cascade }
-      let( :args ) { [ ] }
-      let( :cascade ) { cluster_with_mock_definer }
-      it 'can cause hook frames to cascade' do
-        cascade.should have_called_frame_definer( method, *args, & block )
-      end
-    end
-
-    ################
-    #  cascade_to  #
-    ################
-  
-    context '#cascade_to' do
-      let( :method ) { :cascade_to }
-      let( :cascade_to ) { cluster_with_mock_definer }
-      it 'can cause hook frames to cascade to a given context' do
-        cascade_to.should have_called_frame_definer( method, *args, & block )
-      end
-    end
-
     ####################
     #  before_include  #
     ####################
@@ -222,6 +185,58 @@ describe ::Module::Cluster::Cluster do
       let( :subclass ) { cluster_with_mock_definer }
       it 'can create hook frames to be run when class is subclassed' do
         subclass.should have_called_frame_definer( method, *args, & block )
+      end
+    end
+
+    #######################
+    #  before_initialize  #
+    #######################
+
+    context '#before_initialize' do
+      let( :method ) { :before_initialize }
+      let( :args ) { [ ] }
+      let( :before_initialize ) { cluster_with_mock_definer }
+      it 'can add :before_initialize to hook context to apply to hook frames defined next' do
+        before_initialize.should have_called_frame_definer( method, *args, & block )
+      end
+    end
+
+    ######################
+    #  after_initialize  #
+    ######################
+
+    context '#after_initialize' do
+      let( :method ) { :after_initialize }
+      let( :args ) { [ ] }
+      let( :after_initialize ) { cluster_with_mock_definer }
+      it 'can add :after_initialize to hook context to apply to hook frames defined next' do
+        after_initialize.should have_called_frame_definer( method, *args, & block )
+      end
+    end
+
+    #####################
+    #  before_instance  #
+    #####################
+
+    context '#before_instance' do
+      let( :method ) { :before_instance }
+      let( :args ) { [ ] }
+      let( :before_instance ) { cluster_with_mock_definer }
+      it 'can add :before_instance to hook context to apply to hook frames defined next' do
+        before_instance.should have_called_frame_definer( method, *args, & block )
+      end
+    end
+
+    ####################
+    #  after_instance  #
+    ####################
+
+    context '#after_instance' do
+      let( :method ) { :after_instance }
+      let( :args ) { [ ] }
+      let( :after_instance ) { cluster_with_mock_definer }
+      it 'can add :after_instance to hook context to apply to hook frames defined next' do
+        after_instance.should have_called_frame_definer( method, *args, & block )
       end
     end
 

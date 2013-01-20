@@ -174,7 +174,6 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
       let( :execution_contexts ) { [ :class ] }
       let( :context ) do
         frame_definer.context( *execution_contexts )
-        frame_definer
       end
       it 'declares an instance context to apply to hook frames defined next' do
         context.should have_added_execution_context( *execution_contexts )
@@ -309,6 +308,58 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
         end
       end
     
+      #######################
+      #  before_initialize  #
+      #######################
+
+      context '#before_initialize' do
+        let( :action ) { :before_initialize }
+        let( :hook_contexts ) { [ :before_initialize ] }
+        let( :before_initialize ) { hook_declaration }
+        it 'can add :before_initialize to hook context to apply to hook frames defined next' do
+          before_initialize.should have_added_hook_context( *hook_contexts )
+        end
+      end
+
+      ######################
+      #  after_initialize  #
+      ######################
+
+      context '#after_initialize' do
+        let( :action ) { :after_initialize }
+        let( :hook_contexts ) { [ :after_initialize ] }
+        let( :after_initialize ) { hook_declaration }
+        it 'can add :after_initialize to hook context to apply to hook frames defined next' do
+          after_initialize.should have_added_hook_context( *hook_contexts )
+        end
+      end
+
+      #####################
+      #  before_instance  #
+      #####################
+
+      context '#before_instance' do
+        let( :action ) { :before_instance }
+        let( :hook_contexts ) { [ :before_instance ] }
+        let( :before_instance ) { hook_declaration }
+        it 'can add :before_instance to hook context to apply to hook frames defined next' do
+          before_instance.should have_added_hook_context( *hook_contexts )
+        end
+      end
+
+      ####################
+      #  after_instance  #
+      ####################
+
+      context '#after_instance' do
+        let( :action ) { :after_instance }
+        let( :hook_contexts ) { [ :after_instance ] }
+        let( :after_instance ) { hook_declaration }
+        it 'can add :after_instance to hook context to apply to hook frames defined next' do
+          after_instance.should have_added_hook_context( *hook_contexts )
+        end
+      end
+    
     end
     
     context '=========  Cascade Contexts  ========' do
@@ -319,10 +370,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   
       context '#cascade' do
         let( :cascade_contexts ) { [ :any ] } 
-        let( :cascade ) do
-          frame_definer.cascade
-          frame_definer
-        end
+        let( :cascade ) { frame_definer.cascade }
         it 'declares cascading for all instances to apply to hook frames defined next' do
           cascade.should have_added_cascade_context( *cascade_contexts )
         end
@@ -334,10 +382,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   
       context '#cascade_to' do
         let( :cascade_contexts ) { [ :class, :module ] } 
-        let( :cascade_to ) do
-          frame_definer.cascade_to( *cascade_contexts )
-          frame_definer
-        end
+        let( :cascade_to ) { frame_definer.cascade_to( *cascade_contexts ) }
         it 'declares a cascade context to apply to hook frames defined next' do
           cascade_to.should have_added_cascade_context( *cascade_contexts )
         end
@@ -356,10 +401,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
         
         let( :before_modules ) { [ module_a, module_b ] }
         
-        let( :before ) do
-          frame_definer.before( include_or_extend, *before_modules )
-          frame_definer
-        end
+        let( :before ) { frame_definer.before( include_or_extend, *before_modules ) }
         
         context 'include_or_extend is nil' do
           it 'matches any frame with specified modules' do
@@ -420,10 +462,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
         
         let( :after_modules ) { [ module_a, module_b ] }
 
-        let( :after ) do
-          frame_definer.after( include_or_extend, *after_modules )
-          frame_definer
-        end
+        let( :after ) { frame_definer.after( include_or_extend, *after_modules ) }
 
         context 'include_or_extend is nil' do
           it 'matches any frame with specified modules' do

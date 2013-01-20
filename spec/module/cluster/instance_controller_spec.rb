@@ -108,6 +108,39 @@ describe ::Module::Cluster::InstanceController do
       end
     end
   
+    #############################
+    #  before_initialize_stack  #
+    #############################
+  
+    context '#before_initialize_stack' do
+      let( :before_initialize_stack ) { instance_controller.before_initialize_stack }
+      it 'has a before-initialize stack' do
+        before_initialize_stack.should be_a_stack
+      end
+    end
+  
+    ############################
+    #  after_initialize_stack  #
+    ############################
+
+    context '#after_initialize_stack' do
+      let( :after_initialize_stack ) { instance_controller.after_initialize_stack }
+      it 'has a after-initialize stack' do
+        after_initialize_stack.should be_a_stack
+      end
+    end
+  
+    ##########################
+    #  after_instance_stack  #
+    ##########################
+
+    context '#after_instance_stack' do
+      let( :after_instance_stack ) { instance_controller.after_instance_stack }
+      it 'has a after-instance stack' do
+        after_instance_stack.should be_a_stack
+      end
+    end
+  
     ###########
     #  stack  #
     ###########
@@ -148,6 +181,34 @@ describe ::Module::Cluster::InstanceController do
         let( :event_context ) { :after_extend }
         it 'can return a stack for an event context: :after_extend' do
           stack.should == instance_controller.after_extend_stack
+        end
+      end
+
+      context ':before_initialize' do
+        let( :event_context ) { :before_initialize }
+        it 'can return a stack for an event context: :before_initialize' do
+          stack.should == instance_controller.before_initialize_stack
+        end
+      end
+
+      context ':after_initialize' do
+        let( :event_context ) { :after_initialize }
+        it 'can return a stack for an event context: :after_initialize' do
+          stack.should == instance_controller.after_initialize_stack
+        end
+      end
+
+      context ':before_instance' do
+        let( :event_context ) { :before_instance }
+        it 'can return a stack for an event context: :before_instance' do
+          stack.should == instance_controller.before_instance_stack
+        end
+      end
+
+      context ':after_instance' do
+        let( :event_context ) { :after_instance }
+        it 'can return a stack for an event context: :after_instance' do
+          stack.should == instance_controller.after_instance_stack
         end
       end
 
@@ -220,6 +281,48 @@ describe ::Module::Cluster::InstanceController do
       end
       it 'can report if it has an after-extend stack' do
         has_after_extend_stack?.should == true
+      end
+    end
+
+    ##################################
+    #  has_before_initialize_stack?  #
+    ##################################
+
+    context '#has_before_initialize_stack?' do
+      let( :has_before_initialize_stack? ) do
+        instance_controller.before_initialize_stack
+        instance_controller.has_before_initialize_stack?
+      end
+      it 'can report if it has an before-initialize stack' do
+        has_before_initialize_stack?.should == true
+      end
+    end
+
+    #################################
+    #  has_after_initialize_stack?  #
+    #################################
+
+    context '#has_after_initialize_stack?' do
+      let( :has_after_initialize_stack? ) do
+        instance_controller.after_initialize_stack
+        instance_controller.has_after_initialize_stack?
+      end
+      it 'can report if it has an after-initialize stack' do
+        has_after_initialize_stack?.should == true
+      end
+    end
+
+    ###############################
+    #  has_after_instance_stack?  #
+    ###############################
+
+    context '#has_after_instance_stack?' do
+      let( :has_after_instance_stack? ) do
+        instance_controller.after_instance_stack
+        instance_controller.has_after_instance_stack?
+      end
+      it 'can report if it has an after-instance stack' do
+        has_after_instance_stack?.should == true
       end
     end
   

@@ -24,8 +24,6 @@ class ::Module::Cluster::Cluster
     
     @enabled = true
     
-    @frame_definer = ::Module::Cluster::Cluster::FrameDefiner.new( self )
-    
   end
 
   ###############
@@ -135,89 +133,6 @@ class ::Module::Cluster::Cluster
     
   end
   
-  #############
-  #  context  #
-  #############
-
-  ###
-  # Define execution context for event frames defined after this call.
-  #
-  #   :any is the implicit execution context and does not need to be set explicitly.
-  #
-  # @overload context( execution_context, ... )
-  #
-  #   @param [:any,:class,:module,:instance] execution_context
-  #
-  #          Context for which event frames defined after this call will be executed.
-  #
-  # @return [::Module::Cluster::Cluster] Self.
-  #
-  def context( *contexts )
-
-    @frame_definer.context( *contexts )
-    
-    return self
-    
-  end
-
-  #############
-  #  cascade  #
-  #############
-  
-  ###
-  # Define cascade context for event frames defined after this call as :any.
-  #
-  #   This is the same as calling #cascade_to( :any ).
-  #
-  # @yield [hooked_instance] 
-  #
-  #        Block action to execute at time hook frame executes.
-  #
-  # @yieldparam [Object] hooked_instance
-  #
-  #             Instance for which hooked event is being executed.
-  #
-  # @return [::Module::Cluster::Cluster] Self.
-  #
-  def cascade( & block )
-    
-    @frame_definer.cascade( & block )
-
-    return self
-    
-  end
-
-  ################
-  #  cascade_to  #
-  ################
-  
-  ###
-  # Define cascade context for event frames defined after this call.
-  #
-  # @overload cascade_to( cascade_context, ..., & block )
-  #
-  #   @param [:any,:module,:class,:subclass]
-  #
-  #          Context for which frames defined after this call should cascade.
-  #
-  #   @yield [hooked_instance] 
-  #   
-  #          Block action to execute at time hook frame executes.
-  #   
-  #   @yieldparam [Object] hooked_instance
-  #   
-  #               Instance for which hooked event is being executed.
-  #
-  # @return [::Module::Cluster::Cluster] Self.
-  #
-  def cascade_to( *cascade_contexts, & block )
-    
-    @frame_definer.cascade_to( *cascade_contexts, & block )
-
-    return self
-    
-  end
-  
   ####################
   #  before_include  #
   ####################
@@ -243,7 +158,7 @@ class ::Module::Cluster::Cluster
   #
   def before_include( *contexts, & block )
     
-    return @frame_definer.before_include( *contexts, & block )
+    return frame_definer.before_include( *contexts, & block )
     
   end
 
@@ -270,7 +185,7 @@ class ::Module::Cluster::Cluster
   #
   def after_include( *contexts, & block )
 
-    return @frame_definer.after_include( *contexts, & block )
+    return frame_definer.after_include( *contexts, & block )
 
   end
   
@@ -297,7 +212,7 @@ class ::Module::Cluster::Cluster
   #
   def before_extend( *contexts, & block )
     
-    return @frame_definer.before_extend( *contexts, & block )
+    return frame_definer.before_extend( *contexts, & block )
     
   end
   
@@ -324,7 +239,7 @@ class ::Module::Cluster::Cluster
   #
   def after_extend( *contexts, & block )
 
-    return @frame_definer.after_extend( *contexts, & block )
+    return frame_definer.after_extend( *contexts, & block )
 
   end
   
@@ -347,7 +262,7 @@ class ::Module::Cluster::Cluster
   #
   def subclass( & block )
     
-    return @frame_definer.subclass( & block )
+    return frame_definer.subclass( & block )
 
   end
   
@@ -376,11 +291,10 @@ class ::Module::Cluster::Cluster
   #
   def before_include_or_extend( *contexts, & block )
 
-    return @frame_definer.before_include_or_extend( *contexts, & block )
+    return frame_definer.before_include_or_extend( *contexts, & block )
 
   end
   
-
   #############################
   #  after_include_or_extend  #
   #############################
@@ -406,8 +320,106 @@ class ::Module::Cluster::Cluster
   #
   def after_include_or_extend( *contexts, & block )
 
-    return @frame_definer.after_include_or_extend( *contexts, & block )
+    return frame_definer.after_include_or_extend( *contexts, & block )
 
+  end
+  
+  #######################
+  #  before_initialize  #
+  #######################
+  
+  ###
+  # Create before-initialize hooks.
+  #
+  # @overload before_initialize
+  #
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
+  #
+  # @return [::Module::Cluster::Cluster::FrameDefiner] 
+  #
+  def before_initialize( & block )
+    
+    return frame_definer.before_initialize( & block )
+    
+  end
+  
+  ######################
+  #  after_initialize  #
+  ######################
+  
+  ###
+  # Create after-initialize hooks.
+  #
+  # @overload after_initialize
+  #
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
+  #
+  # @return [::Module::Cluster::Cluster::FrameDefiner] 
+  #
+  def after_initialize( & block )
+
+    return frame_definer.after_initialize( & block )
+
+  end
+  
+  #####################
+  #  before_instance  #
+  #####################
+  
+  ###
+  # Create before-instance hooks.
+  #
+  # @overload before_instance
+  #
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
+  #
+  # @return [::Module::Cluster::Cluster::FrameDefiner] 
+  #
+  def before_instance( & block )
+    
+    return frame_definer.before_instance( & block )
+    
+  end
+  
+  ####################
+  #  after_instance  #
+  ####################
+  
+  ###
+  # Create after-instance hooks.
+  #
+  # @overload after_instance
+  #
+  #   @yieldparam [Object] hooked_instance
+  #   
+  #               Instance for which hooked event is being executed.
+  #
+  # @return [::Module::Cluster::Cluster::FrameDefiner] 
+  #
+  def after_instance( & block )
+
+    return frame_definer.after_instance( & block )
+
+  end
+
+  ######################################################################################################################
+      private ##########################################################################################################
+  ######################################################################################################################
+
+  ###################
+  #  frame_definer  #
+  ###################
+  
+  def frame_definer
+    
+    return ::Module::Cluster::Cluster::FrameDefiner.new( self )
+    
   end
   
 end

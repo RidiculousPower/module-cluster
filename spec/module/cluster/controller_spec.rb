@@ -48,12 +48,7 @@ describe ::Module::Cluster::Controller do
     ###################
   
     context '::extended' do
-            
-      RSpec::Matchers.define :have_initialized_instance_tracking do
-        match { |controller| controller.instance_variable_defined?( :@instances ) }
-        failure_message_for_should { "extending with controller failed to initialize instances" }
-      end
-      
+                  
       it 'will automatically initialize an instances hash' do
          mock_controller.should have_initialized_instance_tracking
       end
@@ -91,33 +86,33 @@ describe ::Module::Cluster::Controller do
     context '#enable_with_module_cluster' do
         
       before :each do
-        mock_controller.enable_with_module_cluster( instance )
+        mock_controller.enable_with_module_cluster( hooked_instance, clustered_instance )
       end
     
       context 'when instance is a module' do
-        let( :instance ) { module_instance }    
+        let( :hooked_instance ) { module_instance }    
         it 'enables as module cluster module' do
-          instance.should have_module_support
-          instance.should_not have_class_support
+          module_instance.should have_module_support
+          module_instance.should_not have_class_support
         end
       end
     
       context 'when instance is a class' do
-        let( :instance ) { class_instance }    
+        let( :hooked_instance ) { class_instance }    
         it 'can enable a class with module cluster' do
-          instance.should have_class_support
-          instance.should_not have_module_support
+          class_instance.should have_class_support
+          class_instance.should_not have_module_support
         end
       end
     
       context 'when instance is a class subclassing Module' do
-        let( :instance ) { class_inheriting_from_module }
+        let( :hooked_instance ) { class_inheriting_from_module }
         let( :instance_of_instance ) { instance.new }
         it 'can enable a class that subclasses Module with module cluster' do
-          instance.should have_class_support
-          instance.should_not have_module_support
-          instance_of_instance.should have_module_support
-          instance_of_instance.should_not have_class_support
+          class_inheriting_from_module.should have_class_support
+          class_inheriting_from_module.should_not have_module_support
+          instance_of_class_inheriting_from_module.should have_module_support
+          instance_of_class_inheriting_from_module.should_not have_class_support
         end
       end
 
@@ -127,63 +122,48 @@ describe ::Module::Cluster::Controller do
   
   context '========  Cascading Stacks  ========' do
 
-    ###################################
-    #  cascade_include_extend_stacks  #
-    ###################################
+    let( :inherited_args ) { [ clustered_instance, mock_controller, event_contexts, stack ] }
     
-    context '#cascade_include_extend_stacks' do
+    before :each do
+      # set up stacks to be tested
+      event_contexts.each do |this_event_context|
+        mock_controller.instance_controller( clustered_instance ).stack( this_event_context ).push( *stack ) if stack
+      end
+      # call appropriate cascade method
+      mock_controller.__send__( cascade_method, hooked_instance, clustered_instance )
+    end
+    
+    ###########################
+    #  cascade_module_stacks  #
+    ###########################
+    
+    context '#cascade_module_stacks' do
       
-      context 'when include/extend stacks exist' do
+      let( :event_contexts ) { [ :before_include, :after_include, :before_extend, :after_extend ] }
       
-        RSpec::Matchers.define :have_inherited_cascaded_module_class_stacks do
-          match do |instance_controller|
-            has_stack = stack ? true : false
-            instance_controller.has_before_include_stack?.should == has_stack
-            instance_controller.has_before_extend_stack?.should == has_stack
-            instance_controller.has_after_include_stack?.should == has_stack
-            instance_controller.has_after_extend_stack?.should == has_stack
-            if has_stack
-              instance_controller.before_include_stack.should == stack
-              instance_controller.before_extend_stack.should == stack
-              instance_controller.after_include_stack.should == stack
-              instance_controller.after_extend_stack.should == stack
-            end
-          end
-          failure_message_for_should { "stacks were not inherited" }
-        end
-        
-        let( :controller_for_instance_of_class_inheriting_from_module ) do
-          instance_controller = mock_controller.instance_controller( instance_of_class_inheriting_from_module )
-          if stack
-            controller_for_module.before_include_stack.push( *stack )
-            controller_for_module.before_extend_stack.push( *stack )
-            controller_for_module.after_include_stack.push( *stack )
-            controller_for_module.after_extend_stack.push( *stack )
-          end
-          mock_controller.cascade_include_extend_stacks( instance_of_class_inheriting_from_module, module_instance )
-          instance_controller
-        end
+      let( :clustered_instance ) { module_instance }
+      let( :hooked_instance ) { instance_of_class_inheriting_from_module }
       
-        context 'when include/extend stacks have members' do
-          let( :stack ) { full_stack }
-          it 'can cause an instance to inherit include/extend stacks from another instance' do
-            controller_for_instance_of_class_inheriting_from_module.should have_inherited_cascaded_module_class_stacks
-          end
+      let( :cascade_method ) { :cascade_module_stacks }
+    
+      context 'when include/extend stacks have members' do
+        let( :stack ) { full_stack }
+        it 'can cause an instance to inherit include/extend stacks from another instance' do
+          hooked_instance.should have_inherited_stacks( *inherited_args )
         end
+      end
 
-        context 'when include/extend stacks are empty' do
-          let( :stack ) { empty_stack }    
-          it 'can cause an instance to inherit include/extend stacks from another instance' do
-            controller_for_instance_of_class_inheriting_from_module.should have_inherited_cascaded_module_class_stacks
-          end
+      context 'when include/extend stacks are empty' do
+        let( :stack ) { empty_stack }    
+        it 'can cause an instance to inherit include/extend stacks from another instance' do
+          hooked_instance.should have_inherited_stacks( *inherited_args )
         end
-
       end
     
       context 'when include/extend stacks do not exist' do
         let( :stack ) { nil_stack }
         it 'can cause an instance to inherit include/extend stacks from another instance' do
-          controller_for_instance_of_class_inheriting_from_module.should_not have_inherited_cascaded_module_class_stacks
+          hooked_instance.should_not have_inherited_stacks( *inherited_args )
         end
       end
     
@@ -195,51 +175,103 @@ describe ::Module::Cluster::Controller do
   
     context '#cascade_subclass_stack' do
       
-      context 'when subclass stack exists' do
-    
-        RSpec::Matchers.define :have_inherited_cascaded_subclass_stacks do
-          match do |instance_controller|
-            has_stack = stack ? true : false
-            instance_controller.has_subclass_stack?.should == true
-            if has_stack
-              instance_controller.subclass_stack.should == stack
-            end
-          end
-          failure_message_for_should { "subclass stack was not inherited" }
-        end
-    
-        let( :controller_for_instance_of_class_inheriting_from_module ) do
-          instance_controller = mock_controller.instance_controller( instance_of_class_inheriting_from_module )
-          if stack
-            controller_for_module.subclass_stack.push( *stack )
-          end
-          mock_controller.cascade_subclass_stack( instance_of_class_inheriting_from_module, module_instance )
-          instance_controller
-        end
-    
-        context 'when subclass stack has members' do
-          let( :stack ) { full_stack }
-          it 'can cause an instance to inherit include/extend stacks from another instance' do
-            controller_for_instance_of_class_inheriting_from_module.should have_inherited_cascaded_subclass_stacks
-          end
-        end
+      let( :event_contexts ) { [ :subclass ] }
 
-        context 'when subclass stack is empty' do
-          let( :stack ) { empty_stack }    
-          it 'can cause an instance to inherit include/extend stacks from another instance' do
-            controller_for_instance_of_class_inheriting_from_module.should have_inherited_cascaded_subclass_stacks
-          end
-        end
+      let( :clustered_instance ) { class_instance }
+      let( :hooked_instance ) { instance_of_class }
 
+      let( :cascade_method ) { :cascade_subclass_stack }
+
+      context 'when subclass stack has members' do
+        let( :stack ) { full_stack }
+        it 'can cause an instance to inherit include/extend stacks from another instance' do
+          hooked_instance.should have_inherited_stacks( *inherited_args )
+        end
+      end
+
+      context 'when subclass stack is empty' do
+        let( :stack ) { empty_stack }    
+        it 'can cause an instance to inherit include/extend stacks from another instance' do
+          hooked_instance.should have_inherited_stacks( *inherited_args )
+        end
       end
 
       context 'when subclass stack does not exist' do
         let( :stack ) { nil_stack }
         it 'can cause an instance to inherit the subclass stack from another instance when it does not exist' do
-          controller_for_instance_of_class_inheriting_from_module.should_not have_inherited_cascaded_subclass_stacks
+          hooked_instance.should_not have_inherited_stacks( *inherited_args )
         end
       end
       
+    end
+    
+    #############################
+    #  cascade_instance_stacks  #
+    #############################
+    
+    context '#cascade_instance_stacks' do
+      
+      let( :event_contexts ) { [ :before_initialize, :after_initialize, :before_instance, :after_instance ] }
+
+      let( :hooked_instance ) { instance_of_class }
+
+      let( :cascade_method ) { :cascade_instance_stacks }
+
+      let( :stack ) { full_stack }
+
+      context 'clustered instance is a module' do
+        let( :clustered_instance ) { ::Module.new.name( :ClusteredModuleInstance ) }
+        context 'hooked instance is a module' do
+          let( :hooked_instance ) { module_instance }
+          it 'will inherit instance and initialize clusters but not enable for either' do
+            module_instance.should have_inherited_stacks( *inherited_args )
+            module_instance.should_not be_enabled_for_instance_hooks
+            module_instance.should_not be_enabled_for_initialize_hooks
+          end
+        end
+        context 'hooked instance is a class' do
+          let( :hooked_instance ) { class_instance }
+          let( :cascade_to_subclass ) do
+            mock_controller.cascade_instance_stacks( subclass, class_instance )
+            subclass
+          end
+          it 'will inherit instance and initialize clusters and enable for each' do
+            class_instance.should have_inherited_stacks( *inherited_args )
+            class_instance.should be_enabled_for_instance_hooks
+            class_instance.should be_enabled_for_initialize_hooks
+          end
+          it 'a subclass will inherit instance and initialize clusters and enable for each' do
+            cascade_to_subclass.should have_inherited_stacks( *inherited_args )
+            cascade_to_subclass.should be_enabled_for_instance_hooks
+            cascade_to_subclass.should be_enabled_for_initialize_hooks
+          end
+        end
+      end
+
+      context 'clustered instance is a class' do
+        let( :clustered_instance ) { ::Class.new.name( :ClusteredClassInstance ) }
+        context 'hooked instance is a subclass' do
+          let( :hooked_instance ) { subclass }
+          let( :subclass ) { ::Class.new( clustered_instance ).name( :SubclassInstance ) }
+          it 'will inherit instance and initialize clusters and enable for each' do
+            subclass.should have_inherited_stacks( *inherited_args )
+            subclass.should be_enabled_for_instance_hooks
+            subclass.should be_enabled_for_initialize_hooks
+          end
+        end
+      end
+
+      context 'clustered instance is a class inheriting from module' do
+        let( :clustered_instance ) { ::Class.new( ::Module ).name( :ClusteredClassInstance ) }
+        let( :hooked_instance ) { subclass }
+        let( :subclass ) { ::Class.new( clustered_instance ).name( :SubclassInstance ) }
+        it 'a subclass will inherit instance and initialize clusters and enable for each' do
+          subclass.should have_inherited_stacks( *inherited_args )
+          subclass.should be_enabled_for_instance_hooks
+          subclass.should be_enabled_for_initialize_hooks
+        end
+      end
+
     end
     
   end
@@ -273,7 +305,6 @@ describe ::Module::Cluster::Controller do
       let( :frame_should_cascade_args ) { [ frame, mock_controller, clustered_instance, event_contexts ] }
 
       let( :event_contexts ) { [ :before_include, :after_include, :before_extend, :after_extend ] }
-
       let( :cascade_results ) { [ :cascade, :execute_and_cascade, :cascade_block, :execute_and_cascade_block ] }
       
       context 'when initial enabled instance is a module' do
@@ -310,8 +341,8 @@ describe ::Module::Cluster::Controller do
           it 'will not execute in but will cascade to a module' do
             module_instance.should have_determined_to_cascade( *frame_should_cascade_args, :cascade )
           end
-          it 'will execute in and cascade block only to a class' do
-            class_instance.should have_determined_to_cascade( *frame_should_cascade_args, :execute_and_cascade_block )
+          it 'will execute in but not cascade to a class' do
+            class_instance.should_not have_determined_to_cascade( *frame_should_cascade_args, :execute_and_cascade_block )
           end
         end
         context 'cascade context is :subclass' do
@@ -383,22 +414,22 @@ describe ::Module::Cluster::Controller do
     context '#frame_should_evaluate?' do
 
       let( :evaluation_args ) { [ frame, event_context ] }
+      let( :clustered_instance ) { enabled_module_instance }
       
       context 'when cluster is disabled' do
-        let( :module_instance_disabled_frame ) do
-          mock_controller.instance_controller( enabled_module_instance ).cluster( :disabled_cluster ).disable
-          ::Module::Cluster::Cluster::Frame.new( enabled_module_instance, :disabled_cluster, execution_contexts, cascade_contexts, modules, include_or_extend )
+        
+        before :each do
+          mock_controller.instance_controller( clustered_instance ).cluster( frame.cluster_name ).disable
         end
-        let( :class_instance_disabled_frame ) do
-          mock_controller.instance_controller( enabled_module_instance ).cluster( :disabled_cluster ).disable
-          ::Module::Cluster::Cluster::Frame.new( enabled_module_instance, :disabled_cluster, execution_contexts, cascade_contexts, modules, include_or_extend )
-        end
+        
         it 'a module instance will not evaluate' do
-          module_instance.should_not have_determined_to_evaluate( module_instance_disabled_frame, event_context, enabled_module_instance )
+          module_instance.should_not have_determined_to_evaluate( frame, event_context, enabled_module_instance )
         end
+        
         it 'a class instance will not evaluate' do
-          class_instance.should_not have_determined_to_evaluate( class_instance_disabled_frame, event_context, enabled_module_instance )
+          class_instance.should_not have_determined_to_evaluate( frame, event_context, enabled_module_instance )
         end
+      
       end
       
       context 'when event is :subclass' do
@@ -673,12 +704,7 @@ describe ::Module::Cluster::Controller do
     context '#evaluate_cluster_stack' do
       
       let( :cluster_stack ) { [ frame_to_evaluate ] }
-      let( :evaluate_cluster_stack ) do
-        mock_controller.instance_controller( clustered_instance ).stack( event_context ).concat( cluster_stack )
-        mock_controller.evaluate_cluster_stack( event_context, hooked_instance, clustered_instance )
-        hooked_instance
-      end
-      
+
       let( :event_cascade_context ) { event_context }
       
       let( :execution_args ) { [ clustered_instance, *modules ] }
@@ -694,6 +720,20 @@ describe ::Module::Cluster::Controller do
       
       let( :block_action ) { _block_state = block_state ; block_state.block = ::Proc.new { _block_state.block_ran! } }
       
+      let( :instance_frame ) { ::Module::Cluster::Cluster::Frame.new( clustered_instance, cluster_name, nil, nil, modules, include_or_extend, block_action ) }
+      let( :instance_stack ) { [ instance_frame ] }
+      
+      let( :instance_contexts ) { [ :before_initialize, :after_initialize, :before_instance, :after_instance ] }
+      let( :instance_stack_args ) { [ clustered_instance, mock_controller, instance_contexts, instance_stack ] }
+      
+      before( :each ) do
+        mock_controller.instance_controller( clustered_instance ).stack( event_context ).concat( cluster_stack )
+        instance_contexts.each do |this_instance_context|
+          mock_controller.instance_controller( clustered_instance ).stack( this_instance_context ).concat( instance_stack )
+        end
+        mock_controller.evaluate_cluster_stack( event_context, hooked_instance, clustered_instance )
+      end
+      
       context 'a disabled cluster' do
         let( :clustered_instance ) { clustered_module_instance }
         let( :hooked_instance ) { module_instance }
@@ -702,11 +742,11 @@ describe ::Module::Cluster::Controller do
           frame
         end
         it 'will not evaluate a disabled frame' do
-          evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-          evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-          evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-          evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-          evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+          hooked_instance.should_not have_executed_include( *execution_args )
+          hooked_instance.should_not have_executed_extend( *execution_args )
+          hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+          hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+          hooked_instance.should_not have_cascaded_block( *cascade_block_args )
         end
       end
       context 'module => module hook' do
@@ -714,11 +754,12 @@ describe ::Module::Cluster::Controller do
         let( :hooked_instance ) { module_instance }
         context 'when module' do
           it 'will execute' do
-            evaluate_cluster_stack.should have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_inherited_stacks( *instance_stack_args )
           end
         end
       end
@@ -726,11 +767,12 @@ describe ::Module::Cluster::Controller do
         let( :clustered_instance ) { clustered_module_instance }
         let( :hooked_instance ) { class_instance }
         it 'will execute' do
-          evaluate_cluster_stack.should have_executed_include( *execution_args )
-          evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-          evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-          evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-          evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+          hooked_instance.should have_executed_include( *execution_args )
+          hooked_instance.should_not have_executed_extend( *execution_args )
+          hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+          hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+          hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+          hooked_instance.should have_inherited_stacks( *instance_stack_args )
         end
       end
       context' module => instance hook' do
@@ -738,11 +780,12 @@ describe ::Module::Cluster::Controller do
         let( :hooked_instance ) { instance_of_class }
         let ( :include_or_extend ) { :extend }
         it 'will execute' do
-          evaluate_cluster_stack.should have_executed_extend( *execution_args )
-          evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-          evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-          evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-          evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+          hooked_instance.should have_executed_extend( *execution_args )
+          hooked_instance.should_not have_executed_include( *execution_args )
+          hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+          hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+          hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+          hooked_instance.should_not have_inherited_stacks( *instance_stack_args )
         end
       end
       context 'module => module cascade' do
@@ -750,11 +793,12 @@ describe ::Module::Cluster::Controller do
         let( :hooked_instance ) { module_instance }
         let( :cascade_contexts ) { [ :module ] }
         it 'will execute and cascade' do
-          evaluate_cluster_stack.should have_executed_include( *execution_args )
-          evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-          evaluate_cluster_stack.should have_cascaded_includes( *cascade_module_args )
-          evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-          evaluate_cluster_stack.should have_cascaded_block( *cascade_block_args )
+          hooked_instance.should have_executed_include( *execution_args )
+          hooked_instance.should_not have_executed_extend( *execution_args )
+          hooked_instance.should have_cascaded_includes( *cascade_module_args )
+          hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+          hooked_instance.should have_cascaded_block( *cascade_block_args )
+          hooked_instance.should have_inherited_stacks( *instance_stack_args )
         end
       end
       context 'module => class cascade' do
@@ -763,11 +807,12 @@ describe ::Module::Cluster::Controller do
         let( :cascade_contexts ) { [ :class ] }
         let( :event_cascade_context ) { :subclass }
         it 'will execute and cascade' do
-          evaluate_cluster_stack.should have_executed_include( *execution_args )
-          evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-          evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-          evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-          evaluate_cluster_stack.should have_cascaded_block( *cascade_block_args )
+          hooked_instance.should have_executed_include( *execution_args )
+          hooked_instance.should_not have_executed_extend( *execution_args )
+          hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+          hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+          hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+          hooked_instance.should have_inherited_stacks( *instance_stack_args )
         end
       end
       context 'module => subclass cascade' do
@@ -776,7 +821,7 @@ describe ::Module::Cluster::Controller do
         let( :clustered_instance ) { clustered_module_instance }
         context 'when module => class => class' do
           let( :hooked_instance ) { class_instance }
-          let( :module_to_class_cascade ) { evaluate_cluster_stack }
+          let( :module_to_class_cascade ) { hooked_instance }
           let( :class_to_subclass_cascade ) do
             module_to_class_cascade
             mock_controller.evaluate_cluster_stack( event_cascade_context, subclass, hooked_instance )
@@ -788,6 +833,7 @@ describe ::Module::Cluster::Controller do
             module_to_class_cascade.should have_cascaded_includes( *cascade_module_args )
             module_to_class_cascade.should_not have_cascaded_extends( *cascade_module_args )
             module_to_class_cascade.should have_cascaded_block( *cascade_block_args )
+            module_to_class_cascade.should have_inherited_stacks( *instance_stack_args )
           end
           it 'will execute in first subclass but will only cascade block' do
             class_to_subclass_cascade.should have_executed_include( *sub_execution_args )
@@ -795,6 +841,7 @@ describe ::Module::Cluster::Controller do
             class_to_subclass_cascade.should_not have_cascaded_includes( *sub_cascade_module_args )
             class_to_subclass_cascade.should_not have_cascaded_extends( *sub_cascade_module_args )
             class_to_subclass_cascade.should have_cascaded_block( *sub_cascade_block_args )
+            class_to_subclass_cascade.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when module => module => class => class' do
@@ -803,7 +850,7 @@ describe ::Module::Cluster::Controller do
           let( :hooked_class_instance ) { class_instance }
           let( :hooked_subclass_instance ) { subclass }
           
-          let( :module_to_module_cascade ) { evaluate_cluster_stack }
+          let( :module_to_module_cascade ) { hooked_instance }
           let( :module_to_class_cascade ) do
             module_to_module_cascade
             mock_controller.evaluate_cluster_stack( event_context, hooked_class_instance, hooked_instance )
@@ -835,6 +882,7 @@ describe ::Module::Cluster::Controller do
             module_to_module_cascade.should have_cascaded_includes( *module_to_module_cascade_module_args )
             module_to_module_cascade.should_not have_cascaded_extends( *module_to_module_cascade_module_args )
             module_to_module_cascade.should have_cascaded_block( *module_to_module_cascade_block_args )
+            module_to_module_cascade.should have_inherited_stacks( *instance_stack_args )
           end
           it 'will not execute in first class but will cascade' do
             module_to_class_cascade.should_not have_executed_include( *module_to_class_execution_args )
@@ -842,6 +890,7 @@ describe ::Module::Cluster::Controller do
             module_to_class_cascade.should have_cascaded_includes( *module_to_class_cascade_module_args )
             module_to_class_cascade.should_not have_cascaded_extends( *module_to_class_cascade_module_args )
             module_to_class_cascade.should have_cascaded_block( *module_to_class_cascade_block_args )
+            module_to_class_cascade.should have_inherited_stacks( *instance_stack_args )
           end
           it 'will execute in first subclass but will only cascade block' do
             class_to_subclass_cascade.should have_executed_include( *class_to_subclass_execution_args )
@@ -849,6 +898,7 @@ describe ::Module::Cluster::Controller do
             class_to_subclass_cascade.should_not have_cascaded_includes( *class_to_subclass_cascade_module_args )
             class_to_subclass_cascade.should_not have_cascaded_extends( *class_to_subclass_cascade_module_args )
             class_to_subclass_cascade.should have_cascaded_block( *class_to_subclass_cascade_block_args )
+            class_to_subclass_cascade.should have_inherited_stacks( *instance_stack_args )
           end
         end
       end
@@ -858,7 +908,7 @@ describe ::Module::Cluster::Controller do
         let( :clustered_instance ) { clustered_module_instance }
         context 'when module => class => class' do
           let( :hooked_instance ) { class_instance }
-          let( :module_to_class_cascade ) { evaluate_cluster_stack }
+          let( :module_to_class_cascade ) { hooked_instance }
           let( :class_to_subclass_cascade ) do
             module_to_class_cascade
             mock_controller.evaluate_cluster_stack( event_cascade_context, subclass, hooked_instance )
@@ -870,6 +920,7 @@ describe ::Module::Cluster::Controller do
             module_to_class_cascade.should have_cascaded_includes( *cascade_module_args )
             module_to_class_cascade.should_not have_cascaded_extends( *cascade_module_args )
             module_to_class_cascade.should have_cascaded_block( *cascade_block_args )
+            module_to_class_cascade.should have_inherited_stacks( *instance_stack_args )
           end
           it 'will execute in first subclass but will only cascade block' do
             class_to_subclass_cascade.should have_executed_include( *sub_execution_args )
@@ -877,6 +928,7 @@ describe ::Module::Cluster::Controller do
             class_to_subclass_cascade.should have_cascaded_includes( *sub_cascade_module_args )
             class_to_subclass_cascade.should_not have_cascaded_extends( *sub_cascade_module_args )
             class_to_subclass_cascade.should have_cascaded_block( *sub_cascade_block_args )
+            class_to_subclass_cascade.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when module => module => class => class' do
@@ -884,7 +936,7 @@ describe ::Module::Cluster::Controller do
           let( :hooked_class_instance ) { class_instance }
           let( :hooked_subclass_instance ) { subclass }
           
-          let( :module_to_module_cascade ) { evaluate_cluster_stack }
+          let( :module_to_module_cascade ) { hooked_instance }
           let( :module_to_class_cascade ) do
             module_to_module_cascade
             mock_controller.evaluate_cluster_stack( event_context, hooked_class_instance, hooked_instance )
@@ -916,6 +968,7 @@ describe ::Module::Cluster::Controller do
             module_to_module_cascade.should have_cascaded_includes( *module_to_module_cascade_module_args )
             module_to_module_cascade.should_not have_cascaded_extends( *module_to_module_cascade_module_args )
             module_to_module_cascade.should have_cascaded_block( *module_to_module_cascade_block_args )
+            module_to_module_cascade.should have_inherited_stacks( *instance_stack_args )
           end
           it 'will not execute in first class but will cascade' do
             module_to_class_cascade.should_not have_executed_include( *module_to_class_execution_args )
@@ -923,6 +976,7 @@ describe ::Module::Cluster::Controller do
             module_to_class_cascade.should have_cascaded_includes( *module_to_class_cascade_module_args )
             module_to_class_cascade.should_not have_cascaded_extends( *module_to_class_cascade_module_args )
             module_to_class_cascade.should have_cascaded_block( *module_to_class_cascade_block_args )
+            module_to_class_cascade.should have_inherited_stacks( *instance_stack_args )
           end
           it 'will execute in first subclass but will only cascade block' do
             class_to_subclass_cascade.should have_executed_include( *class_to_subclass_execution_args )
@@ -930,6 +984,7 @@ describe ::Module::Cluster::Controller do
             class_to_subclass_cascade.should have_cascaded_includes( *class_to_subclass_cascade_module_args )
             class_to_subclass_cascade.should_not have_cascaded_extends( *class_to_subclass_cascade_module_args )
             class_to_subclass_cascade.should have_cascaded_block( *class_to_subclass_cascade_block_args )
+            class_to_subclass_cascade.should have_inherited_stacks( *instance_stack_args )
           end
         end
       end
@@ -939,11 +994,12 @@ describe ::Module::Cluster::Controller do
         let( :cascade_contexts ) { [ :subclass ] }
         let( :event_context ) { :subclass }
         it 'will execute and cascade' do
-          evaluate_cluster_stack.should have_executed_include( *execution_args )
-          evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-          evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-          evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-          evaluate_cluster_stack.should have_cascaded_block( *cascade_block_args )
+          hooked_instance.should have_executed_include( *execution_args )
+          hooked_instance.should_not have_executed_extend( *execution_args )
+          hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+          hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+          hooked_instance.should have_cascaded_block( *cascade_block_args )
+          hooked_instance.should have_inherited_stacks( *instance_stack_args )
         end
       end
       context 'class => each subclass cascade' do
@@ -952,11 +1008,12 @@ describe ::Module::Cluster::Controller do
         let( :cascade_contexts ) { [ :each_subclass ] }
         let( :event_context ) { :subclass }
         it 'will execute and cascade' do
-          evaluate_cluster_stack.should have_executed_include( *execution_args )
-          evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-          evaluate_cluster_stack.should have_cascaded_includes( *cascade_module_args )
-          evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-          evaluate_cluster_stack.should have_cascaded_block( *cascade_block_args )
+          hooked_instance.should have_executed_include( *execution_args )
+          hooked_instance.should_not have_executed_extend( *execution_args )
+          hooked_instance.should have_cascaded_includes( *cascade_module_args )
+          hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+          hooked_instance.should have_cascaded_block( *cascade_block_args )
+          hooked_instance.should have_inherited_stacks( *instance_stack_args )
         end
       end
       context 'conditional :module execution hook' do
@@ -965,32 +1022,35 @@ describe ::Module::Cluster::Controller do
         context 'when module' do
           let( :hooked_instance ) { module_instance }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when class' do
           let( :hooked_instance ) { class_instance }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when instance' do
           let( :hooked_instance ) { instance_of_class }
           let( :include_or_extend ) { :extend }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_inherited_stacks( *instance_stack_args )
           end
         end
       end
@@ -1000,32 +1060,35 @@ describe ::Module::Cluster::Controller do
         context 'when module' do
           let( :hooked_instance ) { module_instance }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when class' do
           let( :hooked_instance ) { class_instance }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when instance' do
           let( :hooked_instance ) { instance_of_class }
           let( :include_or_extend ) { :extend }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_inherited_stacks( *instance_stack_args )
           end
         end
       end
@@ -1035,32 +1098,35 @@ describe ::Module::Cluster::Controller do
         context 'when module' do
           let( :hooked_instance ) { module_instance }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when class' do
           let( :hooked_instance ) { class_instance }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when instance' do
           let( :hooked_instance ) { instance_of_class }
           let( :include_or_extend ) { :extend }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_inherited_stacks( *instance_stack_args )
           end
         end
       end
@@ -1071,32 +1137,35 @@ describe ::Module::Cluster::Controller do
         context 'when module' do
           let( :hooked_instance ) { module_instance }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when class' do
           let( :hooked_instance ) { class_instance }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when instance' do
           let( :hooked_instance ) { instance_of_class }
           let( :include_or_extend ) { :extend }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_inherited_stacks( *instance_stack_args )
           end
         end
       end
@@ -1107,33 +1176,36 @@ describe ::Module::Cluster::Controller do
         context 'when module' do
           let( :hooked_instance ) { module_instance }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when class' do
           let( :hooked_instance ) { class_instance }
           let( :event_cascade_context ) { :subclass }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should have_cascaded_block( *cascade_block_args )
+            hooked_instance.should have_inherited_stacks( *instance_stack_args )
           end
         end
         context 'when instance' do
           let( :hooked_instance ) { instance_of_class }
           let( :include_or_extend ) { :extend }
           it 'will not execute or cascade' do
-            evaluate_cluster_stack.should_not have_executed_include( *execution_args )
-            evaluate_cluster_stack.should_not have_executed_extend( *execution_args )
-            evaluate_cluster_stack.should_not have_cascaded_includes( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_extends( *cascade_module_args )
-            evaluate_cluster_stack.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_executed_include( *execution_args )
+            hooked_instance.should_not have_executed_extend( *execution_args )
+            hooked_instance.should_not have_cascaded_includes( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_extends( *cascade_module_args )
+            hooked_instance.should_not have_cascaded_block( *cascade_block_args )
+            hooked_instance.should_not have_inherited_stacks( *instance_stack_args )
           end
         end
       end

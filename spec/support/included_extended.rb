@@ -8,7 +8,7 @@ module ::IncludedExtended
     include_modules.each do |this_include_module|
       if ! inheriting_instance.is_a?( ::Module ) 
         matched = false
-      elsif ! matched = inheriting_instance.ancestors.include?( this_include_module )
+      elsif ! matched = inheriting_instance.included_modules.include?( this_include_module )
         fail_string = 'inheriting instance did not include :' << this_include_module.name.to_s << 
                       ' (' << this_include_module.to_s << ').'
         break
@@ -22,7 +22,7 @@ module ::IncludedExtended
     fail_string = nil    
     # check extending
     extend_modules.each do |this_extend_module|
-      unless matched = inheriting_instance.is_a?( this_extend_module )
+      unless matched = inheriting_instance.extended_modules.include?( this_extend_module )
         fail_string = 'inheriting instance was not extended with :' << this_extend_module.name.to_s << 
                       ' (' << this_extend_module.to_s << ').'
         break

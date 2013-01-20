@@ -6,7 +6,7 @@ RSpec::Matchers.define :have_added_hook_context do |*hook_contexts|
       hook_contexts.all? { |this_hook_context| @hook_contexts.has_key?( this_hook_context ) }
     end
   end
-  failure_message_for_should { "failed to add hook context :" << hook_context.to_s }
+  failure_message_for_should { "failed to add hook context :" << hook_contexts.collect( & :to_s ).join( ', :' ).to_s }
 end
 
 RSpec::Matchers.define :have_added_execution_context do |*execution_contexts|
