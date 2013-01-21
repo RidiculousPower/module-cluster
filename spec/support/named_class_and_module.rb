@@ -100,7 +100,11 @@ class ::Object
   #  extended_modules  #
   ######################
 
-  attr_reader :extended_modules
+  def extended_modules
+    
+    return @extended_modules ||= [ ]
+    
+  end
 
   ##########
   #  name  #

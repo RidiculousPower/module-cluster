@@ -39,4 +39,28 @@ class ::Module::Cluster::Cluster::Frame < ::Struct.new( :cluster_owner,
                                                         :modules, 
                                                         :include_or_extend,
                                                         :block_action )
+  
+  #####################
+  #  initialize_copy  #
+  #####################
+  
+  ###
+  # Create a copy, duplicating context.
+  #
+  # @param [Module::Cluster::Cluster::Frame] copy
+  #
+  #        Copy of frame to initialize.
+  #
+  def initialize_copy( copy )
+    
+    super
+    
+    copy.execution_contexts = execution_contexts.dup if execution_contexts
+    copy.cascade_contexts = cascade_contexts.dup if cascade_contexts
+    copy.modules = modules.dup if modules
+
+    return copy
+    
+  end
+  
 end

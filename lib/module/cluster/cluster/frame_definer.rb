@@ -20,22 +20,6 @@ class ::Module::Cluster::Cluster::FrameDefiner
     
   end
 
-  #####################
-  #  initialize_copy  #
-  #####################
-  
-  def initialize_copy( copy )
-    
-    super
-    
-    hook_contexts = @hook_contexts.dup
-    execution_contexts = @execution_contexts.dup if @execution_contexts
-    cascade_contexts = @cascade_contexts.dup if @cascade_contexts
-    before_modules = @before_modules.dup if @before_modules
-    after_modules = @after_modules.dup if @after_modules
-    
-  end
-
   #############
   #  cluster  #
   #############
@@ -816,8 +800,8 @@ class ::Module::Cluster::Cluster::FrameDefiner
 
     frame = ::Module::Cluster::Cluster::Frame.new( @cluster.instance,
                                                    @cluster.name,
-                                                   @execution_contexts ? @execution_contexts.keys : nil,
-                                                   @cascade_contexts ? @cascade_contexts.keys : nil,
+                                                   @execution_contexts ? @execution_contexts.keys.sort : nil,
+                                                   @cascade_contexts ? @cascade_contexts.keys.sort : nil,
                                                    modules,
                                                    include_or_extend,
                                                    block )

@@ -1,11 +1,4 @@
 
-require_relative '../../lib/module/cluster.rb'
-
-require_relative '../helpers/integration.rb'
-
-require_relative '../support/block_state.rb'
-require_relative '../support/named_class_and_module.rb'
-
 #############################
 #  setup_integration_tests  #
 #############################

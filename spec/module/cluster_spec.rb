@@ -5,7 +5,7 @@ require_relative '../helpers/support.rb'
 require_relative '../support/named_class_and_module.rb'
 
 describe ::Module::Cluster do
-  
+
   let( :module_instance ) { ::Module.new.name( :ModuleInstance ) }
   let( :class_instance ) { ::Class.new.name( :ClassInstance ) }
   let( :class_inheriting_from_module ) { ::Class.new( ::Module ).name( :ClassInheritingFromModule ) }
