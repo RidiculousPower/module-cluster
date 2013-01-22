@@ -2,6 +2,10 @@
 require_relative '../support/included_extended.rb'
 require_relative '../support/cascaded.rb'
 
+####################################
+#  have_executed_but_not_cascaded  #
+####################################
+
 RSpec::Matchers.define :have_executed_but_not_cascaded do |clustered_instance, 
                                                            event_context, 
                                                            include_modules, 
@@ -82,6 +86,10 @@ RSpec::Matchers.define :have_executed_but_not_cascaded do |clustered_instance,
 
 end
 
+################################
+#  have_executed_and_cascaded  #
+################################
+
 RSpec::Matchers.define :have_executed_and_cascaded do |clustered_instance, 
                                                        event_context, 
                                                        include_modules, 
@@ -124,6 +132,10 @@ RSpec::Matchers.define :have_executed_and_cascaded do |clustered_instance,
   failure_message_for_should_not { unexpected_success_string }
 
 end
+
+###########################################
+#  have_executed_and_cascaded_block_only  #
+###########################################
 
 RSpec::Matchers.define :have_executed_and_cascaded_block_only do |clustered_instance, 
                                                                   event_context, 
@@ -190,6 +202,10 @@ RSpec::Matchers.define :have_executed_and_cascaded_block_only do |clustered_inst
   failure_message_for_should_not { unexpected_success_string }
   
 end
+
+###################################
+#  not_have_executed_or_cascaded  #
+###################################
 
 RSpec::Matchers.define :not_have_executed_or_cascaded do |clustered_instance, 
                                                           event_context, 
@@ -293,6 +309,10 @@ RSpec::Matchers.define :not_have_executed_or_cascaded do |clustered_instance,
   failure_message_for_should_not { unexpected_success_string }
 
 end
+
+####################################
+#  have_cascaded_but_not_executed  #
+####################################
 
 RSpec::Matchers.define :have_cascaded_but_not_executed do |clustered_instance, 
                                                            event_context, 

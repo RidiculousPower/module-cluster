@@ -1,15 +1,23 @@
 
+###########################
+#  have_inherited_stacks  #
+###########################
+
 RSpec::Matchers.define :have_inherited_stacks do |clustered_instance, controller, event_contexts, stack|
   
   unexpected_success_string = nil
   fail_string = nil
   
   match do |hooked_instance|
+
     matched = nil
+
     unexpected_success_string = 'stacks for :' << event_contexts.collect( & :to_s ).join( ', :' ) << 
                                 ' were inherited by ' << hooked_instance.name.to_s << ' from ' <<
                                 clustered_instance.name.to_s << ' but were not expected.'
+
     instance_controller = controller.instance_controller( hooked_instance )
+
     event_contexts.each do |this_event_context|
       unless matched = instance_controller.has_stack?( this_event_context )
         fail_string = 'stack for :' << this_event_context.to_s << ' was not inherited by ' << 
@@ -23,68 +31,77 @@ RSpec::Matchers.define :have_inherited_stacks do |clustered_instance, controller
         break
       end
     end
+
     matched
+
   end
 
   failure_message_for_should_not { unexpected_success_string }
   failure_message_for_should { fail_string }
 
 end
+
+#####################################
+#  be_enabled_for_initialize_hooks  #
+#####################################
 
 RSpec::Matchers.define :be_enabled_for_initialize_hooks do
+
   unexpected_success_string = nil
   fail_string = nil
+
   match do |instance|
-    fail_string = instance.name.to_s << ' was not enabled for :before_instance and :after_initialize.'
+    
     unexpected_success_string = instance.name.to_s << ' was enabled for :before_instance and :after_initialize, ' <<
                                 'but not expected to be enabled.'
-    instance.ancestors.include?( ::Module::Cluster::InitializeSupport )
+    
+    matched = nil
+    
+    unless matched = instance.ancestors.include?( ::Module::Cluster::InitializeSupport )
+      fail_string = instance.name.to_s << ' was not enabled for :before_instance and :after_initialize.'
+    end
+    
+    matched
+    
   end
+
   failure_message_for_should { fail_string }
   failure_message_for_should_not { unexpected_success_string }
+
 end
+
+###################################
+#  be_enabled_for_instance_hooks  #
+###################################
 
 RSpec::Matchers.define :be_enabled_for_instance_hooks do
+
   unexpected_success_string = nil
   fail_string = nil
+
   match do |instance|
-    fail_string = instance.name.to_s << ' was not enabled for :before_instance and :after_instance.'
+    
+    matched = nil
+    
     unexpected_success_string = instance.name.to_s << ' was enabled for :before_instance and :after_instance, ' <<
                                 'but not expected to be enabled.'
-    instance.is_a?( ::Module::Cluster::InstanceSupport )
+
+    unless matched = instance.is_a?( ::Module::Cluster::InstanceSupport )
+      fail_string = instance.name.to_s << ' was not enabled for :before_instance and :after_instance.'
+    end
+    
+    matched
+    
   end
+
   failure_message_for_should { fail_string }
   failure_message_for_should_not { unexpected_success_string }
+
 end
 
-RSpec::Matchers.define :have_inherited_cascaded_subclass_stacks do
-  match do |instance_controller|
-    has_stack = stack ? true : false
-    instance_controller.has_subclass_stack?.should == true
-    if has_stack
-      instance_controller.subclass_stack.should == stack
-    end
-  end
-  failure_message_for_should { "subclass stack was not inherited" }
-end
-
-RSpec::Matchers.define :have_inherited_cascaded_instance_stacks do
-  match do |instance_controller|
-    has_stack = stack ? true : false
-    instance_controller.has_before_initialize_stack?.should == has_stack
-    instance_controller.has_after_initialize_stack?.should == has_stack
-    instance_controller.has_before_instance_stack?.should == has_stack
-    instance_controller.has_after_instance_stack?.should == has_stack
-    if has_stack
-      instance_controller.before_initialize_stack.should == stack
-      instance_controller.after_initialize_stack.should == stack
-      instance_controller.before_instance_stack.should == stack
-      instance_controller.after_instance_stack.should == stack
-    end
-  end
-  failure_message_for_should { "stacks were not inherited" }
-end
-
+################################
+#  have_determined_to_cascade  #
+################################
 
 RSpec::Matchers.define :have_determined_to_cascade do |frame, 
                                                        controller, 
@@ -96,9 +113,12 @@ RSpec::Matchers.define :have_determined_to_cascade do |frame,
   unexpected_success_string = nil
 
   match do |hooked_instance|
+    
     unexpected_success_string = 'instance was determined to cascade for :' << 
                                 event_contexts.collect( & :to_s ).join( ', :' ) << ' but cascade was not expected.'
+    
     matched = nil
+    
     event_contexts.each do |this_event_context|
       cascade_result = controller.frame_should_cascade?( frame, 
                                                          this_event_context, 
@@ -111,13 +131,19 @@ RSpec::Matchers.define :have_determined_to_cascade do |frame,
         break
       end
     end
+    
     matched
+    
   end
   
   failure_message_for_should { fail_string }
   failure_message_for_should_not { unexpected_success_string }
 
 end
+
+############################
+#  have_cascaded_includes  #
+############################
 
 RSpec::Matchers.define :have_cascaded_includes do |controller, clustered_instance, event_context, *modules|
 
@@ -149,6 +175,10 @@ RSpec::Matchers.define :have_cascaded_includes do |controller, clustered_instanc
 
 end
 
+###########################
+#  have_cascaded_extends  #
+###########################
+
 RSpec::Matchers.define :have_cascaded_extends do |controller, clustered_instance, event_context, *modules|
 
   fail_string = nil
@@ -179,43 +209,9 @@ RSpec::Matchers.define :have_cascaded_extends do |controller, clustered_instance
 
 end
 
-RSpec::Matchers.define :have_cascaded_modules do |controller, 
-                                                  clustered_instance, 
-                                                  event_context, 
-                                                  include_modules, 
-                                                  extend_modules|
-
-  fail_string = nil
-  unexpected_success_string = nil
-
-  match do |inheriting_instance|
-
-    unexpected_success_string = 'module cascade occurred but was not expected to ' << inheriting_instance.to_s << 
-                                ' from ' << clustered_instance.to_s << '.'
-
-    include Cascaded
-    
-    matched, fail_string = cascaded_includes?( controller, 
-                                               event_context, 
-                                               inheriting_instance, 
-                                               clustered_instance, 
-                                               *include_modules )
-    unless fail_string
-      matched, fail_string = cascaded_extends?( controller, 
-                                                event_context, 
-                                                inheriting_instance, 
-                                                clustered_instance, 
-                                                *extend_modules )
-    end
-    
-    matched
-
-  end
-
-  failure_message_for_should { fail_string }
-  failure_message_for_should_not { unexpected_success_string }
-
-end
+#########################
+#  have_cascaded_block  #
+#########################
 
 RSpec::Matchers.define :have_cascaded_block do |controller, clustered_instance, event_context, block_state|
 

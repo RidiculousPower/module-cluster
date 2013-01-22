@@ -107,14 +107,24 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
       let( :hook_contexts ) { [ :before_include, :before_extend, :after_include, :after_extend ] }
     
       let( :new_stack_frame_args ) { [ include_or_extend, modules, block_action ] }
-      let( :new_stack_verify_args ) { [ frame_definer, hook_contexts, include_or_extend, modules, block_action ] }
+      let( :new_stack_verify_args ) do
+        [ frame_definer, hook_contexts, cascade_contexts, include_or_extend, modules, block_action ]
+      end
       
       let( :new_stack_frame ) do
         new_stack_frame = nil
         _hook_contexts = hook_contexts
+        _cascade_contexts = cascade_contexts
+        _execution_contexts = execution_contexts
         _new_stack_frame_args = new_stack_frame_args
         frame_definer.instance_eval do
           _hook_contexts.each { |this_hook_context| add_hook_context( this_hook_context ) }
+          if _cascade_contexts
+            _cascade_contexts.each { |this_cascade_context| add_cascade_context( this_cascade_context ) }
+          end
+          if _execution_contexts
+            _execution_contexts.each { |this_execution_context| add_execution_context( this_execution_context ) }
+          end
           new_stack_frame = new_stack_frame( *_new_stack_frame_args )
         end
         new_stack_frame

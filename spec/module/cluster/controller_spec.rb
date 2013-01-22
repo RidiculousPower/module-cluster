@@ -4,6 +4,7 @@ require_relative '../../../lib/module/cluster.rb'
 require_relative '../../helpers/support.rb'
 require_relative '../../helpers/executed.rb'
 require_relative '../../helpers/cascaded.rb'
+require_relative '../../helpers/created.rb'
 
 require_relative '../../support/named_class_and_module.rb'
 require_relative '../../support/block_state.rb'
@@ -60,14 +61,6 @@ describe ::Module::Cluster::Controller do
     #########################
   
     context '#instance_controller' do
-
-      RSpec::Matchers.define :have_initialized_reference_to_instance_controller do
-        match do |controller|
-          controller.is_a?( ::Module::Cluster::InstanceController ).should == true
-          mock_controller.instance_controller( controller.instance ).should == controller
-        end
-        failure_message_for_should { "controller failed to initialize" }
-      end
       
       it 'creates and tracks instances controllers for instances' do
         controller_for_module.should have_initialized_reference_to_instance_controller

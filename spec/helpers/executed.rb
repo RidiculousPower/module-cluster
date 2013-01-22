@@ -2,26 +2,56 @@
 require_relative '../support/included_extended.rb'
 require_relative '../support/cascaded.rb'
 
+########################################
+#  have_initialized_instance_tracking  #
+########################################
+
 RSpec::Matchers.define :have_initialized_instance_tracking do
+  
+  fail_string = "extending with controller failed to initialize instances"
+  unexpected_success_string = "extending with controller initialize instances but was not expected"
+  
   match { |controller| controller.instance_variable_defined?( :@instances ) }
-  failure_message_for_should { "extending with controller failed to initialize instances" }
+  
+  failure_message_for_should { fail_string }
+  failure_message_for_should_not { unexpected_success_string }
+
 end
 
+#################################
+#  have_determined_to_evaluate  #
+#################################
+
 RSpec::Matchers.define :have_determined_to_evaluate do |frame, event_context, clustered_instance|
+
+  fail_string = "frame will not execute"
+  unexpected_success_string = "frame will execute but was not expected to do so"
+
   match do |hooked_instance|
     mock_controller.frame_should_evaluate?( frame, event_context, hooked_instance, clustered_instance )
   end
-  failure_message_for_should { "frame will not execute" }
+
+  failure_message_for_should { fail_string }
+  failure_message_for_should_not { unexpected_success_string }
+
 end
+
+#################################
+#  have_executed_frame_cascade  #
+#################################
 
 RSpec::Matchers.define :have_executed_frame_cascade do |controller, 
                                                         frame, 
                                                         event_contexts, 
                                                         clustered_instance, 
                                                         block_only|
+
   fail_string = nil
+  unexpected_success_string = nil
+
   match do |hooked_instance|
     matched = nil
+    unexpected_success_string = 'frame found on stack for :' << event_contexts.join( ', :' ) << ' but was not expected.'
     event_contexts.each do |this_event_context|
       inherited_frame = mock_controller.instance_controller( hooked_instance ).stack( this_event_context ).last
       unless matched = ! inherited_frame.nil?
@@ -55,29 +85,15 @@ RSpec::Matchers.define :have_executed_frame_cascade do |controller,
     end
     matched
   end
-  failure_message_for_should { fail_string }
-end
-
-RSpec::Matchers.define :have_inherited_modules do |clustered_instance, include_modules, extend_modules|
-
-  fail_string = nil
-  unexpected_success_string = nil
-
-  include IncludedExtended
-  
-  match do |inheriting_instance|
-    unexpected_success_string = 'inheritance occurred but was not expected for ' << inheriting_instance.name.to_s << 
-                                ' from ' << clustered_instance.name.to_s << '.'
-    matched = true
-    matched, fail_string = included_modules?( inheriting_instance, *include_modules )
-    matched, fail_string = extended_modules?( inheriting_instance, *extend_modules ) unless fail_string
-    matched
-  end
 
   failure_message_for_should { fail_string }
   failure_message_for_should_not { unexpected_success_string }
 
 end
+
+###########################
+#  have_executed_include  #
+###########################
 
 RSpec::Matchers.define :have_executed_include do |clustered_instance, *modules|
 
@@ -104,6 +120,10 @@ RSpec::Matchers.define :have_executed_include do |clustered_instance, *modules|
 
 end
 
+##########################
+#  have_executed_extend  #
+##########################
+
 RSpec::Matchers.define :have_executed_extend do |clustered_instance, *modules|
 
   fail_string = nil
@@ -128,6 +148,10 @@ RSpec::Matchers.define :have_executed_extend do |clustered_instance, *modules|
   failure_message_for_should_not { unexpected_success_string }
 
 end
+
+#########################
+#  have_executed_block  #
+#########################
 
 RSpec::Matchers.define :have_executed_block do |clustered_instance, block_state|
 

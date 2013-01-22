@@ -3,6 +3,8 @@ require_relative '../../../lib/module/cluster.rb'
 
 require_relative '../../support/named_class_and_module.rb'
 
+require_relative '../../helpers/support.rb'
+
 describe ::Module::Cluster::InstanceController do
 
   let( :cluster_instance ) { ::Module.new.name( :Instance ) }
@@ -47,11 +49,6 @@ describe ::Module::Cluster::InstanceController do
   end
   
   context '========  Stacks  =======' do
-
-    RSpec::Matchers.define :be_a_stack do
-      match { |actual| actual.is_a?( ::Module::Cluster::InstanceController::Stack ) }
-      failure_message_for_should { "expected stack to be a #{::Module::Cluster::InstanceController::Stack}" }
-    end
 
     ####################
     #  subclass_stack  #

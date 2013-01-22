@@ -9,7 +9,24 @@ describe ::Module::Cluster::Cluster do
   
   let( :cluster_instance ) { ::Module.new.name( :Instance ) }
   let( :cluster ) { ::Module::Cluster::Cluster.new( cluster_instance, :cluster_name ) }
+  
+  before :all do
+    
+    class MockFrameDefiner
+      attr_reader :last_method_called, :last_args, :last_block
+      def method_missing( method_name, *args, & block )
+        @last_method_called = method_name
+        @last_args = args
+        @last_block = block
+      end
+    end
 
+    class ::Module::Cluster::Cluster
+      attr_reader :frame_definer
+    end
+
+  end
+  
   context '========  Initialization  ========' do
     
     ###############
