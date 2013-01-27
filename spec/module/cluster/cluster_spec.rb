@@ -105,7 +105,12 @@ describe ::Module::Cluster::Cluster do
     context '#disable' do
       let( :disable ) { cluster.disable }
       it 'can be disabled' do
-        disable.disabled?.should == true
+        disable.disabled?.should be true
+      end
+      it 'can disable for a block' do
+        cluster.disabled?.should be false
+        cluster.disable { cluster.disabled?.should be true }
+        cluster.disabled?.should be false
       end
     end
 
@@ -127,6 +132,11 @@ describe ::Module::Cluster::Cluster do
       let( :enable ) { cluster.enable }
       it 'can be enabled' do
         enable.disabled?.should == false    
+      end
+      it 'can enable for a block' do
+        cluster.disable
+        cluster.enable { cluster.enabled?.should be true }
+        cluster.enabled?.should be false
       end
     end
   

@@ -108,7 +108,13 @@ class ::Module::Cluster::Cluster
   #
   def disable
     
+    orignial_state = @enabled
     @enabled = false
+    
+    if block_given?
+      yield
+      @enabled = orignial_state
+    end
     
     return self
     
@@ -127,7 +133,12 @@ class ::Module::Cluster::Cluster
   #
   def enable
     
+    orignial_state = @enabled
     @enabled = true
+    if block_given?
+      yield
+      @enabled = orignial_state
+    end
     
     return self
     
