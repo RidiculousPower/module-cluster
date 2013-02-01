@@ -22,11 +22,11 @@ module ::Module::Cluster::InitializeSupport
   #
   def initialize( *args )
 
-    ::Module::Cluster.evaluate_cluster_stack( :before_initialize, self, self.class )
+    ::Module::Cluster.evaluate_cluster_stack( :before_initialize, self, self.class, args )
 
     super if defined?( super )
     
-    ::Module::Cluster.evaluate_cluster_stack( :after_initialize, self, self.class )
+    ::Module::Cluster.evaluate_cluster_stack( :after_initialize, self, self.class, args )
     
   end
   

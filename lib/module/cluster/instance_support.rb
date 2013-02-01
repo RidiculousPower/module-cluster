@@ -24,11 +24,11 @@ module ::Module::Cluster::InstanceSupport
 
     instance = allocate
     
-    ::Module::Cluster.evaluate_cluster_stack( :before_instance, instance, self )
+    ::Module::Cluster.evaluate_cluster_stack( :before_instance, instance, self, args )
     
     instance.instance_eval { initialize( *args ) }
 
-    ::Module::Cluster.evaluate_cluster_stack( :after_instance, instance, self )
+    ::Module::Cluster.evaluate_cluster_stack( :after_instance, instance, self, args )
     
     return instance
     

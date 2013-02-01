@@ -289,9 +289,14 @@ module ::Module::Cluster::Controller
   #
   #        Module cluster enabled instance for which hooks are being activated.
   #
+  # @param args
+  #
+  #        Optional array of arguments. Used presently with instance and initialize hooks
+  #        to pass parameters from #new or #initialize to action blocks.
+  #
   # @return [::Module::Cluster::Controller] Self.
   #
-  def evaluate_cluster_stack( event_context, hooked_instance, clustered_instance )
+  def evaluate_cluster_stack( event_context, hooked_instance, clustered_instance, args = nil )
     
     should_enable = false
     should_cascade_all_stacks = false
@@ -309,14 +314,14 @@ module ::Module::Cluster::Controller
       if frame_should_evaluate?( this_frame, event_context, hooked_instance, clustered_instance )
         case should_cascade = frame_should_cascade?( this_frame, event_context, hooked_instance, clustered_instance )
           when :execute
-            execute_frame_hook( this_frame, hooked_instance, clustered_instance )
+            execute_frame_hook( this_frame, hooked_instance, clustered_instance, args )
           when :execute_and_cascade
             should_enable = true
-            execute_frame_hook( this_frame, hooked_instance, clustered_instance )
+            execute_frame_hook( this_frame, hooked_instance, clustered_instance, args )
             execute_frame_cascade( this_frame, event_context, hooked_instance, clustered_instance )
           when :execute_and_cascade_block
             should_enable = true
-            execute_frame_hook( this_frame, hooked_instance, clustered_instance )
+            execute_frame_hook( this_frame, hooked_instance, clustered_instance, args )
             execute_frame_cascade( this_frame, event_context, hooked_instance, clustered_instance, true )
           when :cascade
             should_enable = true
@@ -737,7 +742,7 @@ module ::Module::Cluster::Controller
   #
   # @return [::Module::Cluster::Controller] Self.
   #
-  def execute_frame_hook( frame, hooked_instance, clustered_instance )
+  def execute_frame_hook( frame, hooked_instance, clustered_instance, args )
 
     # if we have a module to include/extend
     if modules = frame.modules
@@ -759,7 +764,12 @@ module ::Module::Cluster::Controller
     end
 
     if block_instance = frame.block_action
-      clustered_instance.module_exec( hooked_instance, frame.cluster_owner, & block_instance )
+      case hooked_instance
+        when ::Module, ::Class
+          clustered_instance.module_exec( hooked_instance, frame.cluster_owner, & block_instance )
+        else
+          clustered_instance.module_exec( hooked_instance, frame.cluster_owner, *args, & block_instance )
+      end
     end
     
     return self
