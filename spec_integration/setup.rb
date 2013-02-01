@@ -23,9 +23,6 @@ def setup_integration_tests
   let( :integration_args ) { [ clustered_instance, event_context, include_modules, extend_modules, block_state ] }
   let( :class_integration_args ) { [ clustered_instance, :subclass, include_modules, extend_modules, block_state ] }
 
-  let( :event_context ) { :before_include }
-  let( :include_or_extend ) { :include }
-
   let( :module_instance ) do
     _include_or_extend, _clustered_instance = include_or_extend, clustered_instance
     ::Module.new.name( :ModuleInstance ).module_eval { __send__( _include_or_extend, _clustered_instance ) }

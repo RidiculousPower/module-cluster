@@ -1,6 +1,16 @@
+require_relative '../../lib/module/cluster.rb'
+
+require_relative '../../spec/helpers/integration.rb'
+
+require_relative '../../spec/support/block_state.rb'
+require_relative '../../spec/support/named_class_and_module.rb'
+
+require_relative '../setup.rb'
 
 shared_examples_for :ModuleConditionalCascadeIntegration do
-
+  
+  setup_integration_tests
+  
   let( :clustered_instance ) do
     clustered_instance = ::Module.new.name( :CascadeEnabledModule ).extend( ::Module::Cluster )
     cluster = clustered_instance.cluster( cluster_name ).__send__( event_context, *execution_contexts )
@@ -11,12 +21,14 @@ shared_examples_for :ModuleConditionalCascadeIntegration do
 
   let( :nth_module ) do
     _module_instance = module_instance
-    ::Module.new.name( :NthModule ).module_eval { include _module_instance }
+    _include_or_extend = include_or_extend
+    ::Module.new.name( :NthModule ).module_eval { __send__( _include_or_extend, _module_instance ) }
   end
   
   let( :first_class ) do
     _nth_module = nth_module
-    ::Class.new.name( :FirstClass ).module_eval { include _nth_module }
+    _include_or_extend = include_or_extend
+    ::Class.new.name( :FirstClass ).module_eval { __send__( _include_or_extend, _nth_module ) }
   end
 
   let( :first_subclass ) { ::Class.new( first_class ).name( :FirstSubclass ) }
@@ -88,6 +100,9 @@ shared_examples_for :ModuleConditionalCascadeIntegration do
       context 'for hooked module' do
         it 'will not execute but will cascade' do
           module_instance.should have_cascaded_but_not_executed( *integration_args )
+        end
+        it 'nth module will not execute but will cascade' do
+          nth_module.should have_cascaded_but_not_executed( *integration_args )
         end
         it 'first class will not execute but will cascade' do
           first_class.should have_cascaded_but_not_executed( *class_integration_args )

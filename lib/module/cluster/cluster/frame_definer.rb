@@ -362,7 +362,7 @@ class ::Module::Cluster::Cluster::FrameDefiner
   #  before_initialize  #
   #######################
   
-  def before_initialize
+  def before_initialize( & block )
     
     case instance = @cluster.instance
       when ::Class
@@ -380,7 +380,7 @@ class ::Module::Cluster::Cluster::FrameDefiner
   #  after_initialize  #
   ######################
   
-  def after_initialize
+  def after_initialize( & block )
 
     case instance = @cluster.instance
       when ::Class
@@ -398,7 +398,7 @@ class ::Module::Cluster::Cluster::FrameDefiner
   #  before_instance  #
   #####################
   
-  def before_instance
+  def before_instance( & block )
     
     case instance = @cluster.instance
       when ::Class
@@ -416,7 +416,7 @@ class ::Module::Cluster::Cluster::FrameDefiner
   #  after_instance  #
   ####################
   
-  def after_instance
+  def after_instance( & block )
 
     case instance = @cluster.instance
       when ::Class

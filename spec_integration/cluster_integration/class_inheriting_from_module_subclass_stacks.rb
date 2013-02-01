@@ -73,9 +73,9 @@ shared_examples_for :ClassInheritingFromModuleSubclassStacksIntegration do
     context 'cascade_context is :module, :class' do
       let( :cascade_contexts ) { [ :module, :class ] }
       it 'will execute and cascade' do
-        subclass_of_class_inheriting_from_module.should have_executed_and_cascaded( clustered_instance, 
-                                                                                    event_context, 
-                                                                                    *cascade_args )
+        subclass_of_class_inheriting_from_module.should not_have_executed_or_cascaded( clustered_instance, 
+                                                                                       event_context, 
+                                                                                       *cascade_args )
       end
     end
 

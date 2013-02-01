@@ -35,6 +35,7 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
   let( :frame ) { ::Module::Cluster::Cluster::Frame.new( module_instance, cluster_name, execution_contexts, cascade_contexts, modules, include_or_extend, block_action ) }
   let( :modules ) { nil }
   let( :include_or_extend ) { nil }
+  
   let( :block_action ) { nil }
   
   let( :mock_cluster ) { ::MockModuleCluster.new }
@@ -221,8 +222,13 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
     context '=========  Hook Contexts  ========' do
 
       let( :hook_declaration ) do
-        frame_definer.__send__( action )
+        frame_definer.__send__( action, & block_action )
         frame_definer
+      end
+      
+      let( :class_instance ) do
+        _module_instance = module_instance
+        ::Class.new { include( _module_instance ) }
       end
       
       ####################

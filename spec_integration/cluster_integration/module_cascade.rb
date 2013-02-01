@@ -11,12 +11,14 @@ shared_examples_for :ModuleCascadeIntegration do
 
   let( :nth_module ) do
     _module_instance = module_instance
-    ::Module.new.name( :NthModule ).module_eval { include _module_instance }
+    _include_or_extend = include_or_extend
+    ::Module.new.name( :NthModule ).module_eval { __send__( _include_or_extend, _module_instance ) }
   end
   
   let( :first_class ) do
     _nth_module = nth_module
-    ::Class.new.name( :FirstClass ).module_eval { include _nth_module }
+    _include_or_extend = include_or_extend
+    ::Class.new.name( :FirstClass ).module_eval { __send__( _include_or_extend, _nth_module ) }
   end
 
   let( :first_subclass ) { ::Class.new( first_class ).name( :FirstSubclass ) }
@@ -49,9 +51,12 @@ shared_examples_for :ModuleCascadeIntegration do
     end
 
     context 'for hooked instance' do
-      let( :event_context ) { :before_extend }
       it 'will execute but not cascade' do
-        object_instance.should have_executed_but_not_cascaded( *integration_args )
+        if include_or_extend == :include
+          object_instance.should not_have_executed_or_cascaded( *integration_args )
+        elsif include_or_extend == :extend
+          object_instance.should have_executed_but_not_cascaded( *integration_args )
+        end
       end
     end
 

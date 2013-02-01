@@ -324,10 +324,6 @@ module ::Module::Cluster::Controller
           when :cascade_block
             should_enable = true
             execute_frame_cascade( this_frame, event_context, hooked_instance, clustered_instance, true )
-          when ::Module::Cluster::Cluster::Frame
-            should_enable = true
-            execute_frame_hook( this_frame, hooked_instance, clustered_instance )
-            execute_frame_cascade( should_cascade, event_context, hooked_instance, clustered_instance )
         end
       end
     end
@@ -409,7 +405,7 @@ module ::Module::Cluster::Controller
         end
       
       else
-        
+
         frame_should_evaluate = true
 
       end
@@ -490,12 +486,12 @@ module ::Module::Cluster::Controller
                     should_cascade = :execute_and_cascade_block
                   when [ :each_subclass, :module ]
                     should_cascade = :execute_and_cascade
-
-                  # Below here are redundant or meaningless
                   when [ :class, :module ]
                     new_frame = frame.dup
                     new_frame.cascade_contexts.delete( :class )
                     should_cascade = new_frame
+
+                  # Below here are redundant or meaningless
                   when [ :class, :each_subclass ],
                        [ :class, :each_subclass, :module ]
                     should_cascade = :execute_and_cascade
@@ -574,7 +570,7 @@ module ::Module::Cluster::Controller
                 when [ :class ]
                   should_cascade = false
               end
-
+              
           end # end case hooked_instance
                     
         when ::Module # Module => Module, Module => Class
@@ -645,8 +641,12 @@ module ::Module::Cluster::Controller
               end
               
             else # Object instance extended by module
-
-              should_cascade = :execute
+              
+              case cascade_contexts
+                when [ :any ],
+                     [ :instance ]
+                  should_cascade = :execute
+              end
               
           end
       end
@@ -683,11 +683,11 @@ module ::Module::Cluster::Controller
   # @return [::Module::Cluster::Controller] Self.
   #
   def execute_frame_cascade( frame, event_context, hooked_instance, clustered_instance, block_only = false )
-    
+
     cascade_frame = nil
     
     # if we only cascade block then we need a new frame
-    if frame.cascade_contexts
+    if frame.execution_contexts or block_only
       cascade_frame = frame.class.new( frame.cluster_owner,
                                        frame.cluster_name, 
                                        nil, 

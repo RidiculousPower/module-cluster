@@ -1,6 +1,8 @@
 
+require_relative '../../lib/module/cluster.rb'
+
 shared_examples_for :ModuleExecutionIntegration do
-  
+    
   let( :clustered_instance ) do
     clustered_instance = ::Module.new.name( :ExecutionEnabledModule ).extend( ::Module::Cluster )
     cluster = clustered_instance.cluster( cluster_name )
@@ -22,7 +24,11 @@ shared_examples_for :ModuleExecutionIntegration do
 
   context 'for hooked instance' do
     it 'will execute but not cascade' do
-      object_instance.should not_have_executed_or_cascaded( *integration_args )
+      if include_or_extend == :include
+        object_instance.should not_have_executed_or_cascaded( *integration_args )
+      elsif include_or_extend == :extend
+        object_instance.should have_executed_but_not_cascaded( *integration_args )
+      end
     end
   end
   

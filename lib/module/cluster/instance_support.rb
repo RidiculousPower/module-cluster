@@ -22,11 +22,11 @@ module ::Module::Cluster::InstanceSupport
   #
   def new( *args )
 
-    instance = alloc
+    instance = allocate
     
     ::Module::Cluster.evaluate_cluster_stack( :before_instance, instance, self )
     
-    instance.initialize( *args )
+    instance.instance_eval { initialize( *args ) }
 
     ::Module::Cluster.evaluate_cluster_stack( :after_instance, instance, self )
     
