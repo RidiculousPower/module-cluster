@@ -20,13 +20,13 @@ module ::Module::Cluster::InitializeSupport
   #                   Any arguments can be used for initialize.
   #                   No arguments are expected here, but any will be passed to super.
   #
-  def initialize( *args )
+  def initialize( *args, & block )
 
-    ::Module::Cluster.evaluate_cluster_stack( :before_initialize, self, self.class, args )
+    ::Module::Cluster.evaluate_cluster_stack( :before_initialize, self, self.class, args, & block )
 
     super if defined?( super )
     
-    ::Module::Cluster.evaluate_cluster_stack( :after_initialize, self, self.class, args )
+    ::Module::Cluster.evaluate_cluster_stack( :after_initialize, self, self.class, args, & block )
     
   end
   

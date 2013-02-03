@@ -20,15 +20,15 @@ module ::Module::Cluster::InstanceSupport
   #                   Any arguments can be used for initialize.
   #                   No arguments are expected here, but any will be passed to super.
   #
-  def new( *args )
+  def new( *args, & block )
 
     instance = allocate
     
-    ::Module::Cluster.evaluate_cluster_stack( :before_instance, instance, self, args )
+    ::Module::Cluster.evaluate_cluster_stack( :before_instance, instance, self, args, & block )
     
-    instance.instance_eval { initialize( *args ) }
+    instance.instance_eval { initialize( *args, & block ) }
 
-    ::Module::Cluster.evaluate_cluster_stack( :after_instance, instance, self, args )
+    ::Module::Cluster.evaluate_cluster_stack( :after_instance, instance, self, args, & block )
     
     return instance
     
