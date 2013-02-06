@@ -75,13 +75,11 @@ describe ::Module::Cluster do
     context 'Including:' do
       let( :include_or_extend ) { :include }
       context ':before_include' do
-        setup_integration_tests
         it_behaves_like :ModuleBehavior do
           let( :event_context ) { :before_include }
         end
       end
       context ':after_include' do
-        setup_integration_tests
         it_behaves_like :ModuleBehavior do
           let( :event_context ) { :after_include }
         end

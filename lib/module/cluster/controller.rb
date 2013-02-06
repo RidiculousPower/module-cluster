@@ -455,6 +455,30 @@ module ::Module::Cluster::Controller
     if cascade_contexts = frame.cascade_contexts
 
       should_cascade = false
+      
+      has_any_context = false
+      has_module_context = false
+      has_class_context = false
+      has_subclass_context = false
+      has_each_subclass_context = false
+      has_instance_context = false
+      
+      cascade_contexts.each do |this_cascade_context|
+        case this_cascade_context
+          when :any
+            has_any_context = true
+          when :module
+            has_module_context = true
+          when :class
+            has_class_context = true
+          when :subclass
+            has_subclass_context = true
+          when :each_subclass
+            has_each_subclass_context = true
+          when :instance
+            has_instance_context = true
+        end
+      end
 
       case clustered_instance
 
@@ -465,79 +489,25 @@ module ::Module::Cluster::Controller
             when ::Class # subclass
                 
               if clustered_instance < ::Module and not clustered_instance < ::Class # that inherits from Module
-
-                case cascade_contexts
-                  when [ :any ],
-                       [ :subclass ],
-                       [ :any, :class ],
-                       [ :any, :module ],
-                       [ :any, :subclass ],
-                       [ :any, :each_subclass ],
-                       [ :any, :class, :module ],
-                       [ :any, :class, :subclass ],
-                       [ :any, :class, :each_subclass ],
-                       [ :any, :class, :module, :subclass ],
-                       [ :any, :class, :each_subclass, :module ],
-                       [ :any, :module, :subclass ],
-                       [ :any, :each_subclass, :module ]
-                    should_cascade = :execute_and_cascade_block
-                  when [ :module ]
-                    should_cascade = :cascade
-                  when [ :class ]
-                    should_cascade = false
-                  when [ :each_subclass ]
-                    should_cascade = :execute_and_cascade
-                  when [ :module, :subclass ]
-                    should_cascade = :execute_and_cascade_block
-                  when [ :each_subclass, :module ]
-                    should_cascade = :execute_and_cascade
-                  when [ :class, :module ]
-                    new_frame = frame.dup
-                    new_frame.cascade_contexts.delete( :class )
-                    should_cascade = new_frame
-
-                  # Below here are redundant or meaningless
-                  when [ :class, :each_subclass ],
-                       [ :class, :each_subclass, :module ]
-                    should_cascade = :execute_and_cascade
-                  when [ :class, :subclass ],
-                       [ :class, :module, :subclass ]
-                    should_cascade = :execute_and_cascade_block
-                end
                 
+                if has_each_subclass_context
+                  should_cascade = :execute_and_cascade
+                elsif has_any_context or has_subclass_context
+                  should_cascade = :execute_and_cascade_block
+                elsif has_class_context and has_module_context
+                  new_frame = frame.dup
+                  new_frame.cascade_contexts.delete( :class )
+                  should_cascade = new_frame
+                elsif has_module_context
+                  should_cascade = :cascade
+                end
+                                
               else # normal subclass
 
-                case cascade_contexts
-                  when [ :any ],
-                       [ :subclass ],
-                       [ :any, :class ],
-                       [ :any, :module ],
-                       [ :any, :subclass ],
-                       [ :any, :each_subclass ],
-                       [ :any, :class, :module ],
-                       [ :any, :class, :subclass ],
-                       [ :any, :class, :each_subclass ],
-                       [ :any, :class, :module, :subclass ],
-                       [ :any, :class, :each_subclass, :module ],
-                       [ :any, :module, :subclass ],
-                       [ :any, :each_subclass, :module ]
-                    should_cascade = :execute_and_cascade_block
-                  when [ :each_subclass ]
-                    should_cascade = :execute_and_cascade
-
-                  # Below here are redundant or meaningless
-                  when [ :module ],
-                       [ :class ],
-                       [ :class, :module ]
-                    should_cascade = false
-                  when [ :each_subclass, :module ],
-                       [ :class, :each_subclass ],
-                       [ :class, :each_subclass, :module ]
-                    should_cascade = :execute_and_cascade
-                  when [ :class, :subclass ],
-                       [ :class, :module, :subclass ],
-                       [ :module, :subclass ]
-                    should_cascade = :execute_and_cascade_block
+                if has_each_subclass_context
+                  should_cascade = :execute_and_cascade
+                elsif has_any_context or has_subclass_context
+                  should_cascade = :execute_and_cascade_block
                 end
                 
               end
@@ -547,33 +517,11 @@ module ::Module::Cluster::Controller
               # Instance of class that inherits from Module.
               # That means this would be an instance hook ( :before_initialize, :after_initialize,
               #                                             :before_instance, :after_instance ).
-              case cascade_contexts
-                when [ :any ],
-                     [ :module ],
-                     [ :class, :module ],
-                     [ :module, :subclass ],
-                     [ :each_subclass, :module ],
-                     [ :class, :module, :subclass ],
-                     [ :class, :each_subclass, :module ],
-                     [ :any, :class ],
-                     [ :any, :module ],
-                     [ :any, :subclass ],
-                     [ :any, :each_subclass ],
-                     [ :any, :class, :module ],
-                     [ :any, :class, :subclass ],
-                     [ :any, :class, :each_subclass ],
-                     [ :any, :class, :module, :subclass ],
-                     [ :any, :class, :each_subclass, :module ],
-                     [ :any, :module, :subclass ],
-                     [ :any, :each_subclass, :module ]
-                  should_cascade = :execute_and_cascade
-                when [ :subclass ],
-                     [ :each_subclass ],
-                     [ :class, :subclass ],
-                     [ :class, :each_subclass ]
-                  should_cascade = :cascade
-                when [ :class ]
-                  should_cascade = false
+              
+              if has_any_context or has_module_context
+                should_cascade = :execute_and_cascade
+              elsif has_subclass_context or has_each_subclass_context
+                should_cascade = :cascade
               end
               
           end # end case hooked_instance
@@ -583,74 +531,29 @@ module ::Module::Cluster::Controller
           case hooked_instance
 
             when ::Class # Class instance extended by or including module
-
-              case cascade_contexts
-                when [ :any ],
-                     [ :any, :class ],
-                     [ :any, :module ],
-                     [ :any, :subclass ],
-                     [ :any, :class, :module ],
-                     [ :any, :class, :subclass ],
-                     [ :any, :class, :module, :subclass ],
-                     [ :any, :module, :subclass ],
-                     [ :class, :subclass ],
-                     [ :class, :module, :subclass ]
-                  should_cascade = :execute_and_cascade_block
-                when [ :any, :each_subclass ],
-                     [ :any, :class, :each_subclass ],
-                     [ :any, :class, :each_subclass, :module ],
-                     [ :any, :each_subclass, :module ],
-                     [ :class, :each_subclass ],
-                     [ :class, :each_subclass, :module ]
-                  should_cascade = :execute_and_cascade
-                when [ :class ],
-                     [ :class, :module ]
-                  should_cascade = :execute
-                when [ :module ]
-                  should_cascade = false
-                when [ :subclass ],
-                     [ :each_subclass ],
-                     [ :module, :subclass ],
-                     [ :each_subclass, :module ]
-                  should_cascade = :cascade
+              
+              if has_each_subclass_context and has_any_context || has_class_context
+                should_cascade = :execute_and_cascade
+              elsif has_any_context or has_class_context && has_subclass_context
+                should_cascade = :execute_and_cascade_block
+              elsif has_subclass_context or has_each_subclass_context
+                should_cascade = :cascade
+              elsif has_class_context
+                should_cascade = :execute
               end
               
             when ::Module # Module instance extended by or including module
-
-              case cascade_contexts
-                when [ :any ],
-                     [ :module ],
-                     [ :class, :module ],
-                     [ :module, :subclass ],
-                     [ :each_subclass, :module ],
-                     [ :class, :module, :subclass ],
-                     [ :class, :each_subclass, :module ],
-                     [ :any, :class ],
-                     [ :any, :module ],
-                     [ :any, :subclass ],
-                     [ :any, :each_subclass ],
-                     [ :any, :class, :module ],
-                     [ :any, :class, :subclass ],
-                     [ :any, :class, :each_subclass ],
-                     [ :any, :class, :module, :subclass ],
-                     [ :any, :class, :each_subclass, :module ],
-                     [ :any, :module, :subclass ],
-                     [ :any, :each_subclass, :module ]
-                  should_cascade = :execute_and_cascade
-                when [ :class ],
-                     [ :subclass ],
-                     [ :each_subclass ],
-                     [ :class, :subclass ],
-                     [ :class, :each_subclass ]
-                  should_cascade = :cascade
+              
+              if has_any_context or has_module_context
+                should_cascade = :execute_and_cascade
+              elsif has_class_context or has_subclass_context or has_each_subclass_context or has_instance_context
+                should_cascade = :cascade
               end
               
             else # Object instance extended by module
               
-              case cascade_contexts
-                when [ :any ],
-                     [ :instance ]
-                  should_cascade = :execute
+              if has_any_context or has_instance_context
+                should_cascade = :execute
               end
               
           end
