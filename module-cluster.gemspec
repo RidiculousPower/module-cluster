@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
 
   spec.date                      = ::Date.today.to_s
   
-  spec.files                     = ::Dir[ '{lib,spec}/**/*',
+  spec.files                     = ::Dir[ '{lib,lib_ext,spec}/**/*',
                                           'README*', 
                                           'LICENSE*' ]
 

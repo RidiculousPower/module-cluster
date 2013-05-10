@@ -1,26 +1,23 @@
 # -*- encoding : utf-8 -*-
 
-basepath = 'cluster'
-
-files = [
-    
-  'instance_controller',
-  'instance_controller/stack',
-
-  'controller',
-
-  'cluster',
-  'cluster/frame_definer',
-
-  'cluster/frame',
+[
   
-  'class_support',
-  'module_support',
-  'initialize_support',
-  'instance_support'
-    
-]
+  '../../lib_ext/class',
+  '../../lib_ext/module',
+  
+  'cluster/instance_controller',
+  'cluster/instance_controller/stack',
 
-files.each do |this_file|
-  require_relative( ::File.join( basepath, this_file ) + '.rb' )
-end
+  'cluster/controller',
+
+  'cluster/cluster',
+  'cluster/cluster/frame_definer',
+
+  'cluster/cluster/frame',
+  
+  'cluster/class_support',
+  'cluster/module_support',
+  'cluster/initialize_support',
+  'cluster/instance_support'
+    
+].each { |this_file| require_relative( this_file << '.rb' ) }
