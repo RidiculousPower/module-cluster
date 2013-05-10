@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 ###########################
 #  have_inherited_stacks  #

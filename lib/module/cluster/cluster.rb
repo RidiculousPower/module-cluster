@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 ###
 # A Cluster controls stacks of event hooks for before/after include/extend/subclass events.

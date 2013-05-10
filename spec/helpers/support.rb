@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 ########################
 #  have_class_support  #

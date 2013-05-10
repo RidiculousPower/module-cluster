@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 ###
 # A FrameDefiner is associated with a cluster in order to create chained declarations of frames.

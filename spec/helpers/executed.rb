@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 require_relative '../support/included_extended.rb'
 require_relative '../support/cascaded.rb'

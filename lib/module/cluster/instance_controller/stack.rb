@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 ###
 # A Stack is a specialized array for handling inserts of frames before/after other frames.

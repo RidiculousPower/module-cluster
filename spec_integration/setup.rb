@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 #############################
 #  setup_integration_tests  #

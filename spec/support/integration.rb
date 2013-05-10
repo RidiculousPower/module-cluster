@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 ############################
 #  enable_cluster_context  #

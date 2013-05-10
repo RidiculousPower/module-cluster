@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 #############################
 #  have_added_hook_context  #

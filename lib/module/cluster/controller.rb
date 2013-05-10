@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 ###
 # @private
@@ -400,7 +401,12 @@ module ::Module::Cluster::Controller
           
           case hooked_instance
             when ::Class
-              frame_should_evaluate = true if execution_contexts.include?( :class )
+              if execution_contexts.include?( :class )
+                frame_should_evaluate = true 
+              elsif hooked_instance < ::Module and not hooked_instance < ::Class and
+                    execution_contexts.include?( :module_class )
+                frame_should_evaluate = true
+              end
             when ::Module
               frame_should_evaluate = true if execution_contexts.include?( :module )
             else
@@ -459,6 +465,7 @@ module ::Module::Cluster::Controller
       has_any_context = false
       has_module_context = false
       has_class_context = false
+      has_module_class_context = false
       has_subclass_context = false
       has_each_subclass_context = false
       has_instance_context = false
@@ -471,6 +478,8 @@ module ::Module::Cluster::Controller
             has_module_context = true
           when :class
             has_class_context = true
+          when :module_class
+            has_module_class_context = true
           when :subclass
             has_subclass_context = true
           when :each_subclass
@@ -488,7 +497,9 @@ module ::Module::Cluster::Controller
             
             when ::Class # subclass
                 
-              if clustered_instance < ::Module and not clustered_instance < ::Class # that inherits from Module
+              if clustered_instance < ::Module and not clustered_instance < ::Class # class that inherits from Module
+                
+                has_class_context ||= has_module_class_context
                 
                 if has_each_subclass_context
                   should_cascade = :execute_and_cascade
@@ -532,6 +543,10 @@ module ::Module::Cluster::Controller
 
             when ::Class # Class instance extended by or including module
               
+              is_module_class_context = ( hooked_instance < ::Module and not hooked_instance < ::Class )
+              has_module_class_context = is_module_class_context && has_module_class_context
+              has_class_context ||= has_module_class_context
+
               if has_each_subclass_context and has_any_context || has_class_context
                 should_cascade = :execute_and_cascade
               elsif has_any_context or has_class_context && has_subclass_context

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require_relative '../../lib/module/cluster.rb'
 
 require_relative '../../spec/helpers/integration.rb'

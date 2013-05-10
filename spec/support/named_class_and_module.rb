@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 # Module can't include modules properly so we have to duplicate code.
 
