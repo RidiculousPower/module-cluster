@@ -341,7 +341,9 @@ module ::Module::Cluster::Controller
     # :instance stack always cascades to modules and classes.
     case hooked_instance
       when ::Class
-        cascade_instance_stacks( hooked_instance, clustered_instance )
+        unless ::Class.equal?( hooked_instance )
+          cascade_instance_stacks( hooked_instance, clustered_instance )
+        end
       when ::Module
         unless hooked_instance.class < ::Module and not hooked_instance.class < ::Class
           cascade_instance_stacks( hooked_instance, clustered_instance )
