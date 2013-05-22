@@ -91,3 +91,8 @@ Fixes for which instances blocks are eval'd on
 Rewrite of internals, massively simplified.
 Module include/extend order is no longer reversed from Ruby's include and extend methods. This change
 may be quite annoying, but the inconsistency was more annoying.
+
+## 5/22/2013 ##
+
+Add :module_class execution and cascade hooks.
+Fixed subclass handling so that it will work on Class (in addition to instances of Class).

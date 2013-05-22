@@ -2,14 +2,14 @@
 
 class ::Class
 
-  ####################
-  #  self.inherited  #
-  ####################
+  ###############
+  #  inherited  #
+  ###############
   
   ###
   # Override Class.inherited so that modules extending Class can define #inherited.
   #
-  def self.inherited( hooked_instance )
+  def inherited( hooked_instance )
     
     super if defined?( super )
     

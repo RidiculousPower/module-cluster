@@ -86,12 +86,16 @@ module ::Module::Cluster::Controller
     
     case hooked_instance
       when ::Class
-        hooked_instance.extend( ::Module::Cluster::ClassSupport )
-        # if our class is a subclass of Module then its instances need ModuleSupport
-        if hooked_instance < ::Module and not hooked_instance < ::Class
-          hooked_instance.module_eval do
-            include( ::Module::Cluster )
-            include( ::Module::Cluster::ModuleSupport )
+        if ::Class.equal?( hooked_instance )
+          hooked_instance.class_eval { include( ::Module::Cluster::ClassSupport ) }
+        else
+          hooked_instance.extend( ::Module::Cluster::ClassSupport )
+          # if our class is a subclass of Module then its instances need ModuleSupport
+          if hooked_instance < ::Module and not hooked_instance < ::Class
+            hooked_instance.module_eval do
+              include( ::Module::Cluster )
+              include( ::Module::Cluster::ModuleSupport )
+            end
           end
         end
       when ::Module
