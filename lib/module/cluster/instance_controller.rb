@@ -100,29 +100,29 @@ class ::Module::Cluster::InstanceController
   #
   #         Stack that holds event hook frames.
   #
-  def stack( event_context )
+  def stack( event_context, should_create = true )
     
     stack = nil
-    
+
     case event_context
       when :before_include
-        stack = before_include_stack
+        stack = before_include_stack( should_create )
       when :after_include
-        stack = after_include_stack
+        stack = after_include_stack( should_create )
       when :before_extend
-        stack = before_extend_stack
+        stack = before_extend_stack( should_create )
       when :after_extend
-        stack = after_extend_stack
+        stack = after_extend_stack( should_create )
       when :subclass
-        stack = subclass_stack
+        stack = subclass_stack( should_create )
       when :before_initialize
-        stack = before_initialize_stack
+        stack = before_initialize_stack( should_create )
       when :after_initialize
-        stack = after_initialize_stack
+        stack = after_initialize_stack( should_create )
       when :before_instance
-        stack = before_instance_stack
+        stack = before_instance_stack( should_create )
       when :after_instance
-        stack = after_instance_stack
+        stack = after_instance_stack( should_create )
     end
     
     return stack
@@ -184,9 +184,13 @@ class ::Module::Cluster::InstanceController
   #
   #         Stack that holds subclass event hook frames.
   #
-  def subclass_stack
+  def subclass_stack( should_create = true )
+    
+    if should_create
+      @subclass_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    end
 
-    return @subclass_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    return @subclass_stack
 
   end
   
@@ -201,9 +205,13 @@ class ::Module::Cluster::InstanceController
   #
   #         Stack that holds before-include event hook frames.
   #
-  def before_include_stack
+  def before_include_stack( should_create = true )
 
-    return @before_include_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    if should_create
+      @before_include_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    end
+
+    return @before_include_stack
 
   end
 
@@ -218,9 +226,13 @@ class ::Module::Cluster::InstanceController
   #
   #         Stack that holds before-extend event hook frames.
   #
-  def before_extend_stack
+  def before_extend_stack( should_create = true )
 
-    return @before_extend_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    if should_create
+      @before_extend_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    end
+
+    return @before_extend_stack
 
   end
 
@@ -235,9 +247,13 @@ class ::Module::Cluster::InstanceController
   #
   #         Stack that holds after-include event hook frames.
   #
-  def after_include_stack
+  def after_include_stack( should_create = true )
 
-    return @after_include_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    if should_create
+      @after_include_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    end
+
+    return @after_include_stack
 
   end
 
@@ -252,9 +268,13 @@ class ::Module::Cluster::InstanceController
   #
   #         Stack that holds after-extend event hook frames.
   #
-  def after_extend_stack
+  def after_extend_stack( should_create = true )
 
-    return @after_extend_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    if should_create
+      @after_extend_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    end
+
+    return @after_extend_stack
 
   end
 
@@ -269,9 +289,13 @@ class ::Module::Cluster::InstanceController
   #
   #         Stack that holds before-initialize event hook frames.
   #
-  def before_initialize_stack
+  def before_initialize_stack( should_create = true )
 
-    return @before_initialize_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    if should_create
+      @before_initialize_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    end
+
+    return @before_initialize_stack
 
   end
 
@@ -286,9 +310,13 @@ class ::Module::Cluster::InstanceController
   #
   #         Stack that holds after-initialize event hook frames.
   #
-  def after_initialize_stack
+  def after_initialize_stack( should_create = true )
 
-    return @after_initialize_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    if should_create
+      @after_initialize_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    end
+
+    return @after_initialize_stack
 
   end
 
@@ -303,9 +331,13 @@ class ::Module::Cluster::InstanceController
   #
   #         Stack that holds before-instance event hook frames.
   #
-  def before_instance_stack
+  def before_instance_stack( should_create = true )
 
-    return @before_instance_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    if should_create
+      @before_instance_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    end
+
+    return @before_instance_stack
 
   end
 
@@ -320,9 +352,13 @@ class ::Module::Cluster::InstanceController
   #
   #         Stack that holds after-instance event hook frames.
   #
-  def after_instance_stack
+  def after_instance_stack( should_create = true )
 
-    return @after_instance_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    if should_create
+      @after_instance_stack ||= ::Module::Cluster::InstanceController::Stack.new
+    end
+
+    return @after_instance_stack
 
   end
 

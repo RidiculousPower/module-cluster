@@ -45,22 +45,26 @@ module ::Module::Cluster::Controller
   #
   #         Instance Controller instance.
   #
-  def instance_controller( instance )
+  def instance_controller( instance, should_create = true )
 
     unless instance_controller = @instances[ instance ]
 
-      @instances[ instance ] = instance_controller = ::Module::Cluster::InstanceController.new( instance )
+      if should_create
 
-      # If instance is a module instance of a class that inherits from module then instance
-      # needs to inherit stacks defined in its class.
-      case instance
-        when ::Module
-          instance_class = instance.class
-          if instance_class < ::Module and not instance_class < ::Class
-            cascade_module_stacks( instance, instance_class )
-          end
+        @instances[ instance ] = instance_controller = ::Module::Cluster::InstanceController.new( instance )
+
+        # If instance is a module instance of a class that inherits from module then instance
+        # needs to inherit stacks defined in its class.
+        case instance
+          when ::Module
+            instance_class = instance.class
+            if instance_class < ::Module and not instance_class < ::Class
+              cascade_module_stacks( instance, instance_class )
+            end
+        end
+
       end
-
+      
     end
     
     return instance_controller
@@ -308,42 +312,46 @@ module ::Module::Cluster::Controller
     
     @already_included.clear
     @already_extended.clear
-
+    
     # If we have a subclass of ::Module, cascade module stacks.
     # :subclass stack casades as it would in all other cases.
     if event_context == :subclass and clustered_instance < ::Module and not clustered_instance < ::Class
       cascade_module_stacks( hooked_instance, clustered_instance )
     end
     
-    instance_controller( clustered_instance ).stack( event_context ).each do |this_frame|
-      if frame_should_evaluate?( this_frame, event_context, hooked_instance, clustered_instance )
-        case should_cascade = frame_should_cascade?( this_frame, event_context, hooked_instance, clustered_instance )
-          when :execute
-            execute_frame_hook( this_frame, hooked_instance, clustered_instance, *args, & block )
-          when :execute_and_cascade
-            should_enable = true
-            execute_frame_hook( this_frame, hooked_instance, clustered_instance, *args, & block )
-            execute_frame_cascade( this_frame, event_context, hooked_instance, clustered_instance )
-          when :execute_and_cascade_block
-            should_enable = true
-            execute_frame_hook( this_frame, hooked_instance, clustered_instance, *args, & block )
-            execute_frame_cascade( this_frame, event_context, hooked_instance, clustered_instance, true )
-          when :cascade
-            should_enable = true
-            execute_frame_cascade( this_frame, event_context, hooked_instance, clustered_instance )
-          when :cascade_block
-            should_enable = true
-            execute_frame_cascade( this_frame, event_context, hooked_instance, clustered_instance, true )
+    
+    if instance_controller = instance_controller( clustered_instance, false ) and
+       stack = instance_controller.stack( event_context, false )
+
+      stack.each do |this_frame|
+        if frame_should_evaluate?( this_frame, event_context, hooked_instance, clustered_instance )
+          case should_cascade = frame_should_cascade?( this_frame, event_context, hooked_instance, clustered_instance )
+            when :execute
+              execute_frame_hook( this_frame, hooked_instance, clustered_instance, *args, & block )
+            when :execute_and_cascade
+              should_enable = true
+              execute_frame_hook( this_frame, hooked_instance, clustered_instance, *args, & block )
+              execute_frame_cascade( this_frame, event_context, hooked_instance, clustered_instance )
+            when :execute_and_cascade_block
+              should_enable = true
+              execute_frame_hook( this_frame, hooked_instance, clustered_instance, *args, & block )
+              execute_frame_cascade( this_frame, event_context, hooked_instance, clustered_instance, true )
+            when :cascade
+              should_enable = true
+              execute_frame_cascade( this_frame, event_context, hooked_instance, clustered_instance )
+            when :cascade_block
+              should_enable = true
+              execute_frame_cascade( this_frame, event_context, hooked_instance, clustered_instance, true )
+          end
         end
       end
+
     end
     
     # :instance stack always cascades to modules and classes.
     case hooked_instance
       when ::Class
-        unless ::Class.equal?( hooked_instance )
-          cascade_instance_stacks( hooked_instance, clustered_instance )
-        end
+        cascade_instance_stacks( hooked_instance, clustered_instance ) unless ::Class.equal?( hooked_instance )
       when ::Module
         unless hooked_instance.class < ::Module and not hooked_instance.class < ::Class
           cascade_instance_stacks( hooked_instance, clustered_instance )
@@ -408,7 +416,7 @@ module ::Module::Cluster::Controller
           case hooked_instance
             when ::Class
               if execution_contexts.include?( :class )
-                frame_should_evaluate = true 
+                frame_should_evaluate = true
               elsif hooked_instance < ::Module and not hooked_instance < ::Class and
                     execution_contexts.include?( :module_class )
                 frame_should_evaluate = true
