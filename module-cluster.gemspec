@@ -14,6 +14,8 @@ Gem::Specification.new do |spec|
   spec.email                     = 'asher@ridiculouspower.com'
   spec.homepage                  = 'http://rubygems.org/gems/module-cluster'
 
+  spec.add_dependency            'singleton_attr'
+
   spec.required_ruby_version     = ">= 1.9.1"
 
   spec.date                      = ::Date.today.to_s

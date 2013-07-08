@@ -7,6 +7,18 @@
 #
 module ::Module::Cluster::InstanceSupport
   
+  ##########################
+  #  self.append_features  #
+  ##########################
+
+  alias_singleton_method :append_features, :original_append_features
+
+  ########################
+  #  self.extend_object  #
+  ########################
+
+  alias_singleton_method :extend_object, :original_extend_object
+  
   #########
   #  new  #
   #########
@@ -26,7 +38,7 @@ module ::Module::Cluster::InstanceSupport
     instance = allocate
     
     ::Module::Cluster.evaluate_cluster_stack( :before_instance, instance, self, args, & block )
-    
+
     instance.instance_eval { initialize( *args, & block ) }
 
     ::Module::Cluster.evaluate_cluster_stack( :after_instance, instance, self, args, & block )

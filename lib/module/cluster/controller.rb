@@ -55,14 +55,10 @@ module ::Module::Cluster::Controller
 
         # If instance is a module instance of a class that inherits from module then instance
         # needs to inherit stacks defined in its class.
-        case instance
-          when ::Module
-            instance_class = instance.class
-            if instance_class < ::Module and not instance_class < ::Class
-              cascade_module_stacks( instance, instance_class )
-            end
+        if ::Module === instance
+          cascade_module_stacks( instance, instance_class = instance.class )
         end
-
+        
       end
       
     end
@@ -95,7 +91,7 @@ module ::Module::Cluster::Controller
         else
           hooked_instance.extend( ::Module::Cluster::ClassSupport )
           # if our class is a subclass of Module then its instances need ModuleSupport
-          if hooked_instance < ::Module and not hooked_instance < ::Class
+          if hooked_instance <= ::Module
             hooked_instance.module_eval do
               include( ::Module::Cluster )
               include( ::Module::Cluster::ModuleSupport )
@@ -163,20 +159,20 @@ module ::Module::Cluster::Controller
 
       to_instance_controller = instance_controller( to_instance )
 
-      if from_instance_controller.has_before_include_stack?
-        to_instance_controller.before_include_stack.concat( from_instance_controller.before_include_stack )
+      if before_include_stack = from_instance_controller.before_include_stack( false )
+        to_instance_controller.before_include_stack.concat( before_include_stack )
       end
 
-      if from_instance_controller.has_after_include_stack?
-        to_instance_controller.after_include_stack.concat( from_instance_controller.after_include_stack )
+      if after_include_stack = from_instance_controller.after_include_stack( false )
+        to_instance_controller.after_include_stack.concat( after_include_stack )
       end
 
-      if from_instance_controller.has_before_extend_stack?
-        to_instance_controller.before_extend_stack.concat( from_instance_controller.before_extend_stack )
+      if before_extend_stack = from_instance_controller.before_extend_stack( false )
+        to_instance_controller.before_extend_stack.concat( before_extend_stack )
       end
 
-      if from_instance_controller.has_after_extend_stack?
-        to_instance_controller.after_extend_stack.concat( from_instance_controller.after_extend_stack )
+      if after_extend_stack = from_instance_controller.after_extend_stack( false )
+        to_instance_controller.after_extend_stack.concat( after_extend_stack )
       end
 
     end
@@ -205,10 +201,10 @@ module ::Module::Cluster::Controller
   def cascade_subclass_stack( to_instance, from_instance )
 
     if from_instance_controller = @instances[ from_instance ] and 
-       from_instance_controller.has_subclass_stack?
+       subclass_stack = from_instance_controller.subclass_stack( false )
       
       to_instance_controller = instance_controller( to_instance )
-      to_instance_controller.subclass_stack.concat( from_instance_controller.subclass_stack )
+      to_instance_controller.subclass_stack.concat( subclass_stack )
     
     end
     
@@ -242,23 +238,23 @@ module ::Module::Cluster::Controller
       enable_with_initialize_support = false
       enable_with_instance_support = false
       
-      if from_instance_controller.has_before_initialize_stack?
-        to_instance_controller.before_initialize_stack.concat( from_instance_controller.before_initialize_stack )
+      if before_initialize_stack = from_instance_controller.before_initialize_stack( false )
+        to_instance_controller.before_initialize_stack.concat( before_initialize_stack )
         enable_with_initialize_support = true
       end
 
-      if from_instance_controller.has_after_initialize_stack?
-        to_instance_controller.after_initialize_stack.concat( from_instance_controller.after_initialize_stack )
+      if after_initialize_stack = from_instance_controller.after_initialize_stack( false )
+        to_instance_controller.after_initialize_stack.concat( after_initialize_stack )
         enable_with_initialize_support = true
       end
 
-      if from_instance_controller.has_before_instance_stack?
-        to_instance_controller.before_instance_stack.concat( from_instance_controller.before_instance_stack )
+      if before_instance_stack = from_instance_controller.before_instance_stack( false )
+        to_instance_controller.before_instance_stack.concat( before_instance_stack )
         enable_with_instance_support = true
       end
 
-      if from_instance_controller.has_after_instance_stack?
-        to_instance_controller.after_instance_stack.concat( from_instance_controller.after_instance_stack )
+      if after_instance_stack = from_instance_controller.after_instance_stack( false )
+        to_instance_controller.after_instance_stack.concat( after_instance_stack )
         enable_with_instance_support = true
       end
       
@@ -271,6 +267,39 @@ module ::Module::Cluster::Controller
             to_instance.extend( ::Module::Cluster::InstanceSupport )
           end
       end
+      
+    end
+    
+    return self
+    
+  end
+
+  ################################################
+  #  ensure_parser_constructed_module_evaluated  #
+  ################################################
+  
+  def ensure_parser_constructed_module_evaluated( clustered_instance )
+    
+    instance_class = clustered_instance.class
+    
+    # If Module has an instance controller and hooked_instance does not yet, cause module instance to evaluate hooks.
+    if instance_class.equal?( ::Module )       and 
+       instance_controller( ::Module, false )  and 
+       ! instance_controller( clustered_instance, false )
+      
+      #puts 'clustered: ' << clustered_instance.to_s
+      #puts 'class: ' << instance_class.to_s
+      #puts 'HERE: ' << instance_controller( instance_class, false ).to_s
+      
+      # If the parser created the instance of Module then the before_instance, after_instance, before_initialize,
+      # after_initialize hooks will not have been called. There is no way to avoid this, the best we can do is 
+      # call them now.
+      #evaluate_cluster_stack( :before_instance, clustered_instance, instance_class )
+      #evaluate_cluster_stack( :before_initialize, clustered_instance, instance_class )
+      #evaluate_cluster_stack( :after_initialize, clustered_instance, instance_class )
+      #evaluate_cluster_stack( :after_instance, clustered_instance, instance_class )
+      
+      instance_controller( clustered_instance )
       
     end
     
@@ -303,12 +332,16 @@ module ::Module::Cluster::Controller
   #        Optional array of arguments. Used presently with instance and initialize hooks
   #        to pass parameters from #new or #initialize to action blocks.
   #
+  # @yield block
+  #
+  #        Optional block. Used presently with instance and initialize hooks
+  #        to pass block from #new or #initialize to action blocks.
+  #
   # @return [::Module::Cluster::Controller] Self.
   #
   def evaluate_cluster_stack( event_context, hooked_instance, clustered_instance, args = nil, & block )
     
     should_enable = false
-    should_cascade_all_stacks = false
     
     @already_included.clear
     @already_extended.clear
@@ -318,8 +351,7 @@ module ::Module::Cluster::Controller
     if event_context == :subclass and clustered_instance < ::Module and not clustered_instance < ::Class
       cascade_module_stacks( hooked_instance, clustered_instance )
     end
-    
-    
+        
     if instance_controller = instance_controller( clustered_instance, false ) and
        stack = instance_controller.stack( event_context, false )
 

@@ -691,7 +691,7 @@ class ::Module::Cluster::Cluster::FrameDefiner
       when :before_include, :before_extend, :after_include, :after_extend
         case @cluster.instance
           when ::Class
-            unless @cluster.instance < ::Module
+            unless @cluster.instance <= ::Module
               raise ::RuntimeError, 'Include/Extend execution hooks cannot be created for classes.'
             end
         end

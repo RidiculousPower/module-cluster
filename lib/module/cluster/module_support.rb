@@ -8,6 +8,34 @@
 #
 module ::Module::Cluster::ModuleSupport
 
+  ##########################
+  #  self.append_features  #
+  ##########################
+
+  alias_singleton_method :append_features, :original_append_features
+
+  ########################
+  #  self.extend_object  #
+  ########################
+
+  alias_singleton_method :extend_object, :original_extend_object
+
+  ###################
+  #  self.included  #
+  ###################
+
+  def self.included( instance )
+    # do nothing
+  end
+
+  ###################
+  #  self.extended  #
+  ###################
+
+  def self.extended( instance )
+    # do nothing
+  end
+
   #####################
   #  append_features  #
   #####################
@@ -20,7 +48,8 @@ module ::Module::Cluster::ModuleSupport
   #        Instance to which features will be appended.
   #
   def append_features( hooked_instance )
-
+    puts 'hooking include: ' << hooked_instance.to_s
+    ::Module::Cluster.ensure_parser_constructed_module_evaluated( self )
     ::Module::Cluster.evaluate_cluster_stack( :before_include, hooked_instance, self )
 
     super if defined?( super )
@@ -58,7 +87,9 @@ module ::Module::Cluster::ModuleSupport
   #        Instance where features will be extended.
   #
   def extend_object( hooked_instance )
+    puts 'hooking extend: ' << hooked_instance.to_s
 
+    ::Module::Cluster.ensure_parser_constructed_module_evaluated( self )
     ::Module::Cluster.evaluate_cluster_stack( :before_extend, hooked_instance, self )
     
     super if defined?( super )
