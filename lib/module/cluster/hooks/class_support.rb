@@ -7,18 +7,6 @@
 #
 module ::Module::Cluster::Hooks::ClassSupport
   
-  ##########################
-  #  self.append_features  #
-  ##########################
-
-  alias_singleton_method :append_features, :original_append_features
-
-  ########################
-  #  self.extend_object  #
-  ########################
-
-  alias_singleton_method :extend_object, :original_extend_object
-  
   ###############
   #  inherited  #
   ###############

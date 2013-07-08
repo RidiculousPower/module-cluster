@@ -2,9 +2,6 @@
 
 [
   
-  '../../lib_ext/class',
-  '../../lib_ext/module',
-  
   'cluster/instance_controller',
   'cluster/instance_controller/stack',
 

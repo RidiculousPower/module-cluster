@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 
+require 'call_super'
 require 'singleton_attr'
 require 'array/compositing'
 
@@ -78,3 +79,6 @@ module ::Module::Cluster
   end
   
 end
+
+# post-require setup
+require_relative './setup.rb'

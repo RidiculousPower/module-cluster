@@ -14,6 +14,7 @@ Gem::Specification.new do |spec|
   spec.email                     = 'asher@ridiculouspower.com'
   spec.homepage                  = 'http://rubygems.org/gems/module-cluster'
 
+  spec.add_dependency            'call_super'
   spec.add_dependency            'singleton_attr'
   spec.add_dependency            'array-compositing'
 
