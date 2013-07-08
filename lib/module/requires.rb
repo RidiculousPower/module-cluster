@@ -14,7 +14,6 @@
   
   'cluster/hooks/class_support',
   'cluster/hooks/module_support',
-  'cluster/hooks/pre_and_post_initialize_support',
   'cluster/hooks/instance_support'
     
 ].each { |this_file| require_relative( this_file << '.rb' ) }

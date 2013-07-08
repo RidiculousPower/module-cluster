@@ -367,7 +367,8 @@ class ::Module::Cluster::Cluster::FrameDefiner
     
     case instance = @cluster.instance
       when ::Class
-        instance.extend( ::Module::Cluster::Hooks::InstanceSupport )
+        instance.extend( ::PreAndPostInitialize )
+        instance.module_eval { include( ::Module::Cluster::Hooks::InstanceSupport ) }
     end
     
     add_hook_context( :before_instance )
@@ -385,7 +386,8 @@ class ::Module::Cluster::Cluster::FrameDefiner
 
     case instance = @cluster.instance
       when ::Class
-        instance.extend( ::Module::Cluster::Hooks::InstanceSupport )
+        instance.extend( ::PreAndPostInitialize )
+        instance.module_eval { include( ::Module::Cluster::Hooks::InstanceSupport ) }
     end
 
     add_hook_context( :after_instance )

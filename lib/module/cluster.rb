@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 
 require 'call_super'
+require 'pre_and_post_initialize'
 require 'singleton_attr'
 require 'array/compositing'
 

@@ -58,10 +58,10 @@ RSpec::Matchers.define :be_enabled_for_instance_hooks do
     unexpected_success_string = instance.name.to_s << ' was enabled for :before_instance and :after_instance, ' <<
                                 'but not expected to be enabled.'
 
-    unless matched = instance.is_a?( ::Module::Cluster::Hooks::InstanceSupport )
+    unless matched = instance.ancestors.include?( ::Module::Cluster::Hooks::InstanceSupport )
       fail_string = instance.name.to_s << ' was not enabled for :before_instance and :after_instance.'
     end
-    
+
     matched
     
   end

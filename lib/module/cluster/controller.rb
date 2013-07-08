@@ -248,7 +248,8 @@ module ::Module::Cluster::Controller
       end
       
       if enable_with_instance_support and ::Class === to_instance
-        to_instance.extend( ::Module::Cluster::Hooks::InstanceSupport )
+        to_instance.extend( ::PreAndPostInitialize )
+        to_instance.module_eval { include( ::Module::Cluster::Hooks::InstanceSupport ) }
       end
       
     end

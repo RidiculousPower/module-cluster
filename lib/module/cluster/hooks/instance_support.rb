@@ -7,56 +7,38 @@
 #
 module ::Module::Cluster::Hooks::InstanceSupport
 
-  ###################
-  #  self.extended  #
-  ###################
-  
-  def self.extended( instance )
-    
-    super if defined?( super )
-
-    instance.class_eval { include( ::Module::Cluster::Hooks::PreAndPostInitializeSupport ) }
-    
-  end
-  
-  ##########################
-  #  self.append_features  #
-  ##########################
-
-  alias_singleton_method :append_features, :original_append_features
-
-  ########################
-  #  self.extend_object  #
-  ########################
-
-  alias_singleton_method :extend_object, :original_extend_object
-  
-  #########
-  #  new  #
-  #########
+  ####################
+  #  pre_initialize  #
+  ####################
   
   ###
-  # Adds calls to #pre_initialize and #post_initialize before and after call to #initialize.
+  # Ensures :before_instance hooks occur at time of instance creation.
   #
-  # @overload initialize( any_arg, ... )
+  # @param [Module,Class] hooked_subclass_instance
   #
-  #   @param [Object] any_arg
+  #        Instance inheriting features.
   #
-  #                   Any arguments can be used for initialize.
-  #                   No arguments are expected here, but any will be passed to super.
-  #
-  def new( *args, & block )
+  def pre_initialize( *args, & block )
 
-    instance = allocate
-
-    instance.instance_eval do
-      pre_initialize( *args, & block )
-      initialize( *args, & block )
-      post_initialize( *args, & block )
-    end
-    
-    return instance
+    ::Module::Cluster.evaluate_cluster_stack( :before_instance, self, self.class, args, & block )
     
   end
+
+  #####################
+  #  post_initialize  #
+  #####################
   
+  ###
+  # Ensures :after_instance hooks occur at time of instance creation.
+  #
+  # @param [Module,Class] hooked_subclass_instance
+  #
+  #        Instance inheriting features.
+  #
+  def post_initialize( *args, & block )
+
+    ::Module::Cluster.evaluate_cluster_stack( :after_instance, self, self.class, args, & block )
+    
+  end
+
 end
