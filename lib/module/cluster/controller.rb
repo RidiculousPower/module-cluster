@@ -247,9 +247,7 @@ module ::Module::Cluster::Controller
         enable_with_instance_support = true
       end
       
-      if ::Class === to_instance and
-         enable_with_instance_support
-        
+      if enable_with_instance_support and ::Class === to_instance
         to_instance.extend( ::Module::Cluster::Hooks::InstanceSupport )
       end
       
@@ -272,17 +270,11 @@ module ::Module::Cluster::Controller
        instance_controller( ::Module, false )  and 
        ! instance_controller( clustered_instance, false )
       
-      #puts 'clustered: ' << clustered_instance.to_s
-      #puts 'class: ' << instance_class.to_s
-      #puts 'HERE: ' << instance_controller( instance_class, false ).to_s
-      
       # If the parser created the instance of Module then the before_instance, after_instance,
       # hooks will not have been called. There is no way to avoid this, the best we can do is 
       # call them now.
-      #evaluate_cluster_stack( :before_instance, clustered_instance, instance_class )
-      #evaluate_cluster_stack( :after_instance, clustered_instance, instance_class )
-      
-      instance_controller( clustered_instance )
+      evaluate_cluster_stack( :before_instance, clustered_instance, instance_class )
+      evaluate_cluster_stack( :after_instance, clustered_instance, instance_class )
       
     end
     
