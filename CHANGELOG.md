@@ -96,3 +96,12 @@ may be quite annoying, but the inconsistency was more annoying.
 
 Add :module_class execution and cascade hooks.
 Fixed subclass handling so that it will work on Class (in addition to instances of Class).
+
+## 7/08/2013 ##
+
+Changed Stack from < Array to < Array::Compositing and from using #concat to using #register_parent.
+This means that frames will now automatically cascade when created in a super instance after its hook,
+which means that frames can be created on Object to cascade to Module, Class, and other instances.
+This might be confusing and possibly not what we want; if so, we can cause Array::Compositing not to
+inherit elements created after registration. Worst case it is likely that we want Object => Module,
+Class, but not to new subclass.

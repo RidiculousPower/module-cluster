@@ -3,7 +3,7 @@
 ###
 # A Stack is a specialized array for handling inserts of frames before/after other frames.
 #
-class ::Module::Cluster::InstanceController::Stack < ::Array
+class ::Module::Cluster::InstanceController::Stack < ::Array::Compositing
   
   #######################
   #  index_with_module  #

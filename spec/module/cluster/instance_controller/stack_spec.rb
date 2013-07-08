@@ -24,7 +24,7 @@ describe ::Module::Cluster::InstanceController::Stack do
   let( :extend_include_frame ) { MockFrame.new( [ module_g ], :extend_and_include ) }
   let( :block_frame ) { MockFrame.new }
 
-  let( :stack ) { ::Module::Cluster::InstanceController::Stack.new( [ include_frame, extend_frame, include_extend_frame, extend_include_frame, block_frame ] ) }
+  let( :stack ) { ::Module::Cluster::InstanceController::Stack.new( nil, nil, [ include_frame, extend_frame, include_extend_frame, extend_include_frame, block_frame ] ) }
 
   context '========  Initialization  ========' do
     context '#initialize' do

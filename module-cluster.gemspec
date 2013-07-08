@@ -15,6 +15,7 @@ Gem::Specification.new do |spec|
   spec.homepage                  = 'http://rubygems.org/gems/module-cluster'
 
   spec.add_dependency            'singleton_attr'
+  spec.add_dependency            'array-compositing'
 
   spec.required_ruby_version     = ">= 1.9.1"
 

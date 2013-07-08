@@ -160,19 +160,19 @@ module ::Module::Cluster::Controller
       to_instance_controller = instance_controller( to_instance )
 
       if before_include_stack = from_instance_controller.before_include_stack( false )
-        to_instance_controller.before_include_stack.concat( before_include_stack )
+        to_instance_controller.before_include_stack.register_parent( before_include_stack )
       end
 
       if after_include_stack = from_instance_controller.after_include_stack( false )
-        to_instance_controller.after_include_stack.concat( after_include_stack )
+        to_instance_controller.after_include_stack.register_parent( after_include_stack )
       end
 
       if before_extend_stack = from_instance_controller.before_extend_stack( false )
-        to_instance_controller.before_extend_stack.concat( before_extend_stack )
+        to_instance_controller.before_extend_stack.register_parent( before_extend_stack )
       end
 
       if after_extend_stack = from_instance_controller.after_extend_stack( false )
-        to_instance_controller.after_extend_stack.concat( after_extend_stack )
+        to_instance_controller.after_extend_stack.register_parent( after_extend_stack )
       end
 
     end
@@ -204,7 +204,7 @@ module ::Module::Cluster::Controller
        subclass_stack = from_instance_controller.subclass_stack( false )
       
       to_instance_controller = instance_controller( to_instance )
-      to_instance_controller.subclass_stack.concat( subclass_stack )
+      to_instance_controller.subclass_stack.register_parent( subclass_stack )
     
     end
     
@@ -238,12 +238,12 @@ module ::Module::Cluster::Controller
       enable_with_instance_support = false
       
       if before_instance_stack = from_instance_controller.before_instance_stack( false )
-        to_instance_controller.before_instance_stack.concat( before_instance_stack )
+        to_instance_controller.before_instance_stack.register_parent( before_instance_stack )
         enable_with_instance_support = true
       end
 
       if after_instance_stack = from_instance_controller.after_instance_stack( false )
-        to_instance_controller.after_instance_stack.concat( after_instance_stack )
+        to_instance_controller.after_instance_stack.register_parent( after_instance_stack )
         enable_with_instance_support = true
       end
       
