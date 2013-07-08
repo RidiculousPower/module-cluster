@@ -6,7 +6,7 @@
 # Provides :before_include, :after_include, :before_extend, :after_extend support by way of 
 #   #append_features, #included, #extend_object, #extended.
 #
-module ::Module::Cluster::ModuleSupport
+module ::Module::Cluster::Hooks::ModuleSupport
 
   ##########################
   #  self.append_features  #
@@ -48,7 +48,7 @@ module ::Module::Cluster::ModuleSupport
   #        Instance to which features will be appended.
   #
   def append_features( hooked_instance )
-    puts 'hooking include: ' << hooked_instance.to_s
+
     ::Module::Cluster.ensure_parser_constructed_module_evaluated( self )
     ::Module::Cluster.evaluate_cluster_stack( :before_include, hooked_instance, self )
 
@@ -87,7 +87,6 @@ module ::Module::Cluster::ModuleSupport
   #        Instance where features will be extended.
   #
   def extend_object( hooked_instance )
-    puts 'hooking extend: ' << hooked_instance.to_s
 
     ::Module::Cluster.ensure_parser_constructed_module_evaluated( self )
     ::Module::Cluster.evaluate_cluster_stack( :before_extend, hooked_instance, self )

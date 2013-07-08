@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 
 module ::Module::Cluster
+  module Hooks
+  end
   class Cluster
   end
   class InstanceController

@@ -87,19 +87,19 @@ module ::Module::Cluster::Controller
     case hooked_instance
       when ::Class
         if ::Class.equal?( hooked_instance )
-          hooked_instance.class_eval { include( ::Module::Cluster::ClassSupport ) }
+          hooked_instance.class_eval { include( ::Module::Cluster::Hooks::ClassSupport ) }
         else
-          hooked_instance.extend( ::Module::Cluster::ClassSupport )
+          hooked_instance.extend( ::Module::Cluster::Hooks::ClassSupport )
           # if our class is a subclass of Module then its instances need ModuleSupport
           if hooked_instance <= ::Module
             hooked_instance.module_eval do
               include( ::Module::Cluster )
-              include( ::Module::Cluster::ModuleSupport )
+              include( ::Module::Cluster::Hooks::ModuleSupport )
             end
           end
         end
       when ::Module
-        hooked_instance.extend( ::Module::Cluster::ModuleSupport )
+        hooked_instance.extend( ::Module::Cluster::Hooks::ModuleSupport )
     end    
     
     return self
@@ -261,10 +261,10 @@ module ::Module::Cluster::Controller
       case to_instance
         when ::Class
           if enable_with_initialize_support
-            to_instance.module_eval { include( ::Module::Cluster::InitializeSupport ) }
+            to_instance.module_eval { include( ::Module::Cluster::Hooks::InitializeSupport ) }
           end
           if enable_with_instance_support
-            to_instance.extend( ::Module::Cluster::InstanceSupport )
+            to_instance.extend( ::Module::Cluster::Hooks::InstanceSupport )
           end
       end
       

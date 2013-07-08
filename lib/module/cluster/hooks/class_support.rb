@@ -5,7 +5,7 @@
 #
 # Provides :subclass support by way of #inherited.
 #
-module ::Module::Cluster::ClassSupport
+module ::Module::Cluster::Hooks::ClassSupport
   
   ##########################
   #  self.append_features  #

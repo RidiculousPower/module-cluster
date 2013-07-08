@@ -5,7 +5,7 @@
 #
 # Provides :instance support by way of #new.
 #
-module ::Module::Cluster::InstanceSupport
+module ::Module::Cluster::Hooks::InstanceSupport
   
   ##########################
   #  self.append_features  #

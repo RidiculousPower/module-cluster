@@ -5,7 +5,7 @@
 #
 # Provides :instance support by way of #initialize.
 #
-module ::Module::Cluster::InitializeSupport
+module ::Module::Cluster::Hooks::InitializeSupport
   
   ################
   #  initialize  #
