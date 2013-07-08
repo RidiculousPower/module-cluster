@@ -235,19 +235,8 @@ module ::Module::Cluster::Controller
       
       to_instance_controller = instance_controller( to_instance )
       
-      enable_with_initialize_support = false
       enable_with_instance_support = false
       
-      if before_initialize_stack = from_instance_controller.before_initialize_stack( false )
-        to_instance_controller.before_initialize_stack.concat( before_initialize_stack )
-        enable_with_initialize_support = true
-      end
-
-      if after_initialize_stack = from_instance_controller.after_initialize_stack( false )
-        to_instance_controller.after_initialize_stack.concat( after_initialize_stack )
-        enable_with_initialize_support = true
-      end
-
       if before_instance_stack = from_instance_controller.before_instance_stack( false )
         to_instance_controller.before_instance_stack.concat( before_instance_stack )
         enable_with_instance_support = true
@@ -258,14 +247,10 @@ module ::Module::Cluster::Controller
         enable_with_instance_support = true
       end
       
-      case to_instance
-        when ::Class
-          if enable_with_initialize_support
-            to_instance.module_eval { include( ::Module::Cluster::Hooks::InitializeSupport ) }
-          end
-          if enable_with_instance_support
-            to_instance.extend( ::Module::Cluster::Hooks::InstanceSupport )
-          end
+      if ::Class === to_instance and
+         enable_with_instance_support
+        
+        to_instance.extend( ::Module::Cluster::Hooks::InstanceSupport )
       end
       
     end
@@ -291,12 +276,10 @@ module ::Module::Cluster::Controller
       #puts 'class: ' << instance_class.to_s
       #puts 'HERE: ' << instance_controller( instance_class, false ).to_s
       
-      # If the parser created the instance of Module then the before_instance, after_instance, before_initialize,
-      # after_initialize hooks will not have been called. There is no way to avoid this, the best we can do is 
+      # If the parser created the instance of Module then the before_instance, after_instance,
+      # hooks will not have been called. There is no way to avoid this, the best we can do is 
       # call them now.
       #evaluate_cluster_stack( :before_instance, clustered_instance, instance_class )
-      #evaluate_cluster_stack( :before_initialize, clustered_instance, instance_class )
-      #evaluate_cluster_stack( :after_initialize, clustered_instance, instance_class )
       #evaluate_cluster_stack( :after_instance, clustered_instance, instance_class )
       
       instance_controller( clustered_instance )
@@ -572,8 +555,7 @@ module ::Module::Cluster::Controller
             when ::Module # instance of class that subclassed Module
 
               # Instance of class that inherits from Module.
-              # That means this would be an instance hook ( :before_initialize, :after_initialize,
-              #                                             :before_instance, :after_instance ).
+              # That means this would be an instance hook ( :before_instance, :after_instance ).
               
               if has_any_context or has_module_context
                 should_cascade = :execute_and_cascade

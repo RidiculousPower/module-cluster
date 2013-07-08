@@ -5,8 +5,6 @@ shared_examples_for :ClassInheritingFromModuleInstanceStacksIntegration do
   let( :clustered_instance ) do
     clustered_instance = ::Class.new( ::Module ).name( :CascadeEnabledClassInheritingFromModule ).extend( ::Module::Cluster )
     cluster = clustered_instance.cluster( cluster_name )
-    cluster.before_initialize.cascade_to( *cascade_contexts ).include( *include_modules ).extend( *extend_modules ).action( & block_action )
-    cluster.after_initialize.cascade_to( *cascade_contexts ).include( *include_modules ).extend( *extend_modules ).action( & block_action )
     cluster.before_instance.cascade_to( *cascade_contexts ).include( *include_modules ).extend( *extend_modules ).action( & block_action )
     cluster.after_instance.cascade_to( *cascade_contexts ).include( *include_modules ).extend( *extend_modules ).action( & block_action )
     clustered_instance

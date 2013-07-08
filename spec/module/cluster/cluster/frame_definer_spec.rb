@@ -324,32 +324,6 @@ describe ::Module::Cluster::Cluster::FrameDefiner do
           after_include_or_extend.should have_added_hook_context( *hook_contexts )
         end
       end
-    
-      #######################
-      #  before_initialize  #
-      #######################
-
-      context '#before_initialize' do
-        let( :action ) { :before_initialize }
-        let( :hook_contexts ) { [ :before_initialize ] }
-        let( :before_initialize ) { hook_declaration }
-        it 'can add :before_initialize to hook context to apply to hook frames defined next' do
-          before_initialize.should have_added_hook_context( *hook_contexts )
-        end
-      end
-
-      ######################
-      #  after_initialize  #
-      ######################
-
-      context '#after_initialize' do
-        let( :action ) { :after_initialize }
-        let( :hook_contexts ) { [ :after_initialize ] }
-        let( :after_initialize ) { hook_declaration }
-        it 'can add :after_initialize to hook context to apply to hook frames defined next' do
-          after_initialize.should have_added_hook_context( *hook_contexts )
-        end
-      end
 
       #####################
       #  before_instance  #

@@ -205,7 +205,7 @@ describe ::Module::Cluster::Controller do
     
     context '#cascade_instance_stacks' do
       
-      let( :event_contexts ) { [ :before_initialize, :after_initialize, :before_instance, :after_instance ] }
+      let( :event_contexts ) { [ :before_instance, :after_instance ] }
 
       let( :hooked_instance ) { instance_of_class }
 
@@ -217,10 +217,9 @@ describe ::Module::Cluster::Controller do
         let( :clustered_instance ) { ::Module.new.name( :ClusteredModuleInstance ) }
         context 'hooked instance is a module' do
           let( :hooked_instance ) { module_instance }
-          it 'will inherit instance and initialize clusters but not enable for either' do
+          it 'will inherit instance clusters but not enable for either' do
             module_instance.should have_inherited_stacks( *inherited_args )
             module_instance.should_not be_enabled_for_instance_hooks
-            module_instance.should_not be_enabled_for_initialize_hooks
           end
         end
         context 'hooked instance is a class' do
@@ -229,15 +228,13 @@ describe ::Module::Cluster::Controller do
             mock_controller.cascade_instance_stacks( subclass, class_instance )
             subclass
           end
-          it 'will inherit instance and initialize clusters and enable for each' do
+          it 'will inherit instance clusters and enable for each' do
             class_instance.should have_inherited_stacks( *inherited_args )
             class_instance.should be_enabled_for_instance_hooks
-            class_instance.should be_enabled_for_initialize_hooks
           end
-          it 'a subclass will inherit instance and initialize clusters and enable for each' do
+          it 'a subclass will inherit instance clusters and enable for each' do
             cascade_to_subclass.should have_inherited_stacks( *inherited_args )
             cascade_to_subclass.should be_enabled_for_instance_hooks
-            cascade_to_subclass.should be_enabled_for_initialize_hooks
           end
         end
       end
@@ -247,10 +244,9 @@ describe ::Module::Cluster::Controller do
         context 'hooked instance is a subclass' do
           let( :hooked_instance ) { subclass }
           let( :subclass ) { ::Class.new( clustered_instance ).name( :SubclassInstance ) }
-          it 'will inherit instance and initialize clusters and enable for each' do
+          it 'will inherit instance clusters and enable for each' do
             subclass.should have_inherited_stacks( *inherited_args )
             subclass.should be_enabled_for_instance_hooks
-            subclass.should be_enabled_for_initialize_hooks
           end
         end
       end
@@ -259,10 +255,9 @@ describe ::Module::Cluster::Controller do
         let( :clustered_instance ) { ::Class.new( ::Module ).name( :ClusteredClassInstance ) }
         let( :hooked_instance ) { subclass }
         let( :subclass ) { ::Class.new( clustered_instance ).name( :SubclassInstance ) }
-        it 'a subclass will inherit instance and initialize clusters and enable for each' do
+        it 'a subclass will inherit instance clusters and enable for each' do
           subclass.should have_inherited_stacks( *inherited_args )
           subclass.should be_enabled_for_instance_hooks
-          subclass.should be_enabled_for_initialize_hooks
         end
       end
 
@@ -717,7 +712,7 @@ describe ::Module::Cluster::Controller do
       let( :instance_frame ) { ::Module::Cluster::Cluster::Frame.new( clustered_instance, cluster_name, nil, nil, modules, include_or_extend, block_action ) }
       let( :instance_stack ) { [ instance_frame ] }
       
-      let( :instance_contexts ) { [ :before_initialize, :after_initialize, :before_instance, :after_instance ] }
+      let( :instance_contexts ) { [ :before_instance, :after_instance ] }
       let( :instance_stack_args ) { [ clustered_instance, mock_controller, instance_contexts, instance_stack ] }
       
       before( :each ) do

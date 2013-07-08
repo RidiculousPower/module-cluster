@@ -115,10 +115,6 @@ class ::Module::Cluster::InstanceController
         stack = after_extend_stack( should_create )
       when :subclass
         stack = subclass_stack( should_create )
-      when :before_initialize
-        stack = before_initialize_stack( should_create )
-      when :after_initialize
-        stack = after_initialize_stack( should_create )
       when :before_instance
         stack = before_instance_stack( should_create )
       when :after_instance
@@ -159,10 +155,6 @@ class ::Module::Cluster::InstanceController
         has_stack = has_after_extend_stack?
       when :subclass
         has_stack = has_subclass_stack?
-      when :before_initialize
-        has_stack = has_before_initialize_stack?
-      when :after_initialize
-        has_stack = has_after_initialize_stack?
       when :before_instance
         has_stack = has_before_instance_stack?
       when :after_instance
@@ -275,48 +267,6 @@ class ::Module::Cluster::InstanceController
     end
 
     return @after_extend_stack
-
-  end
-
-  #############################
-  #  before_initialize_stack  #
-  #############################
-
-  ###
-  # Get before-initialize event hook stack.
-  #
-  # @return [::Module::Cluster::InstanceController::Stack]
-  #
-  #         Stack that holds before-initialize event hook frames.
-  #
-  def before_initialize_stack( should_create = true )
-
-    if should_create
-      @before_initialize_stack ||= ::Module::Cluster::InstanceController::Stack.new
-    end
-
-    return @before_initialize_stack
-
-  end
-
-  ############################
-  #  after_initialize_stack  #
-  ############################
-
-  ###
-  # Get after-initialize event hook stack.
-  #
-  # @return [::Module::Cluster::InstanceController::Stack]
-  #
-  #         Stack that holds after-initialize event hook frames.
-  #
-  def after_initialize_stack( should_create = true )
-
-    if should_create
-      @after_initialize_stack ||= ::Module::Cluster::InstanceController::Stack.new
-    end
-
-    return @after_initialize_stack
 
   end
 
@@ -444,40 +394,6 @@ class ::Module::Cluster::InstanceController
   def has_after_extend_stack?
 
     return @after_extend_stack ? true : false
-
-  end
-
-  ##################################
-  #  has_before_initialize_stack?  #
-  ##################################
-
-  ###
-  # Query whether before-initialization hook stack exists.
-  #
-  # @return [true,false] 
-  #
-  #         Whether before-initialization hook stack exists.
-  #
-  def has_before_initialize_stack?
-
-    return @before_initialize_stack ? true : false
-
-  end
-
-  #################################
-  #  has_after_initialize_stack?  #
-  #################################
-
-  ###
-  # Query whether after-initialization hook stack exists.
-  #
-  # @return [true,false] 
-  #
-  #         Whether after-initialization hook stack exists.
-  #
-  def has_after_initialize_stack?
-
-    return @after_initialize_stack ? true : false
 
   end
 

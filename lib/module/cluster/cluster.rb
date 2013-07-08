@@ -336,48 +336,6 @@ class ::Module::Cluster::Cluster
 
   end
   
-  #######################
-  #  before_initialize  #
-  #######################
-  
-  ###
-  # Create before-initialize hooks.
-  #
-  # @overload before_initialize
-  #
-  #   @yieldparam [Object] hooked_instance
-  #   
-  #               Instance for which hooked event is being executed.
-  #
-  # @return [::Module::Cluster::Cluster::FrameDefiner] 
-  #
-  def before_initialize( & block )
-    
-    return frame_definer.before_initialize( & block )
-    
-  end
-  
-  ######################
-  #  after_initialize  #
-  ######################
-  
-  ###
-  # Create after-initialize hooks.
-  #
-  # @overload after_initialize
-  #
-  #   @yieldparam [Object] hooked_instance
-  #   
-  #               Instance for which hooked event is being executed.
-  #
-  # @return [::Module::Cluster::Cluster::FrameDefiner] 
-  #
-  def after_initialize( & block )
-
-    return frame_definer.after_initialize( & block )
-
-  end
-  
   #####################
   #  before_instance  #
   #####################

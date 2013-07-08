@@ -25,7 +25,7 @@ module ::Module::Cluster::Hooks::PreAndPostInitializeSupport
   #
   def pre_initialize( *args, & block )
 
-    ::Module::Cluster.evaluate_cluster_stack( :before_instance, instance, self, args, & block )
+    ::Module::Cluster.evaluate_cluster_stack( :before_instance, self, self.class, args, & block )
     
   end
 
@@ -45,7 +45,7 @@ module ::Module::Cluster::Hooks::PreAndPostInitializeSupport
   #
   def post_initialize( *args, & block )
 
-    ::Module::Cluster.evaluate_cluster_stack( :after_instance, instance, self, args, & block )
+    ::Module::Cluster.evaluate_cluster_stack( :after_instance, self, self.class, args, & block )
     
   end
   

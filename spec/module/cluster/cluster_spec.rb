@@ -216,32 +216,6 @@ describe ::Module::Cluster::Cluster do
       end
     end
 
-    #######################
-    #  before_initialize  #
-    #######################
-
-    context '#before_initialize' do
-      let( :method ) { :before_initialize }
-      let( :args ) { [ ] }
-      let( :before_initialize ) { cluster_with_mock_definer }
-      it 'can add :before_initialize to hook context to apply to hook frames defined next' do
-        before_initialize.should have_called_frame_definer( method, *args, & block )
-      end
-    end
-
-    ######################
-    #  after_initialize  #
-    ######################
-
-    context '#after_initialize' do
-      let( :method ) { :after_initialize }
-      let( :args ) { [ ] }
-      let( :after_initialize ) { cluster_with_mock_definer }
-      it 'can add :after_initialize to hook context to apply to hook frames defined next' do
-        after_initialize.should have_called_frame_definer( method, *args, & block )
-      end
-    end
-
     #####################
     #  before_instance  #
     #####################

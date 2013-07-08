@@ -359,42 +359,6 @@ class ::Module::Cluster::Cluster::FrameDefiner
 
   end
 
-  #######################
-  #  before_initialize  #
-  #######################
-  
-  def before_initialize( & block )
-    
-    case instance = @cluster.instance
-      when ::Class
-        instance.module_eval { include( ::Module::Cluster::Hooks::InitializeSupport ) }
-    end
-    
-    add_hook_context( :before_initialize )
-    action( & block ) if block_given?
-    
-    return self
-    
-  end
-  
-  ######################
-  #  after_initialize  #
-  ######################
-  
-  def after_initialize( & block )
-
-    case instance = @cluster.instance
-      when ::Class
-        instance.module_eval { include( ::Module::Cluster::Hooks::InitializeSupport ) }
-    end
-
-    add_hook_context( :after_initialize )
-    action( & block ) if block_given?
-    
-    return self
-
-  end
-  
   #####################
   #  before_instance  #
   #####################

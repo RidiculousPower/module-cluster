@@ -101,18 +101,6 @@ describe ::Module::Cluster do
       end
     end
     
-    context ':before_initialize' do
-      it_behaves_like :InstanceBehavior do
-        let( :event_cascade_context ) { :before_initialize }
-      end
-    end
-
-    context ':after_initialize' do
-      it_behaves_like :InstanceBehavior do
-        let( :event_cascade_context ) { :after_initialize }
-      end
-    end
-
     context ':before_instance' do
       it_behaves_like :InstanceBehavior do
         let( :event_cascade_context ) { :before_instance }
@@ -187,24 +175,12 @@ describe ::Module::Cluster do
   
     context 'instance of class inheriting from module (module by way of :instance event_context)' do
       
-      context ':before_initialize' do
-        let( :event_context ) { :before_initialize }
-        setup_integration_tests
-        it_behaves_like :ClassInheritingFromModuleInstanceStacksIntegration
-      end
-  
       context ':before_instance' do
         let( :event_context ) { :before_instance }
         setup_integration_tests
         it_behaves_like :ClassInheritingFromModuleInstanceStacksIntegration
       end
-  
-      context ':after_initialize' do
-        let( :event_context ) { :after_initialize }
-        setup_integration_tests
-        it_behaves_like :ClassInheritingFromModuleInstanceStacksIntegration
-      end
-  
+    
       context ':after_instance' do
         let( :event_context ) { :after_instance }
         setup_integration_tests

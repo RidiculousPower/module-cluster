@@ -14,7 +14,7 @@ module ::Module::Cluster::Hooks::InstanceSupport
   def self.extended( instance )
     
     super if defined?( super )
-    
+
     instance.class_eval { include( ::Module::Cluster::Hooks::PreAndPostInitializeSupport ) }
     
   end
@@ -47,13 +47,15 @@ module ::Module::Cluster::Hooks::InstanceSupport
   #
   def new( *args, & block )
 
-    return allocate.instance_eval do
-      
+    instance = allocate
+
+    instance.instance_eval do
       pre_initialize( *args, & block )
       initialize( *args, & block )
       post_initialize( *args, & block )
-
     end
+    
+    return instance
     
   end
   

@@ -42,35 +42,6 @@ RSpec::Matchers.define :have_inherited_stacks do |clustered_instance, controller
 
 end
 
-#####################################
-#  be_enabled_for_initialize_hooks  #
-#####################################
-
-RSpec::Matchers.define :be_enabled_for_initialize_hooks do
-
-  unexpected_success_string = nil
-  fail_string = nil
-
-  match do |instance|
-    
-    unexpected_success_string = instance.name.to_s << ' was enabled for :before_instance and :after_initialize, ' <<
-                                'but not expected to be enabled.'
-    
-    matched = nil
-    
-    unless matched = instance.ancestors.include?( ::Module::Cluster::Hooks::InitializeSupport )
-      fail_string = instance.name.to_s << ' was not enabled for :before_instance and :after_initialize.'
-    end
-    
-    matched
-    
-  end
-
-  failure_message_for_should { fail_string }
-  failure_message_for_should_not { unexpected_success_string }
-
-end
-
 ###################################
 #  be_enabled_for_instance_hooks  #
 ###################################
