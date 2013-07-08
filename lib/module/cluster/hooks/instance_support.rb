@@ -6,6 +6,18 @@
 # Provides :instance support by way of #new.
 #
 module ::Module::Cluster::Hooks::InstanceSupport
+
+  ###################
+  #  self.extended  #
+  ###################
+  
+  def self.extended( instance )
+    
+    super if defined?( super )
+    
+    instance.class_eval { include( ::Module::Cluster::Hooks::PreAndPostInitializeSupport ) }
+    
+  end
   
   ##########################
   #  self.append_features  #
@@ -24,7 +36,7 @@ module ::Module::Cluster::Hooks::InstanceSupport
   #########
   
   ###
-  # Ensures :instance hooks occur at time of initialization.
+  # Adds calls to #pre_initialize and #post_initialize before and after call to #initialize.
   #
   # @overload initialize( any_arg, ... )
   #
@@ -35,15 +47,13 @@ module ::Module::Cluster::Hooks::InstanceSupport
   #
   def new( *args, & block )
 
-    instance = allocate
-    
-    ::Module::Cluster.evaluate_cluster_stack( :before_instance, instance, self, args, & block )
+    return allocate.instance_eval do
+      
+      pre_initialize( *args, & block )
+      initialize( *args, & block )
+      post_initialize( *args, & block )
 
-    instance.instance_eval { initialize( *args, & block ) }
-
-    ::Module::Cluster.evaluate_cluster_stack( :after_instance, instance, self, args, & block )
-    
-    return instance
+    end
     
   end
   
